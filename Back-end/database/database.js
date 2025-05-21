@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 const connection = new Sequelize(
-    'figurinha',
+    'Navashooting',
     'root',
     '123456',
     {
