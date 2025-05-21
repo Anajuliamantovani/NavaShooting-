@@ -5,7 +5,9 @@ const User = connection.define('user', {
 
     id : {
         type:Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        primaryKey: true,  
+        autoIncrement: true,
     },
     email: {
         type: Sequelize.STRING,
@@ -35,8 +37,11 @@ const User = connection.define('user', {
         type: Sequelize.INTEGER,
         allowNull: true
     },
+},{
+    tableName: 'users',   
+    timestamps: false
 });
 
-//Usuario.sync({force: true});
+User.sync({ force: true });
 
 module.exports = User;

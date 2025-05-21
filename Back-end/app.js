@@ -3,7 +3,7 @@ const app = express();
 const connection = require('./database/database');
 
 // Models
-const Usuario = require('./models/usuario');
+const Usuario = require('./models/user');
 const Tipo = require('./models/tipo');
 const Figurinha = require('./models/figurinha');
 
