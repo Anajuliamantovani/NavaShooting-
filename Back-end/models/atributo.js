@@ -12,19 +12,19 @@ const Atributo = connection.define('atributo',
     },
     speed : {
         type:Sequelize.DOUBLE,
-        allowNull: false
+        allowNull: true
     },
     scale : {
         type:Sequelize.DOUBLE,
-        allowNull:false
+        allowNull:true
     },
     maxLife : {
         type:Sequelize.DOUBLE,
-        allowNull: false
+        allowNull: true
     },
     shield : {
         type:Sequelize.BOOLEAN,
-        allowNull: false
+        allowNull: true
     }
 },{
     tableName: 'atributo',   

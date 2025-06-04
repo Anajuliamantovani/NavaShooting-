@@ -11,15 +11,15 @@ const User = connection.define('user', {
     },
     email: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
     },
     nickname: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
     },
     password: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
     },
     level: {
         type:Sequelize.INTEGER,
@@ -27,11 +27,11 @@ const User = connection.define('user', {
     },
     status: {
         type: Sequelize.CHAR,
-        allowNull: false
+        allowNull: true
     },
     permission: {
         type: Sequelize.CHAR,
-        allowNull: false
+        allowNull: true
     },
     coins: {
         type: Sequelize.INTEGER,

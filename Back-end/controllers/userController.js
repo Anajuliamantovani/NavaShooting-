@@ -253,6 +253,8 @@ exports.create = async (req, res) => {
         nickname: novo.nickname,
         email: novo.email
       }
+
+      
     });
   } catch (err) {
     console.error(err);

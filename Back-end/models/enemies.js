@@ -12,25 +12,25 @@ const Enemies = connection.define('enemies',
         primaryKey: true,  
         autoIncrement: true,
     },
-    sprite : {
-        type:Sequelize.BLOB,
-        allowNull: false
+    spriteId:{
+        type:Sequelize.INTEGER,
+        allowNull:true
     },
     name : {
         type:Sequelize.STRING,
-        allowNull:false
+        allowNull:true
     },
     movement : {
         type:Sequelize.INTEGER,
-        allowNull: false
+        allowNull: true
     },
     coinsDropped : {
         type:Sequelize.INTEGER,
-        allowNull: false
+        allowNull: true
     },
     wave : {
         type:Sequelize.INTEGER,
-        allowNull:false
+        allowNull:true
     }
 },{
     tableName: 'enemies',   

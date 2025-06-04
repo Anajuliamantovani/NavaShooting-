@@ -13,11 +13,11 @@ const PowerUp = connection.define('powerUp', {
     },
     name: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
     },
     sprite: {
         type: Sequelize.BLOB,
-        allowNull: false
+        allowNull: true
     }
 },{
     tableName: 'powerUp',   

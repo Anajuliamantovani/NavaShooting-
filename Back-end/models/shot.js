@@ -11,11 +11,11 @@ const Shot = connection.define('shot', {
     },
     color: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
     },
     sprite: {
         type: Sequelize.BLOB,
-        allowNull: false
+        allowNull: true
     },
     price: {
         type: Sequelize.INTEGER,
@@ -27,11 +27,11 @@ const Shot = connection.define('shot', {
     },
     status: {
         type: Sequelize.CHAR,
-        allowNull: false
+        allowNull: true
     },
     permission: {
         type: Sequelize.CHAR,
-        allowNull: false
+        allowNull: true
     },
     coins: {
         type: Sequelize.INTEGER,
