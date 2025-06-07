@@ -15,8 +15,8 @@ const PowerUp = connection.define('powerUp', {
         type: Sequelize.STRING,
         allowNull: false
     },
-    sprite: {
-        type: Sequelize.BLOB,
+    spriteId: {
+        type: Sequelize.INTEGER,
         allowNull: false
     }
 },{
