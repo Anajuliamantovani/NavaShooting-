@@ -13,7 +13,7 @@ const Enemies = require('./models/enemies');
 const bag = require('./models/bag');
 const atributo = require('./models/atributo');
 
-connection.sync({force: true}) // Sincroniza todos os modelos conectados à essa instância
+/*connection.sync({force: true}) // Sincroniza todos os modelos conectados à essa instância
     .then(() => {
         console.log("Banco de dados sincronizado com sucesso!");
         // Comece seu servidor aqui
@@ -21,6 +21,7 @@ connection.sync({force: true}) // Sincroniza todos os modelos conectados à essa
     .catch(err => {
         console.error("Erro ao sincronizar o banco de dados:", err);
     });
+*/
 
 // Routes imports
 const userRoutes = require('./routes/userRoutes');

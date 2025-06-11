@@ -12,11 +12,11 @@ const naveController = require('../controllers/naveController'); // Certifique-s
 
 // POST /naves
 // Cria uma nova nave no sistema.
-router.post('/resgiter', naveController.create);
+router.post('/register', naveController.create);
 
 // PUT /naves
 // Atualiza os dados de uma nave existente. O ID da nave é esperado no corpo da requisição.
-router.put('/', naveController.update);
+router.put('/update', naveController.update);
 
 // DELETE /naves
 // Remove uma nave do sistema. O ID da nave é esperado no corpo da requisição.
