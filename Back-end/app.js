@@ -3,14 +3,27 @@ const app = express();
 const connection = require('./database/database');
 
 // Models
-const Usuario = require('./models/user');
+const User = require('./models/user');
 const Tipo = require('./models/tipo');
 const Figurinha = require('./models/figurinha');
+const Shot = require('./models/shot');
+const PowerUp = require('./models/powerUp');
+const Nave = require('./models/nave');
+const Enemies = require('./models/enemies');
+const bag = require('./models/bag');
+const atributo = require('./models/atributo');
 
 // Routes imports
-const usuarioRoutes = require('./routes/usuarioRoutes');
+const userRoutes = require('./routes/userRoutes');
 const tipoRoutes = require('./routes/tipoRoutes');
 const figurinhaRoutes = require('./routes/figurinhaRoutes');
+const shotRouter = require('./routes/shotRouter');
+const powerUpRouter = require('./routes/powerUpRouter'); 
+const naveRouter = require('./routes/naveRouter'); 
+const enemiesRouter = require('./routes/enemiesRouter'); 
+const bagRouter = require('./routes/bagRouter'); 
+const atributoRouter = require('./routes/atributoRouter');
+
 
 // Environment Setup
 app.use(express.json());
@@ -41,8 +54,14 @@ connection
    })
 
    // Routes
-   app.use('/usuarios', usuarioRoutes);
+   app.use('/user', userRoutes);
    app.use('/tipos', tipoRoutes);
    app.use('/figurinha', figurinhaRoutes);
+   app.use('/shots', shotRouter); 
+   app.use('/powerups', powerUpRouter); 
+   app.use('/naves', naveRouter);
+   app.use('/enemies', enemiesRouter); 
+   app.use('/bags', bagRouter); 
+   app.use('/atributos', atributoRouter);
 
 module.exports = app;
