@@ -13,6 +13,15 @@ const Enemies = require('./models/enemies');
 const bag = require('./models/bag');
 const atributo = require('./models/atributo');
 
+connection.sync({force: true}) // Sincroniza todos os modelos conectados à essa instância
+    .then(() => {
+        console.log("Banco de dados sincronizado com sucesso!");
+        // Comece seu servidor aqui
+    })
+    .catch(err => {
+        console.error("Erro ao sincronizar o banco de dados:", err);
+    });
+
 // Routes imports
 const userRoutes = require('./routes/userRoutes');
 const tipoRoutes = require('./routes/tipoRoutes');
@@ -20,8 +29,8 @@ const figurinhaRoutes = require('./routes/figurinhaRoutes');
 const shotRouter = require('./routes/shotRouter');
 const powerUpRouter = require('./routes/powerUpRouter'); 
 const naveRouter = require('./routes/naveRouter'); 
-const enemiesRouter = require('./routes/enemiesRouter'); 
-const bagRouter = require('./routes/bagRouter'); 
+const enemiesRoutes = require('./routes/enemiesRoutes'); 
+const bagRoutes = require('./routes/bagRoutes'); 
 const atributoRouter = require('./routes/atributoRouter');
 
 
@@ -60,8 +69,8 @@ connection
    app.use('/shots', shotRouter); 
    app.use('/powerups', powerUpRouter); 
    app.use('/naves', naveRouter);
-   app.use('/enemies', enemiesRouter); 
-   app.use('/bags', bagRouter); 
+   app.use('/enemies', enemiesRoutes); 
+   app.use('/bags', bagRoutes); 
    app.use('/atributos', atributoRouter);
 
 module.exports = app;

@@ -12,7 +12,7 @@ const naveController = require('../controllers/naveController'); // Certifique-s
 
 // POST /naves
 // Cria uma nova nave no sistema.
-router.post('/', naveController.create);
+router.post('/resgiter', naveController.create);
 
 // PUT /naves
 // Atualiza os dados de uma nave existente. O ID da nave é esperado no corpo da requisição.
@@ -28,7 +28,7 @@ router.get('/:id', naveController.getOne);
 
 // GET /naves
 // Obtém todas as naves disponíveis no sistema.
-router.get('/', naveController.getAll);
+router.get('/allNave', naveController.getAll);
 
 // POST /naves/activate
 // Ativa uma nave, alterando seu status para 'A' (Ativo). O ID da nave é esperado no corpo da requisição.

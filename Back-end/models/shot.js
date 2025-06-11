@@ -42,6 +42,6 @@ const Shot = connection.define('shot', {
     timestamps: false
 });
 
-Shot.sync({ force: true });
+//Shot.sync({ force: true });
 
 module.exports = Shot;

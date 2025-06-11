@@ -21,6 +21,6 @@ const Bag = connection.define('bag',
 Bag.belongsTo(User);
 Bag.belongsTo(Shot);
 Bag.belongsTo(Nave);
-Bag.sync({ force: true });
+//Bag.sync({ force: true });
 
 module.exports = Bag;

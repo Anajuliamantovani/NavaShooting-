@@ -13,17 +13,17 @@ const Nave = connection.define('nave',
         primaryKey: true,  
         autoIncrement: true,
     },
-    sprite:{
-        type:Sequelize.BLOB,
-        allowNull:false
+    spriteId:{
+        type:Sequelize.INTEGER,
+        allowNull:true
     },
     name: {
         type:Sequelize.STRING,
-        allowNull: false
+        allowNull: true
     },
     price:{
         type:Sequelize.INTEGER,
-        allowNull:false
+        allowNull:true
     }
 },{
     tableName: 'nave',   
@@ -33,6 +33,7 @@ const Nave = connection.define('nave',
 Nave.belongsTo(PowerUp)
 Nave.belongsTo(Shot);
 Nave.belongsTo(Atributo);
-Nave.sync({ force: true });
+
+//Nave.sync({ force: true });
 
 module.exports = Nave;

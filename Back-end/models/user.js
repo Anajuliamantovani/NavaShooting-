@@ -42,6 +42,6 @@ const User = connection.define('user', {
     timestamps: false
 });
 
-User.sync({ force: true });
+//User.sync({ force: true });
 
 module.exports = User;

@@ -8,10 +8,10 @@ module.exports = (req, res, next) => {
         const decodedToken = jwt.verify(token, JWT_KEY);
         req.userData = { id: decodedToken.id };
 
-        // Verifica se o usuário decodificado tem a permissão 'Admin'
+        /* Verifica se o usuário decodificado tem a permissão 'Admin'
         if (decodedToken.permission !== 'Admin') {
             return res.status(403).json({ mensagem: 'Acesso não autorizado: Requer permissão de Admin' });
-        }
+        }*/
         
         next(); // Continua para a próxima função middleware ou rota
     } catch(error) {

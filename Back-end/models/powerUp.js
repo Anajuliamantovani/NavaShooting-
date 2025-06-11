@@ -8,16 +8,16 @@ const PowerUp = connection.define('powerUp', {
     id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        primarykey: true,
-        autoincrement: true
+        primaryKey: true,
+        autoIncrement: true
     },
     name: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
     },
     spriteId: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: true
     }
 },{
     tableName: 'powerUp',   
@@ -29,6 +29,6 @@ PowerUp.belongsTo(Shot);
 PowerUp.belongsTo(Atributo);
 
 
-PowerUp.sync({force: true});
+//PowerUp.sync({force: true});
 
 module.exports = PowerUp;

@@ -12,8 +12,8 @@ const Enemies = connection.define('enemies',
         primaryKey: true,  
         autoIncrement: true,
     },
-    sprite : {
-        type:Sequelize.BLOB,
+    spriteId : {
+        type:Sequelize.INTEGER,
         allowNull: false
     },
     name : {
@@ -37,10 +37,10 @@ const Enemies = connection.define('enemies',
     timestamps: false
 });
 
-Enemies.belongsto(Shot);
-Enemies.belongsto(Atributo);
+Enemies.belongsTo(Shot);
+Enemies.belongsTo(Atributo);
 
-Enemies.sync({ force: true });
+//Enemies.sync({ force: true });
 
 
 module.exports = Enemies;

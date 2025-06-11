@@ -31,6 +31,6 @@ const Atributo = connection.define('atributo',
     timestamps: false
 });
 
-Atributo.sync({ force: true });
+//Atributo.sync({ force: true });
 
 module.exports = Atributo;
