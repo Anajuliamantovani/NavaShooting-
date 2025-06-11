@@ -1,20 +1,48 @@
+/**
+ * @file bagRouter.js
+ * @description Define as rotas para o recurso 'Bag', conectando-as aos métodos
+ * correspondentes no bagController.
+ */
+
 const express = require('express');
 const router = express.Router();
+const bagController = require('../controllers/bagController'); // Certifique-se de que o caminho está correto
 
-const bagController = require('../controllers/bagController');
-const checkAuth = require('../middleware/checkAuth');
+// --- Rotas para Bags ---
 
+// POST /bags
+// Cria uma nova bag no sistema.
+router.post('/', bagController.create);
 
-// Rota pública para cadastro de usuário (se desejar permitir novos cadastros sem token)
-router.post('/', bagController.create); 
+// PUT /bags
+// Atualiza os dados de uma bag existente. O ID da bag é esperado no corpo da requisição.
+router.put('/', bagController.update);
 
-// Rotas protegidas por JWT
-router.get('/',  checkAuth, UsuarioController.getAll);
-router.get('/:id', checkAuth, UsuarioController.getOne);
-router.put('/:id', checkAuth, UsuarioController.update);
-router.delete('/:id', checkAuth, UsuarioController.remove);
+// DELETE /bags
+// Remove uma bag do sistema. O ID da bag é esperado no corpo da requisição.
+router.delete('/', bagController.remove);
 
-// Alteração de senha (pode ser também PUT '/:id/password' para ficar mais claro)
-router.post('/:id/password', checkAuth, UsuarioController.password);
+// GET /bags/:id
+// Obtém uma bag específica pelo seu ID, que é passado como parâmetro na URL.
+router.get('/:id', bagController.getOne);
+
+// GET /bags
+// Obtém todas as bags disponíveis no sistema.
+router.get('/', bagController.getAll);
+
+// GET /bags/user/:userId
+// Obtém uma lista de bags filtradas por um ID de usuário específico,
+// que é passado como parâmetro na URL.
+router.get('/user/:userId', bagController.getByUser);
+
+// GET /bags/nave/:naveId
+// Obtém uma lista de bags filtradas por um ID de nave específica,
+// que é passado como parâmetro na URL.
+router.get('/nave/:naveId', bagController.getByNave);
+
+// GET /bags/shot/:shotId
+// Obtém uma lista de bags filtradas por um ID de shot específico,
+// que é passado como parâmetro na URL.
+router.get('/shot/:shotId', bagController.getByShot);
 
 module.exports = router;
