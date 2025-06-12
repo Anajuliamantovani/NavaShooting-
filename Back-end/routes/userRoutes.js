@@ -8,7 +8,7 @@ router.post('/login', UserController.login);          // Login de usuário
 router.post('/register', UserController.create);     // Cadastro de novo usuário
 
 // Rotas protegidas (requerem token JWT válido)
-router.get('/', checkAuth, UserController.getAll);               // Listar todos usuários
+router.get('/getAll', checkAuth, UserController.getAll);               // Listar todos usuários
 router.get('/:id', checkAuth, UserController.getOne);            // Obter um usuário específico
 router.put('/:id', checkAuth, UserController.update);            // Atualizar informações do usuário
 router.delete('/:id', checkAuth, UserController.remove);         // Remover usuário
