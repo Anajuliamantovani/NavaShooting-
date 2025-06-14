@@ -20,11 +20,13 @@ public class MenuController : MonoBehaviour
 
     public void entrarTela(GameObject tela)
     {
-        for (int x = 0; x < transform.childCount - 1; x++)
+        Transform pai = tela.transform.parent;
+
+        for (int x = 0; x < pai.transform.childCount; ++x)
         {
-            if (transform.GetChild(x).gameObject.activeSelf)
+            if (pai.transform.GetChild(x).gameObject.activeSelf == true)
             {
-                transform.GetChild(x).gameObject.SetActive(false);
+                pai.transform.GetChild(x).gameObject.SetActive(false);
             }
         }
         tela.SetActive(true);

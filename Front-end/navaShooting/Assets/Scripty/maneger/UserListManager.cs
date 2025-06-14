@@ -15,6 +15,8 @@ public class UserListManager : MonoBehaviour
 
     [Header("UI Feedback")]
     [SerializeField] private TMP_Text statusText;
+    [SerializeField] private List<GameObject> listaJogadores;
+
 
     private void Start()
     {
@@ -74,6 +76,19 @@ public class UserListManager : MonoBehaviour
 
             if (response.usuarios != null && response.usuarios.Length > 0)
             {
+
+                foreach (UserData user in response.usuarios)
+                {
+                    if (listaJogadores.Count > 0)
+                    {
+                        foreach (GameObject jogador in listaJogadores)
+                        {
+                            Destroy(jogador);
+                        }
+                        listaJogadores.Clear();
+                    }
+                }
+
                 foreach (UserData user in response.usuarios)
                 {
                     CreateUserPrefab(user);
@@ -108,6 +123,8 @@ public class UserListManager : MonoBehaviour
         userEntry.transform.Find("Txt_Permission").GetComponent<TMP_Text>().text = user.permission;
         userEntry.SetActive(true);
         userEntry.transform.SetParent(contentParent.parent);
+
+        listaJogadores.Add(userEntry);
 
         // Você pode adicionar botões ou outras interações aqui
     }
