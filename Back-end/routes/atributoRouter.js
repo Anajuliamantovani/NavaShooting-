@@ -12,23 +12,23 @@ const atributoController = require('../controllers/atributoController'); // Cert
 
 // POST /atributos
 // Cria um novo atributo no sistema.
-router.post('/', atributoController.create);
+router.post('/newAtribute', atributoController.create);
 
 // PUT /atributos
 // Atualiza os dados de um atributo existente. O ID do atributo e os campos são esperados no corpo da requisição.
-router.put('/', atributoController.update);
+router.put('/updateAtribute', atributoController.update);
 
 // DELETE /atributos
 // Remove um atributo do sistema. O ID do atributo é esperado no corpo da requisição.
-router.delete('/', atributoController.remove);
+router.delete('/deleteAtribute', atributoController.remove);
 
 // GET /atributos/:id
 // Obtém um atributo específico pelo seu ID, que é passado como parâmetro na URL.
-router.get('/:id', atributoController.getOne);
+router.get('/:idAtribute', atributoController.getOne);
 
 // GET /atributos
 // Obtém todos os atributos disponíveis no sistema.
-router.get('/', atributoController.getAll);
+router.get('/allAtributes', atributoController.getAll);
 
 // GET /atributos/speed-range/:min/:max
 // Obtém uma lista de atributos dentro de uma faixa de velocidade específica.

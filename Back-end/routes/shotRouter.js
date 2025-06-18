@@ -12,31 +12,31 @@ const shotController = require('../controllers/shotController'); // Certifique-s
 
 // POST /shots
 // Cria um novo shot no sistema.
-router.post('/', shotController.create);
+router.post('/newShot', shotController.create);
 
 // PUT /shots
 // Atualiza os dados de um shot existente. O ID do shot é esperado no corpo da requisição.
-router.put('/', shotController.update);
+router.put('/attShot', shotController.update);
 
 // DELETE /shots
 // Remove um shot do sistema. O ID do shot é esperado no corpo da requisição.
-router.delete('/', shotController.remove);
+router.delete('/removeShot', shotController.remove);
 
 // GET /shots/:id
 // Obtém um shot específico pelo seu ID, que é passado como parâmetro na URL.
-router.get('/:id', shotController.getOne);
+router.get('/:idShot', shotController.getOne);
 
 // GET /shots
 // Obtém todos os shots disponíveis no sistema.
-router.get('/', shotController.getAll);
+router.get('/allShots', shotController.getAll);
 
 // POST /shots/activate
 // Ativa um shot, alterando seu status para 'A' (Ativo). O ID do shot é esperado no corpo da requisição.
-router.post('/activate', shotController.activate);
+router.post('/activateShot', shotController.activate);
 
 // POST /shots/deactivate
 // Desativa um shot, alterando seu status para 'D' (Desativado). O ID do shot é esperado no corpo da requisição.
-router.post('/deactivate', shotController.deactivate);
+router.post('/deactivateShot', shotController.deactivate);
 
 // GET /shots/permission/:permission
 // Obtém uma lista de shots filtrados por um tipo de permissão específica,

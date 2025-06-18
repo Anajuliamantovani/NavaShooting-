@@ -12,23 +12,22 @@ const bagController = require('../controllers/bagController'); // Certifique-se 
 
 // POST /bags
 // Cria uma nova bag no sistema.
-router.post('/', bagController.create);
-
+router.post('/newBag', bagController.create);
 // PUT /bags
 // Atualiza os dados de uma bag existente. O ID da bag é esperado no corpo da requisição.
-router.put('/', bagController.update);
+router.put('/updateBag', bagController.update);
 
 // DELETE /bags
 // Remove uma bag do sistema. O ID da bag é esperado no corpo da requisição.
-router.delete('/', bagController.remove);
+router.delete('/removeBag', bagController.remove);
 
 // GET /bags/:id
 // Obtém uma bag específica pelo seu ID, que é passado como parâmetro na URL.
-router.get('/:id', bagController.getOne);
+router.get('/:idBag', bagController.getOne);
 
 // GET /bags
 // Obtém todas as bags disponíveis no sistema.
-router.get('/', bagController.getAll);
+router.get('/allBags', bagController.getAll);
 
 // GET /bags/user/:userId
 // Obtém uma lista de bags filtradas por um ID de usuário específico,

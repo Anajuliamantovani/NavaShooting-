@@ -12,23 +12,23 @@ const enemiesController = require('../controllers/enemiesController'); // Certif
 
 // POST /enemies
 // Cria um novo inimigo no sistema.
-router.post('/', enemiesController.create);
+router.post('/newEnemie', enemiesController.create);
 
 // PUT /enemies
 // Atualiza os dados de um inimigo existente. O ID do inimigo é esperado no corpo da requisição.
-router.put('/', enemiesController.update);
+router.put('/updateEnemie', enemiesController.update);
 
 // DELETE /enemies
 // Remove um inimigo do sistema. O ID do inimigo é esperado no corpo da requisição.
-router.delete('/', enemiesController.remove);
+router.delete('/removeEnemie', enemiesController.remove);
 
 // GET /enemies/:id
 // Obtém um inimigo específico pelo seu ID, que é passado como parâmetro na URL.
-router.get('/:id', enemiesController.getOne);
+router.get('/:idEnemie', enemiesController.getOne);
 
 // GET /enemies
 // Obtém todos os inimigos disponíveis no sistema.
-router.get('/', enemiesController.getAll);
+router.get('/allEnemies', enemiesController.getAll);
 
 // GET /enemies/wave/:wave
 // Obtém uma lista de inimigos filtrados por uma "wave" específica,

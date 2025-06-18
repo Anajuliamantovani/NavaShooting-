@@ -12,23 +12,23 @@ const powerUpController = require('../controllers/powerUpController'); // Certif
 
 // POST /powerups
 // Cria um novo PowerUp no sistema.
-router.post('/', powerUpController.create);
+router.post('/newPowerUp', powerUpController.create);
 
 // PUT /powerups
 // Atualiza os dados de um PowerUp existente. O ID do PowerUp é esperado no corpo da requisição.
-router.put('/', powerUpController.update);
+router.put('/attPowerUp', powerUpController.update);
 
 // DELETE /powerups
 // Remove um PowerUp do sistema. O ID do PowerUp é esperado no corpo da requisição.
-router.delete('/', powerUpController.remove);
+router.delete('/removePowerUp', powerUpController.remove);
 
 // GET /powerups/:id
 // Obtém um PowerUp específico pelo seu ID, que é passado como parâmetro na URL.
-router.get('/:id', powerUpController.getOne);
+router.get('/:idPowerUp', powerUpController.getOne);
 
 // GET /powerups
 // Obtém todos os PowerUps disponíveis no sistema.
-router.get('/', powerUpController.getAll);
+router.get('/allPowerUps', powerUpController.getAll);
 
 // GET /powerups/atributo/:atributoId
 // Obtém uma lista de PowerUps filtrados por um atributo específico,
