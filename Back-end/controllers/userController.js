@@ -157,6 +157,25 @@ exports.getAll = async (req, res) => {
   }
 };
 
+// retorna os usuarios ordenados por level (GET /user/ranking) 
+exports.getRanking = async (req, res) => {
+  try {
+    const ranking = await User.findAll({
+      order: [['level', 'DESC']], // Ordena por level (decrescente)
+      attributes: ['nickname', 'level'], // Campos retornados
+      where: { status: 'A' }, // Filtra apenas usuários ativos 
+    });
+
+    return res.status(200).json({ 
+      mensagem: 'Ranking carregado com sucesso',
+      ranking 
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ mensagem: 'Erro ao carregar ranking' });
+  }
+};
+
 // Altera senha (POST /user/password)
 exports.password = async (req, res) => {
   try {
