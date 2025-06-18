@@ -4,8 +4,6 @@ const connection = require('./database/database');
 
 // Models
 const User = require('./models/user');
-//const Tipo = require('./models/tipo');
-//const Figurinha = require('./models/figurinha');
 const Shot = require('./models/shot');
 const PowerUp = require('./models/powerUp');
 const Nave = require('./models/nave');
@@ -25,8 +23,6 @@ const atributo = require('./models/atributo');
 
 // Routes imports
 const userRoutes = require('./routes/userRoutes');
-//const tipoRoutes = require('./routes/tipoRoutes');
-//const figurinhaRoutes = require('./routes/figurinhaRoutes');
 const shotRouter = require('./routes/shotRouter');
 const powerUpRouter = require('./routes/powerUpRouter'); 
 const naveRouter = require('./routes/naveRouter'); 
@@ -65,8 +61,6 @@ connection
 
    // Routes
    app.use('/user', userRoutes);
-   //app.use('/tipos', tipoRoutes);
-   //app.use('/figurinha', figurinhaRoutes);
    app.use('/shots', shotRouter); 
    app.use('/powerups', powerUpRouter); 
    app.use('/naves', naveRouter);

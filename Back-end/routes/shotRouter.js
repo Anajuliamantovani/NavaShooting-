@@ -24,7 +24,7 @@ router.delete('/removeShot', shotController.remove);
 
 // GET /shots/:id
 // Obtém um shot específico pelo seu ID, que é passado como parâmetro na URL.
-router.get('/:idShot', shotController.getOne);
+router.get('/:id/shot', shotController.getOne);
 
 // GET /shots
 // Obtém todos os shots disponíveis no sistema.
