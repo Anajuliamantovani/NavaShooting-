@@ -296,7 +296,7 @@ exports.login = async (req, res) => {
     return res.status(200).json({
       mensagem: 'Login realizado com sucesso',
       token,
-      expiresIn: 14400,
+      expiresIn: 10800,
       user: {
         id: usuario.id,
         nickname: usuario.nickname,
