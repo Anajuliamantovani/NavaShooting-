@@ -24,7 +24,7 @@ router.delete('/removeNave', naveController.remove);
 
 // GET /naves/:id
 // Obtém uma nave específica pelo seu ID, que é passado como parâmetro na URL.
-router.get('/:idNave', naveController.getOne);
+router.get('/:id/nave', naveController.getOne);
 
 // GET /naves
 // Obtém todas as naves disponíveis no sistema.

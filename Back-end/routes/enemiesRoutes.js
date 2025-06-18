@@ -24,7 +24,7 @@ router.delete('/removeEnemie', enemiesController.remove);
 
 // GET /enemies/:id
 // Obtém um inimigo específico pelo seu ID, que é passado como parâmetro na URL.
-router.get('/:idEnemie', enemiesController.getOne);
+router.get('/:id/enemie', enemiesController.getOne);
 
 // GET /enemies
 // Obtém todos os inimigos disponíveis no sistema.
