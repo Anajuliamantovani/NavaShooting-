@@ -24,7 +24,7 @@ router.delete('/deleteAtribute', atributoController.remove);
 
 // GET /atributos/:id
 // Obtém um atributo específico pelo seu ID, que é passado como parâmetro na URL.
-router.get('/:idAtribute', atributoController.getOne);
+router.get('/:id/atribute', atributoController.getOne);
 
 // GET /atributos
 // Obtém todos os atributos disponíveis no sistema.

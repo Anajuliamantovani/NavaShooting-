@@ -23,7 +23,7 @@ router.delete('/removeBag', bagController.remove);
 
 // GET /bags/:id
 // Obtém uma bag específica pelo seu ID, que é passado como parâmetro na URL.
-router.get('/:idBag', bagController.getOne);
+router.get('/:id/bag', bagController.getOne);
 
 // GET /bags
 // Obtém todas as bags disponíveis no sistema.
