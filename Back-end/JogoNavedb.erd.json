@@ -4,9 +4,9 @@
   "settings": {
     "width": 2000,
     "height": 2000,
-    "scrollTop": -282.8575,
-    "scrollLeft": -579.1207,
-    "zoomLevel": 0.76,
+    "scrollTop": -496.7983,
+    "scrollLeft": -565.1787,
+    "zoomLevel": 0.49,
     "show": 431,
     "database": 4,
     "databaseName": "JogoNavedb",
@@ -1463,34 +1463,6 @@
         "meta": {
           "updateAt": 1744816147467,
           "createAt": 1744816147467
-        }
-      },
-      "dJ1FRG3-hqnaMIdcYz-yp": {
-        "id": "dJ1FRG3-hqnaMIdcYz-yp",
-        "identification": false,
-        "relationshipType": 8,
-        "startRelationshipType": 2,
-        "start": {
-          "tableId": "dw-bmC5Lvm-lF9hQQA_Qp",
-          "columnIds": [
-            "0Ne6lgFDuYxsUns5u5tcB"
-          ],
-          "x": 644,
-          "y": 1355.5,
-          "direction": 1
-        },
-        "end": {
-          "tableId": "Wi2AdgJ_hEj7pM0UhPkYE",
-          "columnIds": [
-            "G3YmRjUhOmfZlrc4AdaEu"
-          ],
-          "x": 356.25,
-          "y": 724.5,
-          "direction": 8
-        },
-        "meta": {
-          "updateAt": 1744816216002,
-          "createAt": 1744816216002
         }
       },
       "-7DbdcRXqFNxGXKDFhiQD": {
