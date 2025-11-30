@@ -3,32 +3,36 @@ const Nave = require('../models/nave');
 // Cria uma nova nave
 exports.create = async (req, res) => {
   try {
-    const { name, price, sprite, masLife, status } = req.body;
+    // Nota: Quando usamos multer, os campos de texto vêm em req.body
+    // e o arquivo vem em req.file
+    const { name, price, masLife, status } = req.body;
     
-    // Validação: 'status' é obrigatório no banco. 'name' geralmente é obrigatório por regra de negócio.
+    // Caminho da imagem para salvar no banco
+    let spritePath = null;
+
+    if (req.file) {
+        // Salva exemplo: "imagens/1723123123-nave.png"
+        // O 'imagens/' vem do alias que criamos no app.js
+        spritePath = req.file.filename; 
+    }
+
     if (!name || !status) {
-      return res.status(400).json({ mensagem: 'Campos obrigatórios não definidos (name, status)' });
+      return res.status(400).json({ mensagem: 'Campos obrigatórios: name, status' });
     }
 
     const novaNave = await Nave.create({
       name,
-      price: price || null,
-      sprite: sprite || null,
-      masLife: masLife || null,
+      price: price || 0, // Garante que não quebre se vier vazio
+      sprite: spritePath, // Aqui entra o nome do arquivo da imagem
+      masLife: masLife || 100,
       status
     });
 
     return res.status(201).json({
       mensagem: 'Nave criada com sucesso',
-      nave: {
-        id: novaNave.id,
-        name: novaNave.name,
-        price: novaNave.price,
-        sprite: novaNave.sprite,
-        masLife: novaNave.masLife,
-        status: novaNave.status
-      }
+      nave: novaNave
     });
+
   } catch (err) {
     console.error(err);
     return res.status(500).json({ mensagem: 'Erro na criação da nave' });

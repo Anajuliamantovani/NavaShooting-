@@ -19,6 +19,7 @@ const StoreEnemies = connection.define('storeEnemies',
 
 StoreEnemies.belongsTo(User);
 StoreEnemies.belongsTo(Enemies);
-StoreEnemies.sync({ force: true });
+
+//StoreEnemies.sync({ force: true });
 
 module.exports = StoreEnemies;

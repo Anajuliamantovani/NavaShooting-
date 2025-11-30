@@ -18,6 +18,6 @@ router.post('/:id/deactivate', checkAuth, UserController.deactivate); // Desativ
 router.put('/:id/permission', checkAuth, UserController.updatePermission); // Atualizar permissão
 router.post('/:id/coins', checkAuth, UserController.addCoins);   // Adicionar moedas
 router.post('/:id/level-up', checkAuth, UserController.addScore); // Aumentar nível
-router.get('/user/ranking', checkAuth, UserController.getRanking); // rank por level
+router.get('/ranking', checkAuth, UserController.getRanking); // rank por level
 
 module.exports = router;
