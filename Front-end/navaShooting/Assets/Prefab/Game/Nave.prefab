@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 828424111834441357}
   - component: {fileID: 8392700632925808183}
   - component: {fileID: 2957448271246940906}
+  - component: {fileID: 1867187095444300513}
   m_Layer: 0
   m_Name: Nave
   m_TagString: Untagged
@@ -103,6 +104,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tiro: {fileID: 1691910342987956660, guid: efb3f66e9a8a68948975c2c21f515f7c, type: 3}
   velocidade: 15
+  podeTirar: 0
 --- !u!50 &2957448271246940906
 Rigidbody2D:
   serializedVersion: 5
@@ -130,3 +132,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &1867187095444300513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3348565403407412014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 986ee096f08afb141a2c6469f45d664c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

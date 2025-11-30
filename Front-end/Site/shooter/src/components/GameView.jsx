@@ -18,7 +18,7 @@ function GameView() {
   // ID da nave que queremos carregar. 
   // Num cenário real, isso poderia vir da URL (ex: useParams) ou de um estado global.
   // Por enquanto, deixamos fixo em 1 para teste.
-  const naveIdParaCarregar = 1; 
+  const naveIdParaCarregar = 3; 
 
   // Função que envia o Token e o ID para dentro do jogo
   const sendAuthToUnity = useCallback(() => {
