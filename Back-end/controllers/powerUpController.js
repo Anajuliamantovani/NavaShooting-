@@ -3,15 +3,17 @@ const PowerUp = require('../models/powerUp');
 // Cria um novo PowerUp
 exports.create = async (req, res) => {
   try {
-    const { name, spriteId, shotId, atributoId } = req.body;
+    const { name, sprite, status, shotId, atributoId } = req.body;
     
-    if (!name || !spriteId) {
-      return res.status(400).json({ mensagem: 'Campos obrigatórios não definidos (name, spriteId)' });
+    // Validação: 'status' é obrigatório no banco. 'name' e 'sprite' validamos por regra de negócio.
+    if (!status) {
+      return res.status(400).json({ mensagem: 'O campo status é obrigatório.' });
     }
 
     const novoPowerUp = await PowerUp.create({
-      name,
-      spriteId,
+      name: name || null,
+      sprite: sprite || null,
+      status,
       shotId: shotId || null,
       atributoId: atributoId || null
     });
@@ -21,7 +23,8 @@ exports.create = async (req, res) => {
       powerUp: {
         id: novoPowerUp.id,
         name: novoPowerUp.name,
-        spriteId: novoPowerUp.spriteId,
+        sprite: novoPowerUp.sprite,
+        status: novoPowerUp.status,
         shotId: novoPowerUp.shotId,
         atributoId: novoPowerUp.atributoId
       }
@@ -35,10 +38,11 @@ exports.create = async (req, res) => {
 // Atualiza dados do PowerUp
 exports.update = async (req, res) => {
   try {
-    const { id, name, spriteId, shotId, atributoId } = req.body;
+    const { id, name, sprite, status, shotId, atributoId } = req.body;
     
-    if (!id || !name || !spriteId) {
-      return res.status(400).json({ mensagem: 'Campos obrigatórios não definidos (id, name, spriteId)' });
+    // Validação básica
+    if (!id || !status) {
+      return res.status(400).json({ mensagem: 'Campos obrigatórios não definidos (id, status)' });
     }
 
     const powerUpExistente = await PowerUp.findByPk(id);
@@ -49,7 +53,8 @@ exports.update = async (req, res) => {
     await PowerUp.update(
       { 
         name, 
-        spriteId,
+        sprite,
+        status,
         shotId,
         atributoId
       },
@@ -105,7 +110,7 @@ exports.getOne = async (req, res) => {
         { association: 'shot', attributes: ['id', 'name'] },
         { association: 'atributo', attributes: ['id', 'name'] }
       ],
-      attributes: ['id', 'name', 'spriteId']
+      attributes: ['id', 'name', 'sprite', 'status', 'shotId', 'atributoId']
     });
 
     if (!powerUp) {
@@ -131,7 +136,7 @@ exports.getAll = async (req, res) => {
         { association: 'shot', attributes: ['id', 'name'] },
         { association: 'atributo', attributes: ['id', 'name'] }
       ],
-      attributes: ['id', 'name', 'spriteId']
+      attributes: ['id', 'name', 'sprite', 'status', 'shotId', 'atributoId']
     });
 
     return res.status(200).json({ 
@@ -155,7 +160,7 @@ exports.getByAtributo = async (req, res) => {
       include: [
         { association: 'shot', attributes: ['id', 'name'] }
       ],
-      attributes: ['id', 'name', 'spriteId']
+      attributes: ['id', 'name', 'sprite', 'status', 'shotId', 'atributoId']
     });
 
     if (!powerUps || powerUps.length === 0) {
@@ -183,7 +188,7 @@ exports.getByShot = async (req, res) => {
       include: [
         { association: 'atributo', attributes: ['id', 'name'] }
       ],
-      attributes: ['id', 'name', 'spriteId']
+      attributes: ['id', 'name', 'sprite', 'status', 'shotId', 'atributoId']
     });
 
     if (!powerUps || powerUps.length === 0) {

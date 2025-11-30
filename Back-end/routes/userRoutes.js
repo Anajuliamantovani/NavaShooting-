@@ -9,15 +9,15 @@ router.post('/register', UserController.create);     // Cadastro de novo usuári
 
 // Rotas protegidas (requerem token JWT válido)
 router.get('/getAll', checkAuth, UserController.getAll);               // Listar todos usuários
-router.get('/:id/get', checkAuth, UserController.getOne);            // Obter um usuário específico
+router.get('/:id/get', checkAuth, UserController.getOne);               // Obter um usuário específico
 router.put('/:id/update', checkAuth, UserController.update);            // Atualizar informações do usuário
 router.delete('/:id/remove', checkAuth, UserController.remove);         // Remover usuário
-router.put('/:id/password', checkAuth, UserController.password); // Alterar senha
-router.post('/:id/activate', checkAuth, UserController.activate); // Ativar usuário
+router.put('/:id/password', checkAuth, UserController.password);        // Alterar senha
+router.post('/:id/activate', checkAuth, UserController.activate);       // Ativar usuário
 router.post('/:id/deactivate', checkAuth, UserController.deactivate); // Desativar usuário
 router.put('/:id/permission', checkAuth, UserController.updatePermission); // Atualizar permissão
 router.post('/:id/coins', checkAuth, UserController.addCoins);   // Adicionar moedas
-router.post('/:id/level-up', checkAuth, UserController.levelUp); // Aumentar nível
-router.get('/user/ranking', userController.getRanking); // rank por level
+router.post('/:id/level-up', checkAuth, UserController.addScore); // Aumentar nível
+router.get('/user/ranking', checkAuth, UserController.getRanking); // rank por level
 
 module.exports = router;

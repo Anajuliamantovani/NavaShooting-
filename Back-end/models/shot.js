@@ -9,12 +9,8 @@ const Shot = connection.define('shot', {
         primaryKey: true,  
         autoIncrement: true,
     },
-    color: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
     sprite: {
-        type: Sequelize.BLOB,
+        type: Sequelize.STRING,
         allowNull: false
     },
     price: {
@@ -25,18 +21,14 @@ const Shot = connection.define('shot', {
         type:Sequelize.STRING,
         allowNull: true
     },
-    status: {
-        type: Sequelize.CHAR,
-        allowNull: false
-    },
-    permission: {
-        type: Sequelize.CHAR,
-        allowNull: false
-    },
-    coins: {
+    damage: {
         type: Sequelize.INTEGER,
         allowNull: true
     },
+    status: {
+            type: Sequelize.CHAR,
+            allowNull: false
+    }
 },{
     tableName: 'shot',   
     timestamps: false

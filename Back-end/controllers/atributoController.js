@@ -1,18 +1,19 @@
+const Sequelize = require('sequelize');
 const Atributo = require('../models/atributo');
 
 // Cria um novo atributo
 exports.create = async (req, res) => {
   try {
-    const { speed, scale, maxLife, shield } = req.body;
+    const { speed, scale, shield } = req.body;
     
-    if (speed === undefined || scale === undefined || maxLife === undefined || shield === undefined) {
-      return res.status(400).json({ mensagem: 'Todos os campos são obrigatórios (speed, scale, maxLife, shield)' });
+    // Validação: Verificamos undefined porque 0 ou false são valores válidos
+    if (speed === undefined || scale === undefined || shield === undefined) {
+      return res.status(400).json({ mensagem: 'Todos os campos são obrigatórios (speed, scale, shield)' });
     }
 
     const novoAtributo = await Atributo.create({
       speed,
       scale,
-      maxLife,
       shield
     });
 
@@ -22,7 +23,6 @@ exports.create = async (req, res) => {
         id: novoAtributo.id,
         speed: novoAtributo.speed,
         scale: novoAtributo.scale,
-        maxLife: novoAtributo.maxLife,
         shield: novoAtributo.shield
       }
     });
@@ -35,10 +35,10 @@ exports.create = async (req, res) => {
 // Atualiza dados do atributo
 exports.update = async (req, res) => {
   try {
-    const { id, speed, scale, maxLife, shield } = req.body;
+    const { id, speed, scale, shield } = req.body;
     
-    if (!id || speed === undefined || scale === undefined || maxLife === undefined || shield === undefined) {
-      return res.status(400).json({ mensagem: 'Todos os campos são obrigatórios (id, speed, scale, maxLife, shield)' });
+    if (!id || speed === undefined || scale === undefined || shield === undefined) {
+      return res.status(400).json({ mensagem: 'Todos os campos são obrigatórios (id, speed, scale, shield)' });
     }
 
     const atributoExistente = await Atributo.findByPk(id);
@@ -50,7 +50,6 @@ exports.update = async (req, res) => {
       { 
         speed,
         scale,
-        maxLife,
         shield
       },
       { where: { id } }
@@ -177,13 +176,3 @@ exports.getWithShield = async (req, res) => {
     return res.status(500).json({ mensagem: 'Erro ao buscar atributos com shield' });
   }
 };
-
-/*
-POST /atributo/criar
-PUT /atributo/alterar
-GET /atributo/consultarUm/:id
-GET /atributo/consultarTodos
-DELETE /atributo/excluir
-GET /atributo/porVelocidade/:min/:max
-GET /atributo/comShield
-*/

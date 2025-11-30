@@ -3,10 +3,13 @@ const Enemies = require('../models/enemies');
 // Cria um novo inimigo
 exports.create = async (req, res) => {
   try {
-    const { name, sprite, movement, coinsDropped, wave, shotId, atributoId } = req.body;
+    const { name, sprite, movement, coinsDropped, wave, score, status, shotId, atributoId } = req.body;
     
-    if (!name || !sprite || !movement || !coinsDropped || !wave) {
-      return res.status(400).json({ mensagem: 'Campos obrigatórios não definidos (name, sprite, movement, coinsDropped, wave)' });
+    // Validação: Todos os campos 'allowNull: false' do model
+    if (!name || !sprite || !movement || !coinsDropped || !wave || !score || !status) {
+      return res.status(400).json({ 
+        mensagem: 'Campos obrigatórios não definidos (name, sprite, movement, coinsDropped, wave, score, status)' 
+      });
     }
 
     const novoInimigo = await Enemies.create({
@@ -15,6 +18,8 @@ exports.create = async (req, res) => {
       movement,
       coinsDropped,
       wave,
+      score,
+      status,
       shotId: shotId || null,
       atributoId: atributoId || null
     });
@@ -28,6 +33,8 @@ exports.create = async (req, res) => {
         movement: novoInimigo.movement,
         coinsDropped: novoInimigo.coinsDropped,
         wave: novoInimigo.wave,
+        score: novoInimigo.score,
+        status: novoInimigo.status,
         shotId: novoInimigo.shotId,
         atributoId: novoInimigo.atributoId
       }
@@ -41,10 +48,12 @@ exports.create = async (req, res) => {
 // Atualiza dados do inimigo
 exports.update = async (req, res) => {
   try {
-    const { id, name, sprite, movement, coinsDropped, wave, shotId, atributoId } = req.body;
+    const { id, name, sprite, movement, coinsDropped, wave, score, status, shotId, atributoId } = req.body;
     
-    if (!id || !name || !sprite || !movement || !coinsDropped || !wave) {
-      return res.status(400).json({ mensagem: 'Campos obrigatórios não definidos (id, name, sprite, movement, coinsDropped, wave)' });
+    if (!id || !name || !sprite || !movement || !coinsDropped || !wave || !score || !status) {
+      return res.status(400).json({ 
+        mensagem: 'Campos obrigatórios não definidos (id, name, sprite, movement, coinsDropped, wave, score, status)' 
+      });
     }
 
     const inimigoExistente = await Enemies.findByPk(id);
@@ -59,13 +68,20 @@ exports.update = async (req, res) => {
         movement, 
         coinsDropped, 
         wave,
+        score,
+        status,
         shotId,
         atributoId
       },
       { where: { id } }
     );
 
-    const inimigoAtualizado = await Enemies.findByPk(id);
+    const inimigoAtualizado = await Enemies.findByPk(id, {
+      include: [
+        { association: 'shot', attributes: ['id', 'name'] },
+        { association: 'atributo', attributes: ['id', 'name'] }
+      ]
+    });
 
     return res.status(200).json({ 
       mensagem: 'Inimigo alterado com sucesso!',
@@ -109,7 +125,7 @@ exports.getOne = async (req, res) => {
         { association: 'shot', attributes: ['id', 'name'] },
         { association: 'atributo', attributes: ['id', 'name'] }
       ],
-      attributes: ['id', 'name', 'sprite', 'movement', 'coinsDropped', 'wave']
+      attributes: ['id', 'name', 'sprite', 'movement', 'coinsDropped', 'wave', 'score', 'status', 'shotId', 'atributoId']
     });
 
     if (!enemy) {
@@ -135,7 +151,7 @@ exports.getAll = async (req, res) => {
         { association: 'shot', attributes: ['id', 'name'] },
         { association: 'atributo', attributes: ['id', 'name'] }
       ],
-      attributes: ['id', 'name', 'sprite', 'movement', 'coinsDropped', 'wave']
+      attributes: ['id', 'name', 'sprite', 'movement', 'coinsDropped', 'wave', 'score', 'status', 'shotId', 'atributoId']
     });
 
     return res.status(200).json({ 
@@ -160,7 +176,7 @@ exports.getByWave = async (req, res) => {
         { association: 'shot', attributes: ['id', 'name'] },
         { association: 'atributo', attributes: ['id', 'name'] }
       ],
-      attributes: ['id', 'name', 'sprite', 'movement', 'coinsDropped', 'wave']
+      attributes: ['id', 'name', 'sprite', 'movement', 'coinsDropped', 'wave', 'score', 'status', 'shotId', 'atributoId']
     });
 
     if (!enemies || enemies.length === 0) {

@@ -18,10 +18,6 @@ const Atributo = connection.define('atributo',
         type:Sequelize.DOUBLE,
         allowNull:false
     },
-    maxLife : {
-        type:Sequelize.DOUBLE,
-        allowNull: false
-    },
     shield : {
         type:Sequelize.BOOLEAN,
         allowNull: false

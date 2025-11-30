@@ -13,8 +13,8 @@ const Nave = connection.define('nave',
         primaryKey: true,  
         autoIncrement: true,
     },
-    spriteId:{
-        type:Sequelize.INTEGER,
+    sprite:{
+        type:Sequelize.STRING,
         allowNull:true
     },
     name: {
@@ -24,15 +24,19 @@ const Nave = connection.define('nave',
     price:{
         type:Sequelize.INTEGER,
         allowNull:true
+    },
+    masLife:{
+        type:Sequelize.INTEGER,
+        allowNull:true
+    },
+    status: {
+        type: Sequelize.CHAR,
+        allowNull: false
     }
 },{
     tableName: 'nave',   
     timestamps: false
 });
-
-Nave.belongsTo(PowerUp)
-Nave.belongsTo(Shot);
-Nave.belongsTo(Atributo);
 
 //Nave.sync({ force: true });
 

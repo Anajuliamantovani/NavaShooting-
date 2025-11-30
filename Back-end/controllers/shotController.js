@@ -3,33 +3,30 @@ const Shot = require('../models/shot');
 // Cria um novo shot
 exports.create = async (req, res) => {
   try {
-    const { color, sprite, price, name, status, permission, coins } = req.body;
+    const { sprite, price, name, damage, status } = req.body;
     
-    if (!color || !sprite || !status || !permission) {
-      return res.status(400).json({ mensagem: 'Campos obrigatórios não definidos (color, sprite, status, permission)' });
+    // Validação: Apenas os campos allowNull: false do model são obrigatórios aqui
+    if (!sprite || !status) {
+      return res.status(400).json({ mensagem: 'Campos obrigatórios não definidos (sprite, status)' });
     }
 
     const novoShot = await Shot.create({
-      color,
       sprite,
       price: price || null,
       name: name || null,
-      status,
-      permission,
-      coins: coins || null
+      damage: damage || null,
+      status
     });
 
     return res.status(201).json({
       mensagem: 'Shot criado com sucesso',
       shot: {
         id: novoShot.id,
-        color: novoShot.color,
         sprite: novoShot.sprite,
         price: novoShot.price,
         name: novoShot.name,
-        status: novoShot.status,
-        permission: novoShot.permission,
-        coins: novoShot.coins
+        damage: novoShot.damage,
+        status: novoShot.status
       }
     });
   } catch (err) {
@@ -41,10 +38,10 @@ exports.create = async (req, res) => {
 // Atualiza dados do shot
 exports.update = async (req, res) => {
   try {
-    const { id, color, sprite, price, name, status, permission, coins } = req.body;
+    const { id, sprite, price, name, damage, status } = req.body;
     
-    if (!id || !color || !sprite || !status || !permission) {
-      return res.status(400).json({ mensagem: 'Campos obrigatórios não definidos (id, color, sprite, status, permission)' });
+    if (!id || !sprite || !status) {
+      return res.status(400).json({ mensagem: 'Campos obrigatórios não definidos (id, sprite, status)' });
     }
 
     const shotExistente = await Shot.findByPk(id);
@@ -54,13 +51,11 @@ exports.update = async (req, res) => {
 
     await Shot.update(
       { 
-        color, 
         sprite, 
         price, 
         name, 
-        status, 
-        permission, 
-        coins 
+        damage, 
+        status 
       },
       { where: { id } }
     );
@@ -105,7 +100,7 @@ exports.getOne = async (req, res) => {
     const { id } = req.params;
     
     const shot = await Shot.findByPk(id, {
-      attributes: ['id', 'color', 'sprite', 'price', 'name', 'status', 'permission', 'coins']
+      attributes: ['id', 'sprite', 'price', 'name', 'damage', 'status']
     });
 
     if (!shot) {
@@ -127,7 +122,7 @@ exports.getAll = async (req, res) => {
   try {
     const shots = await Shot.findAll({
       order: [['name', 'ASC']],
-      attributes: ['id', 'color', 'sprite', 'price', 'name', 'status', 'permission', 'coins']
+      attributes: ['id', 'sprite', 'price', 'name', 'damage', 'status']
     });
 
     return res.status(200).json({ 
@@ -192,31 +187,6 @@ exports.deactivate = async (req, res) => {
   }
 };
 
-// Obtém shots por permissão
-exports.getByPermission = async (req, res) => {
-  try {
-    const { permission } = req.params;
-    
-    const shots = await Shot.findAll({
-      where: { permission },
-      order: [['name', 'ASC']],
-      attributes: ['id', 'color', 'sprite', 'price', 'name', 'status', 'coins']
-    });
-
-    if (!shots || shots.length === 0) {
-      return res.status(404).json({ mensagem: 'Nenhum shot encontrado com esta permissão' });
-    }
-
-    return res.status(200).json({ 
-      mensagem: 'Shots encontrados', 
-      shots 
-    });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ mensagem: 'Erro ao buscar shots por permissão' });
-  }
-};
-
 /*
 POST /shot/criar
 PUT /shot/alterar
@@ -225,5 +195,4 @@ GET /shot/consultarTodos
 DELETE /shot/excluir
 POST /shot/ativar
 POST /shot/desativar
-GET /shot/porPermissao/:permission
 */

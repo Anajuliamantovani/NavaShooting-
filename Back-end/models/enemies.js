@@ -12,8 +12,8 @@ const Enemies = connection.define('enemies',
         primaryKey: true,  
         autoIncrement: true,
     },
-    spriteId : {
-        type:Sequelize.INTEGER,
+    sprite : {
+        type:Sequelize.STRING,
         allowNull: false
     },
     name : {
@@ -31,6 +31,14 @@ const Enemies = connection.define('enemies',
     wave : {
         type:Sequelize.INTEGER,
         allowNull:false
+    },
+    score : {
+        type:Sequelize.INTEGER,
+        allowNull:false
+    },
+    status: {
+        type: Sequelize.CHAR,
+        allowNull: false
     }
 },{
     tableName: 'enemies',   

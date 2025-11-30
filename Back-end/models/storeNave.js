@@ -1,10 +1,9 @@
 const Sequelize = require('sequelize');
 const connection = require('../database/database');
 const User = require('./user');
-const Shot = require('./shot');
 const Nave = require('./nave');
 
-const Bag = connection.define('bag', 
+const StoreNave = connection.define('storeNave', 
 {
 
     id : {
@@ -14,14 +13,13 @@ const Bag = connection.define('bag',
         autoIncrement: true,
     }
 },{
-    tableName: 'bag',   
+    tableName: 'storeNave',   
     timestamps: false
 });
 
-Bag.belongsTo(User);
-Bag.belongsTo(Shot);
-Bag.belongsTo(Nave);
+StoreNave.belongsTo(User);
+StoreNave.belongsTo(Nave);
 
-//Bag.sync({ force: true });
+//StoreNave.sync({ force: true });
 
-module.exports = Bag;
+module.exports = StoreNave;

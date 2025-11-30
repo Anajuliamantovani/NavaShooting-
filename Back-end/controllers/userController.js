@@ -28,7 +28,7 @@ exports.create = async (req, res) => {
       nickname,
       email,
       password: hashed,
-      level: 1,
+      score: 0, // Inicia com Score 0
       status: 'A',
       permission: 'User',
       coins: 0
@@ -40,7 +40,7 @@ exports.create = async (req, res) => {
         id: novo.id,
         nickname: novo.nickname,
         email: novo.email,
-        level: novo.level,
+        score: novo.score,
         coins: novo.coins
       }
     });
@@ -85,7 +85,7 @@ exports.update = async (req, res) => {
     );
 
     const usuarioAtualizado = await User.findByPk(id, {
-      attributes: ['id', 'nickname', 'email', 'level', 'coins', 'status', 'permission']
+      attributes: ['id', 'nickname', 'email', 'score', 'coins', 'status', 'permission']
     });
 
     return res.status(200).json({ 
@@ -125,7 +125,7 @@ exports.getOne = async (req, res) => {
     const { id } = req.params;
     const usuario = await User.findOne({
       where: { id },
-      attributes: ['id', 'nickname', 'email', 'level', 'coins', 'status', 'permission']
+      attributes: ['id', 'nickname', 'email', 'score', 'coins', 'status', 'permission']
     });
     if (!usuario) {
       return res.status(404).json({ mensagem: 'Usuário não encontrado' });
@@ -145,7 +145,7 @@ exports.getAll = async (req, res) => {
   try {
     const usuarios = await User.findAll({
       order: [['nickname', 'ASC']],
-      attributes: ['id', 'nickname', 'email', 'level', 'coins', 'status', 'permission']
+      attributes: ['id', 'nickname', 'email', 'score', 'coins', 'status', 'permission']
     });
     return res.status(200).json({ 
       mensagem: 'Usuários encontrados', 
@@ -157,12 +157,12 @@ exports.getAll = async (req, res) => {
   }
 };
 
-// retorna os usuarios ordenados por level (GET /user/ranking) 
+// retorna os usuarios ordenados por score (GET /user/ranking) 
 exports.getRanking = async (req, res) => {
   try {
     const ranking = await User.findAll({
-      order: [['level', 'DESC']], // Ordena por level (decrescente)
-      attributes: ['nickname', 'level'], // Campos retornados
+      order: [['score', 'DESC']], // Ordena por SCORE (decrescente)
+      attributes: ['nickname', 'score'], // Campos retornados
       where: { status: 'A' }, // Filtra apenas usuários ativos 
     });
 
@@ -302,7 +302,7 @@ exports.login = async (req, res) => {
         nickname: usuario.nickname,
         email: usuario.email,
         permission: usuario.permission,
-        level: usuario.level,
+        score: usuario.score, // Retorna score
         coins: usuario.coins
       }
     });
@@ -369,12 +369,12 @@ exports.addCoins = async (req, res) => {
   }
 };
 
-// Atualiza nível do usuário (POST /user/levelUp)
-exports.levelUp = async (req, res) => {
+// Adiciona SCORE ao usuário (POST /user/addScore) - ANTIGO levelUp
+exports.addScore = async (req, res) => {
   try {
-    const { id } = req.body;
-    if (!id) {
-      return res.status(400).json({ mensagem: 'ID não definido' });
+    const { id, score } = req.body; // 'score' aqui é o valor a ser somado
+    if (!id || score === undefined) {
+      return res.status(400).json({ mensagem: 'Campos obrigatórios não definidos (id, score)' });
     }
 
     const usuario = await User.findByPk(id);
@@ -382,33 +382,36 @@ exports.levelUp = async (req, res) => {
       return res.status(404).json({ mensagem: 'Usuário não encontrado' });
     }
 
-    const newLevel = parseInt(usuario.level || 1) + 1;
+    // Soma o score recebido com o atual
+    const newScore = parseInt(usuario.score || 0) + parseInt(score);
+    
     await User.update(
-      { level: newLevel },
+      { score: newScore },
       { where: { id } }
     );
 
     return res.status(200).json({ 
-      mensagem: 'Nível aumentado com sucesso!',
-      level: newLevel
+      mensagem: 'Score atualizado com sucesso!',
+      score: newScore
     });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ mensagem: 'Erro ao aumentar nível' });
+    return res.status(500).json({ mensagem: 'Erro ao atualizar score' });
   }
 };
 
 /*
-POST /user/criar - Cria novo usuário
+POST /user/criar - Cria novo usuário (score inicial 0)
 PUT /user/alterar - Atualiza dados do usuário
 DELETE /user/excluir - Remove usuário
-GET /user/consultarUm/:id - Obtém um usuário
+GET /user/consultarUm/:id - Obtém um usuário (traz score)
 GET /user/consultarTodos - Lista todos usuários
+GET /user/ranking - Lista ordenada por score
 POST /user/password - Altera senha
 POST /user/ativar - Ativa usuário
 POST /user/desativar - Desativa usuário
-POST /user/login - Login e geração de token
+POST /user/login - Login e geração de token (retorna score)
 POST /user/permission - Atualiza permissão
 POST /user/addCoins - Adiciona moedas
-POST /user/levelUp - Aumenta nível
+POST /user/addScore - Soma pontos ao score atual (Antigo levelUp)
 */

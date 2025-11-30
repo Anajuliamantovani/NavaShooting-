@@ -3,20 +3,19 @@ const Nave = require('../models/nave');
 // Cria uma nova nave
 exports.create = async (req, res) => {
   try {
-    const { name, price, spriteId, powerUpId, shotId, atributoId } = req.body;
+    const { name, price, sprite, masLife, status } = req.body;
     
-    if (!name || !price) {
-      return res.status(400).json({ mensagem: 'Campos obrigatórios não definidos (name, price)' });
+    // Validação: 'status' é obrigatório no banco. 'name' geralmente é obrigatório por regra de negócio.
+    if (!name || !status) {
+      return res.status(400).json({ mensagem: 'Campos obrigatórios não definidos (name, status)' });
     }
 
     const novaNave = await Nave.create({
       name,
-      price,
-      spriteId: spriteId || null,
-      powerUpId: powerUpId || null,
-      shotId: shotId || null,
-      atributoId: atributoId || null,
-      status: 'A'
+      price: price || null,
+      sprite: sprite || null,
+      masLife: masLife || null,
+      status
     });
 
     return res.status(201).json({
@@ -25,10 +24,8 @@ exports.create = async (req, res) => {
         id: novaNave.id,
         name: novaNave.name,
         price: novaNave.price,
-        spriteId: novaNave.spriteId,
-        powerUpId: novaNave.powerUpId,
-        shotId: novaNave.shotId,
-        atributoId: novaNave.atributoId,
+        sprite: novaNave.sprite,
+        masLife: novaNave.masLife,
         status: novaNave.status
       }
     });
@@ -41,10 +38,10 @@ exports.create = async (req, res) => {
 // Atualiza dados da nave
 exports.update = async (req, res) => {
   try {
-    const { id, name, price, spriteId, powerUpId, shotId, atributoId } = req.body;
+    const { id, name, price, sprite, masLife, status } = req.body;
     
-    if (!id || !name || !price) {
-      return res.status(400).json({ mensagem: 'Campos obrigatórios não definidos (id, name, price)' });
+    if (!id || !name || !status) {
+      return res.status(400).json({ mensagem: 'Campos obrigatórios não definidos (id, name, status)' });
     }
 
     const naveExistente = await Nave.findByPk(id);
@@ -56,10 +53,9 @@ exports.update = async (req, res) => {
       { 
         name, 
         price, 
-        spriteId, 
-        powerUpId, 
-        shotId, 
-        atributoId 
+        sprite, 
+        masLife, 
+        status 
       },
       { where: { id } }
     );
@@ -98,18 +94,14 @@ exports.remove = async (req, res) => {
   }
 };
 
-// Obtém uma nave específica com relacionamentos
+// Obtém uma nave específica
 exports.getOne = async (req, res) => {
   try {
     const { id } = req.params;
     
+    // Sem relacionamentos (include removido)
     const nave = await Nave.findByPk(id, {
-      include: [
-        { association: 'powerUp', attributes: ['id', 'name'] },
-        { association: 'shot', attributes: ['id', 'name'] },
-        { association: 'atributo', attributes: ['id', 'name'] }
-      ],
-      attributes: ['id', 'name', 'price', 'spriteId', 'status']
+      attributes: ['id', 'name', 'price', 'sprite', 'masLife', 'status']
     });
 
     if (!nave) {
@@ -126,17 +118,13 @@ exports.getOne = async (req, res) => {
   }
 };
 
-// Obtém todas as naves com relacionamentos básicos
+// Obtém todas as naves
 exports.getAll = async (req, res) => {
   try {
+    // Sem relacionamentos (include removido)
     const naves = await Nave.findAll({
       order: [['name', 'ASC']],
-      include: [
-        { association: 'powerUp', attributes: ['id', 'name'] },
-        { association: 'shot', attributes: ['id', 'name'] },
-        { association: 'atributo', attributes: ['id', 'name'] }
-      ],
-      attributes: ['id', 'name', 'price', 'spriteId', 'status']
+      attributes: ['id', 'name', 'price', 'sprite', 'masLife', 'status']
     });
 
     return res.status(200).json({ 

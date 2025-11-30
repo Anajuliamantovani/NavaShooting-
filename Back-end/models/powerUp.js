@@ -15,9 +15,13 @@ const PowerUp = connection.define('powerUp', {
         type: Sequelize.STRING,
         allowNull: true
     },
-    spriteId: {
-        type: Sequelize.INTEGER,
+    sprite: {
+        type: Sequelize.STRING,
         allowNull: true
+    },
+    status: {
+        type: Sequelize.CHAR,
+        allowNull: false
     }
 },{
     tableName: 'powerUp',   

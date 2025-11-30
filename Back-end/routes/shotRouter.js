@@ -38,9 +38,5 @@ router.post('/activateShot', shotController.activate);
 // Desativa um shot, alterando seu status para 'D' (Desativado). O ID do shot é esperado no corpo da requisição.
 router.post('/deactivateShot', shotController.deactivate);
 
-// GET /shots/permission/:permission
-// Obtém uma lista de shots filtrados por um tipo de permissão específica,
-// que é passada como parâmetro na URL.
-router.get('/permission/:permission', shotController.getByPermission);
 
 module.exports = router;

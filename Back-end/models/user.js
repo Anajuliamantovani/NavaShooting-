@@ -21,7 +21,7 @@ const User = connection.define('user', {
         type: Sequelize.STRING,
         allowNull: false
     },
-    level: {
+    score: {
         type:Sequelize.INTEGER,
         allowNull: true
     },
@@ -36,7 +36,7 @@ const User = connection.define('user', {
     coins: {
         type: Sequelize.INTEGER,
         allowNull: true
-    },
+    }
 },{
     tableName: 'users',   
     timestamps: false
