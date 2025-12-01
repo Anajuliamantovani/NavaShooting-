@@ -1,33 +1,36 @@
 const PowerUp = require('../models/powerUp');
+const Shot = require('../models/shot');       // Importante
+const Atributo = require('../models/atributo'); // Importante
 
 // Cria um novo PowerUp
 exports.create = async (req, res) => {
   try {
-    const { name, sprite, status, shotId, atributoId } = req.body;
+    const { name, status, shotId, atributoId } = req.body;
     
-    // Validação: 'status' é obrigatório no banco. 'name' e 'sprite' validamos por regra de negócio.
-    if (!status) {
-      return res.status(400).json({ mensagem: 'O campo status é obrigatório.' });
+    let spritePath = null;
+    if (req.file) {
+        spritePath = req.file.filename; 
     }
 
+    if (!status || !spritePath) {
+      return res.status(400).json({ mensagem: 'Campos obrigatórios: status e sprite (imagem).' });
+    }
+
+    // Tratamento para Foreign Keys vazias
+    const finalShotId = (shotId && shotId !== "") ? shotId : null;
+    const finalAtributoId = (atributoId && atributoId !== "") ? atributoId : null;
+
     const novoPowerUp = await PowerUp.create({
-      name: name || null,
-      sprite: sprite || null,
+      name: name || 'Sem Nome',
+      sprite: spritePath,
       status,
-      shotId: shotId || null,
-      atributoId: atributoId || null
+      shotId: finalShotId,
+      atributoId: finalAtributoId
     });
 
     return res.status(201).json({
       mensagem: 'PowerUp criado com sucesso',
-      powerUp: {
-        id: novoPowerUp.id,
-        name: novoPowerUp.name,
-        sprite: novoPowerUp.sprite,
-        status: novoPowerUp.status,
-        shotId: novoPowerUp.shotId,
-        atributoId: novoPowerUp.atributoId
-      }
+      powerUp: novoPowerUp
     });
   } catch (err) {
     console.error(err);
@@ -40,10 +43,12 @@ exports.update = async (req, res) => {
   try {
     const { id, name, sprite, status, shotId, atributoId } = req.body;
     
-    // Validação básica
     if (!id || !status) {
-      return res.status(400).json({ mensagem: 'Campos obrigatórios não definidos (id, status)' });
+      return res.status(400).json({ mensagem: 'Campos obrigatórios: id, status' });
     }
+
+    const finalShotId = (shotId && shotId !== "") ? shotId : null;
+    const finalAtributoId = (atributoId && atributoId !== "") ? atributoId : null;
 
     const powerUpExistente = await PowerUp.findByPk(id);
     if (!powerUpExistente) {
@@ -53,24 +58,16 @@ exports.update = async (req, res) => {
     await PowerUp.update(
       { 
         name, 
-        sprite,
+        sprite, // Nota: Se vier vazio do front, vai apagar a imagem no banco se não tratar. No front mandamos a string antiga.
         status,
-        shotId,
-        atributoId
+        shotId: finalShotId,
+        atributoId: finalAtributoId
       },
       { where: { id } }
     );
 
-    const powerUpAtualizado = await PowerUp.findByPk(id, {
-      include: [
-        { association: 'shot', attributes: ['id', 'name'] },
-        { association: 'atributo', attributes: ['id', 'name'] }
-      ]
-    });
-
     return res.status(200).json({ 
-      mensagem: 'PowerUp alterado com sucesso!',
-      powerUp: powerUpAtualizado
+      mensagem: 'PowerUp alterado com sucesso!'
     });
   } catch (err) {
     console.error(err);
@@ -82,15 +79,10 @@ exports.update = async (req, res) => {
 exports.remove = async (req, res) => {
   try {
     const { id } = req.body;
-    
-    if (!id) {
-      return res.status(400).json({ mensagem: 'ID não definido' });
-    }
+    if (!id) return res.status(400).json({ mensagem: 'ID não definido' });
 
     const powerUpExistente = await PowerUp.findByPk(id);
-    if (!powerUpExistente) {
-      return res.status(404).json({ mensagem: 'PowerUp não encontrado' });
-    }
+    if (!powerUpExistente) return res.status(404).json({ mensagem: 'PowerUp não encontrado' });
 
     await PowerUp.destroy({ where: { id } });
     return res.status(200).json({ mensagem: 'PowerUp excluído com sucesso' });
@@ -100,22 +92,46 @@ exports.remove = async (req, res) => {
   }
 };
 
-// Obtém um PowerUp específico com relacionamentos
+// Ativa
+exports.activate = async (req, res) => {
+    try {
+      const { id } = req.body;
+      if (!id) return res.status(400).json({ mensagem: 'ID não definido' });
+      await PowerUp.update({ status: 'A' }, { where: { id } });
+      return res.status(200).json({ mensagem: 'Ativado com sucesso!' });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ mensagem: 'Erro ao ativar' });
+    }
+};
+  
+// Desativa
+exports.deactivate = async (req, res) => {
+    try {
+      const { id } = req.body;
+      if (!id) return res.status(400).json({ mensagem: 'ID não definido' });
+      await PowerUp.update({ status: 'D' }, { where: { id } });
+      return res.status(200).json({ mensagem: 'Desativado com sucesso!' });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ mensagem: 'Erro ao desativar' });
+    }
+};
+
+// Obtém um PowerUp específico
 exports.getOne = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params; // CUIDADO: na rota defini como :id, certifique-se que o router está batendo
     
     const powerUp = await PowerUp.findByPk(id, {
       include: [
-        { association: 'shot', attributes: ['id', 'name'] },
-        { association: 'atributo', attributes: ['id', 'name'] }
+        { model: Shot, attributes: ['id', 'name'] },
+        { model: Atributo, attributes: ['id', 'speed', 'scale', 'shield'] }
       ],
       attributes: ['id', 'name', 'sprite', 'status', 'shotId', 'atributoId']
     });
 
-    if (!powerUp) {
-      return res.status(404).json({ mensagem: 'PowerUp não encontrado' });
-    }
+    if (!powerUp) return res.status(404).json({ mensagem: 'PowerUp não encontrado' });
 
     return res.status(200).json({ 
       mensagem: 'PowerUp encontrado', 
@@ -127,14 +143,14 @@ exports.getOne = async (req, res) => {
   }
 };
 
-// Obtém todos os PowerUps com relacionamentos
+// Obtém todos
 exports.getAll = async (req, res) => {
   try {
     const powerUps = await PowerUp.findAll({
       order: [['name', 'ASC']],
       include: [
-        { association: 'shot', attributes: ['id', 'name'] },
-        { association: 'atributo', attributes: ['id', 'name'] }
+        { model: Shot, attributes: ['id', 'name'] },
+        { model: Atributo, attributes: ['id', 'speed', 'scale', 'shield'] }
       ],
       attributes: ['id', 'name', 'sprite', 'status', 'shotId', 'atributoId']
     });
@@ -149,7 +165,6 @@ exports.getAll = async (req, res) => {
   }
 };
 
-// Obtém PowerUps por atributo
 exports.getByAtributo = async (req, res) => {
   try {
     const { atributoId } = req.params;
@@ -158,7 +173,7 @@ exports.getByAtributo = async (req, res) => {
       where: { atributoId },
       order: [['name', 'ASC']],
       include: [
-        { association: 'shot', attributes: ['id', 'name'] }
+        { model: Shot, attributes: ['id', 'name'] }
       ],
       attributes: ['id', 'name', 'sprite', 'status', 'shotId', 'atributoId']
     });
@@ -186,7 +201,7 @@ exports.getByShot = async (req, res) => {
       where: { shotId },
       order: [['name', 'ASC']],
       include: [
-        { association: 'atributo', attributes: ['id', 'name'] }
+        { model: Atributo, attributes: ['id', 'speed', 'scale', 'shield'] }
       ],
       attributes: ['id', 'name', 'sprite', 'status', 'shotId', 'atributoId']
     });
@@ -204,13 +219,3 @@ exports.getByShot = async (req, res) => {
     return res.status(500).json({ mensagem: 'Erro ao buscar PowerUps por shot' });
   }
 };
-
-/*
-POST /powerup/criar
-PUT /powerup/alterar
-GET /powerup/consultarUm/:id
-GET /powerup/consultarTodos
-DELETE /powerup/excluir
-GET /powerup/porAtributo/:atributoId
-GET /powerup/porShot/:shotId
-*/

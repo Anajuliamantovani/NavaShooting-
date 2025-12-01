@@ -1,43 +1,57 @@
 /**
  * @file powerUpRouter.js
- * @description Define as rotas para o recurso 'PowerUp', conectando-as aos métodos
- * correspondentes no powerUpController.
  */
-
 const express = require('express');
 const router = express.Router();
-const powerUpController = require('../controllers/powerUpController'); // Certifique-se de que o caminho está correto
+const powerUpController = require('../controllers/powerUpController'); 
+const multer = require('multer');
+const path = require('path');
+const checkAuth = require('../middleware/checkAuth');
+
+// --- Configuração do Multer (Upload) ---
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/uploads/'); 
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
 
 // --- Rotas para PowerUps ---
 
-// POST /powerups
-// Cria um novo PowerUp no sistema.
-router.post('/newPowerUp', powerUpController.create);
+// 1. POST e PUT (Criar e Editar)
+router.post('/newPowerUp', checkAuth, upload.single('sprite'), powerUpController.create);
+router.put('/attPowerUp', checkAuth, powerUpController.update);
 
-// PUT /powerups
-// Atualiza os dados de um PowerUp existente. O ID do PowerUp é esperado no corpo da requisição.
-router.put('/attPowerUp', powerUpController.update);
+// 2. DELETE
+router.delete('/removePowerUp', checkAuth, powerUpController.remove);
 
-// DELETE /powerups
-// Remove um PowerUp do sistema. O ID do PowerUp é esperado no corpo da requisição.
-router.delete('/removePowerUp', powerUpController.remove);
+// 3. AÇÕES ESPECÍFICAS (Ativar/Desativar)
+router.post('/activatePowerUp', checkAuth, powerUpController.activate);
+router.post('/desactivatePowerUp', checkAuth, powerUpController.deactivate);
 
-// GET /powerups/:id
-// Obtém um PowerUp específico pelo seu ID, que é passado como parâmetro na URL.
-router.get('/:idPowerUp', powerUpController.getOne);
+// =================================================================
+// 4. ROTAS DE BUSCA ESPECÍFICAS (DEVEM VIR ANTES DO /:id) !!!
+// =================================================================
 
-// GET /powerups
-// Obtém todos os PowerUps disponíveis no sistema.
-router.get('/allPowerUps', powerUpController.getAll);
+// GET /powerups/allPowerUps
+router.get('/allPowerUps', checkAuth, powerUpController.getAll);
 
 // GET /powerups/atributo/:atributoId
-// Obtém uma lista de PowerUps filtrados por um atributo específico,
-// que é passado como parâmetro na URL.
-router.get('/atributo/:atributoId', powerUpController.getByAtributo);
+router.get('/atributo/:atributoId', checkAuth, powerUpController.getByAtributo);
 
 // GET /powerups/shot/:shotId
-// Obtém uma lista de PowerUps filtrados por um tipo de shot específico,
-// que é passado como parâmetro na URL.
-router.get('/shot/:shotId', powerUpController.getByShot);
+router.get('/shot/:shotId', checkAuth, powerUpController.getByShot);
+
+// =================================================================
+// 5. ROTA DINÂMICA (DEVE SER A ÚLTIMA DE GET) !!!
+// =================================================================
+// Se esta rota ficar em cima, ela "rouba" o lugar da allPowerUps
+// Mudei de :idPowerUp para :id para bater com seu controller
+router.get('/:id', checkAuth, powerUpController.getOne);
+
 
 module.exports = router;

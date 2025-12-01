@@ -25,6 +25,13 @@ import EnemieList from './pages/EnemieList';
 import CreateEnemie from './pages/CreateEnemie';
 import EditEnemie from './pages/EditEnemie';
 
+import PowerUpList from './pages/PowerUpList';
+import CreatePowerUp from './pages/CreatePowerUp';
+import EditPowerUp from './pages/EditPowerUp';
+
+import UserList from './pages/UserList'; // <--- NOVO
+import EditUser from './pages/EditUser'; // <--- NOVO
+
 
 const Home = () => (
   <div style={{ textAlign: 'center', marginTop: '50px' }}>
@@ -62,6 +69,8 @@ function App() {
           <Link to="/shots" style={linkStyle}>🔫 Shots</Link> {/* NOVO LINK */} 
           <Link to="/atributos" style={linkStyle}>⚙️ Atributos</Link> {/* NOVO LINK */}
           <Link to="/enemies" style={linkStyle}>👾 Inimigos</Link> {/* NOVO LINK */}
+          <Link to="/powerups" style={linkStyle}>⚡ PowerUps</Link> {/* NOVO */}
+          <Link to="/users" style={linkStyle}>👥 Users</Link> {/* NOVO LINK */}
           <span style={{ color: '#444' }}>|</span>
           <Link to="/login" style={linkStyle}>Login</Link>
           <Link to="/register" style={linkStyle}>Cadastro</Link>
@@ -94,6 +103,13 @@ function App() {
             <Route path="/enemies" element={<EnemieList />} />
             <Route path="/create-enemie" element={<CreateEnemie />} />
             <Route path="/edit-enemie/:id" element={<EditEnemie />} />
+
+            <Route path="/powerups" element={<PowerUpList />} />
+            <Route path="/create-powerup" element={<CreatePowerUp />} />
+            <Route path="/edit-powerup/:id" element={<EditPowerUp />} />
+
+            <Route path="/users" element={<UserList />} />
+            <Route path="/edit-user/:id" element={<EditUser />} />
             
             {/* Rotas de Autenticação */}
             <Route path="/login" element={<Login />} />
