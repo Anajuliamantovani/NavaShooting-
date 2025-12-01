@@ -1,43 +1,42 @@
 const Enemies = require('../models/enemies');
+const Shot = require('../models/shot');       // <--- IMPORTANTE: Importar o Model Shot
+const Atributo = require('../models/atributo'); // <--- IMPORTANTE: Importar o Model Atributo
 
 // Cria um novo inimigo
 exports.create = async (req, res) => {
   try {
-    const { name, sprite, movement, coinsDropped, wave, score, status, shotId, atributoId } = req.body;
+    const { name, movement, coinsDropped, wave, score, status, shotId, atributoId } = req.body;
     
-    // Validação: Todos os campos 'allowNull: false' do model
-    if (!name || !sprite || !movement || !coinsDropped || !wave || !score || !status) {
+    let spritePath = null;
+    if (req.file) {
+        spritePath = req.file.filename; 
+    }
+
+    if (!name || !spritePath || !movement || !coinsDropped || !wave || !score || !status) {
       return res.status(400).json({ 
-        mensagem: 'Campos obrigatórios não definidos (name, sprite, movement, coinsDropped, wave, score, status)' 
+        mensagem: 'Campos obrigatórios: name, sprite, movement, coinsDropped, wave, score, status' 
       });
     }
 
+    // Tratamento para Foreign Keys vazias
+    const finalShotId = (shotId && shotId !== "") ? shotId : null;
+    const finalAtributoId = (atributoId && atributoId !== "") ? atributoId : null;
+
     const novoInimigo = await Enemies.create({
       name,
-      sprite,
+      sprite: spritePath,
       movement,
       coinsDropped,
       wave,
       score,
       status,
-      shotId: shotId || null,
-      atributoId: atributoId || null
+      shotId: finalShotId,
+      atributoId: finalAtributoId
     });
 
     return res.status(201).json({
       mensagem: 'Inimigo criado com sucesso',
-      enemy: {
-        id: novoInimigo.id,
-        name: novoInimigo.name,
-        sprite: novoInimigo.sprite,
-        movement: novoInimigo.movement,
-        coinsDropped: novoInimigo.coinsDropped,
-        wave: novoInimigo.wave,
-        score: novoInimigo.score,
-        status: novoInimigo.status,
-        shotId: novoInimigo.shotId,
-        atributoId: novoInimigo.atributoId
-      }
+      enemy: novoInimigo
     });
   } catch (err) {
     console.error(err);
@@ -52,9 +51,12 @@ exports.update = async (req, res) => {
     
     if (!id || !name || !sprite || !movement || !coinsDropped || !wave || !score || !status) {
       return res.status(400).json({ 
-        mensagem: 'Campos obrigatórios não definidos (id, name, sprite, movement, coinsDropped, wave, score, status)' 
+        mensagem: 'Campos obrigatórios não definidos' 
       });
     }
+
+    const finalShotId = (shotId && shotId !== "") ? shotId : null;
+    const finalAtributoId = (atributoId && atributoId !== "") ? atributoId : null;
 
     const inimigoExistente = await Enemies.findByPk(id);
     if (!inimigoExistente) {
@@ -70,22 +72,14 @@ exports.update = async (req, res) => {
         wave,
         score,
         status,
-        shotId,
-        atributoId
+        shotId: finalShotId,
+        atributoId: finalAtributoId
       },
       { where: { id } }
     );
 
-    const inimigoAtualizado = await Enemies.findByPk(id, {
-      include: [
-        { association: 'shot', attributes: ['id', 'name'] },
-        { association: 'atributo', attributes: ['id', 'name'] }
-      ]
-    });
-
     return res.status(200).json({ 
-      mensagem: 'Inimigo alterado com sucesso!',
-      enemy: inimigoAtualizado
+      mensagem: 'Inimigo alterado com sucesso!'
     });
   } catch (err) {
     console.error(err);
@@ -93,19 +87,14 @@ exports.update = async (req, res) => {
   }
 };
 
-// Remove um inimigo
+// Remove um inimigo (Excluir definitivamente)
 exports.remove = async (req, res) => {
   try {
     const { id } = req.body;
-    
-    if (!id) {
-      return res.status(400).json({ mensagem: 'ID não definido' });
-    }
+    if (!id) return res.status(400).json({ mensagem: 'ID não definido' });
 
     const inimigoExistente = await Enemies.findByPk(id);
-    if (!inimigoExistente) {
-      return res.status(404).json({ mensagem: 'Inimigo não encontrado' });
-    }
+    if (!inimigoExistente) return res.status(404).json({ mensagem: 'Inimigo não encontrado' });
 
     await Enemies.destroy({ where: { id } });
     return res.status(200).json({ mensagem: 'Inimigo excluído com sucesso' });
@@ -115,15 +104,43 @@ exports.remove = async (req, res) => {
   }
 };
 
-// Obtém um inimigo específico com relacionamentos
+// Ativa um inimigo
+exports.activate = async (req, res) => {
+    try {
+      const { id } = req.body;
+      if (!id) return res.status(400).json({ mensagem: 'ID não definido' });
+  
+      await Enemies.update({ status: 'A' }, { where: { id } });
+      return res.status(200).json({ mensagem: 'Inimigo ativado com sucesso!' });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ mensagem: 'Erro ao ativar inimigo' });
+    }
+  };
+  
+// Desativa um inimigo
+exports.deactivate = async (req, res) => {
+    try {
+      const { id } = req.body;
+      if (!id) return res.status(400).json({ mensagem: 'ID não definido' });
+  
+      await Enemies.update({ status: 'D' }, { where: { id } });
+      return res.status(200).json({ mensagem: 'Inimigo desativado com sucesso!' });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ mensagem: 'Erro ao desativar inimigo' });
+    }
+};
+
+// Obtém um inimigo específico
 exports.getOne = async (req, res) => {
   try {
     const { id } = req.params;
     
     const enemy = await Enemies.findByPk(id, {
       include: [
-        { association: 'shot', attributes: ['id', 'name'] },
-        { association: 'atributo', attributes: ['id', 'name'] }
+        { model: Shot, attributes: ['id', 'name', 'damage'] },
+        { model: Atributo, attributes: ['id', 'speed', 'scale', 'shield'] } // <--- Corrigido aqui
       ],
       attributes: ['id', 'name', 'sprite', 'movement', 'coinsDropped', 'wave', 'score', 'status', 'shotId', 'atributoId']
     });
@@ -142,14 +159,14 @@ exports.getOne = async (req, res) => {
   }
 };
 
-// Obtém todos os inimigos com relacionamentos básicos
+// Obtém todos os inimigos
 exports.getAll = async (req, res) => {
   try {
     const enemies = await Enemies.findAll({
       order: [['wave', 'ASC'], ['name', 'ASC']],
       include: [
-        { association: 'shot', attributes: ['id', 'name'] },
-        { association: 'atributo', attributes: ['id', 'name'] }
+        { model: Shot, attributes: ['id', 'name', 'damage'] }, // Traz o nome e dano da arma
+        { model: Atributo, attributes: ['id', 'speed', 'scale', 'shield'] } // <--- CORRIGIDO: Removi 'name', adicionei os campos reais
       ],
       attributes: ['id', 'name', 'sprite', 'movement', 'coinsDropped', 'wave', 'score', 'status', 'shotId', 'atributoId']
     });
@@ -159,7 +176,7 @@ exports.getAll = async (req, res) => {
       enemies 
     });
   } catch (err) {
-    console.error(err);
+    console.error("Erro detalhado no getAll Enemies:", err); // Log para ajudar se der erro de novo
     return res.status(500).json({ mensagem: 'Erro ao listar inimigos' });
   }
 };
@@ -173,8 +190,8 @@ exports.getByWave = async (req, res) => {
       where: { wave },
       order: [['name', 'ASC']],
       include: [
-        { association: 'shot', attributes: ['id', 'name'] },
-        { association: 'atributo', attributes: ['id', 'name'] }
+        { model: Shot, attributes: ['id', 'name'] },
+        { model: Atributo, attributes: ['id', 'speed', 'scale'] }
       ],
       attributes: ['id', 'name', 'sprite', 'movement', 'coinsDropped', 'wave', 'score', 'status', 'shotId', 'atributoId']
     });

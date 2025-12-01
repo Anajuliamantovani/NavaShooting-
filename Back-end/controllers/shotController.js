@@ -3,31 +3,30 @@ const Shot = require('../models/shot');
 // Cria um novo shot
 exports.create = async (req, res) => {
   try {
-    const { sprite, price, name, damage, status } = req.body;
+    const { price, name, damage, status } = req.body;
     
-    // Validação: Apenas os campos allowNull: false do model são obrigatórios aqui
-    if (!sprite || !status) {
-      return res.status(400).json({ mensagem: 'Campos obrigatórios não definidos (sprite, status)' });
+    // Tratamento da Imagem (Vem do Multer)
+    let spritePath = null;
+    if (req.file) {
+        spritePath = req.file.filename; 
+    }
+
+    // Validação: Sprite e Status são obrigatórios
+    if (!spritePath || !status) {
+      return res.status(400).json({ mensagem: 'Campos obrigatórios: sprite (imagem) e status' });
     }
 
     const novoShot = await Shot.create({
-      sprite,
-      price: price || null,
-      name: name || null,
-      damage: damage || null,
+      sprite: spritePath, // Salva o nome do arquivo gerado
+      price: price || 0,
+      name: name || 'Sem Nome',
+      damage: damage || 0,
       status
     });
 
     return res.status(201).json({
       mensagem: 'Shot criado com sucesso',
-      shot: {
-        id: novoShot.id,
-        sprite: novoShot.sprite,
-        price: novoShot.price,
-        name: novoShot.name,
-        damage: novoShot.damage,
-        status: novoShot.status
-      }
+      shot: novoShot
     });
   } catch (err) {
     console.error(err);

@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{98AF547A-9131-C30A-EEE6-8F2B3D01314E}|Assembly-CSharp.csproj|g:\\savaprojetos\\navashooting-\\front-end\\navashooting\\assets\\scripty\\game\\shot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{98AF547A-9131-C30A-EEE6-8F2B3D01314E}|Assembly-CSharp.csproj|solutionrelative:assets\\scripty\\game\\shot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{98AF547A-9131-C30A-EEE6-8F2B3D01314E}|Assembly-CSharp.csproj|G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\assets\\scripty\\game\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{98AF547A-9131-C30A-EEE6-8F2B3D01314E}|Assembly-CSharp.csproj|solutionrelative:assets\\scripty\\game\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{98AF547A-9131-C30A-EEE6-8F2B3D01314E}|Assembly-CSharp.csproj|g:\\savaprojetos\\navashooting-\\front-end\\navashooting\\assets\\scripty\\game\\shot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{98AF547A-9131-C30A-EEE6-8F2B3D01314E}|Assembly-CSharp.csproj|solutionrelative:assets\\scripty\\game\\shot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,32 +18,33 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Shot.cs",
               "DocumentMoniker": "G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\Assets\\Scripty\\game\\Shot.cs",
               "RelativeDocumentMoniker": "Assets\\Scripty\\game\\Shot.cs",
               "ToolTip": "G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\Assets\\Scripty\\game\\Shot.cs",
               "RelativeToolTip": "Assets\\Scripty\\game\\Shot.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABwAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-28T01:13:51.204Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Player.cs",
               "DocumentMoniker": "G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\Assets\\Scripty\\game\\Player.cs",
               "RelativeDocumentMoniker": "Assets\\Scripty\\game\\Player.cs",
               "ToolTip": "G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\Assets\\Scripty\\game\\Player.cs",
               "RelativeToolTip": "Assets\\Scripty\\game\\Player.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-28T00:37:50.965Z"
+              "WhenOpened": "2025-11-28T00:37:50.965Z",
+              "EditorCaption": ""
             }
           ]
         }
