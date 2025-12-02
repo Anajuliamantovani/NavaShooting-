@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios from 'axios'; // Importante para conectar no back
 import { useNavigate, Link } from 'react-router-dom';
+// O CSS (App.css) já é importado no main.jsx, então o estilo funciona automático
 
 const Login = () => {
     const navigate = useNavigate();
@@ -16,22 +17,22 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // A rota correta baseada no seu router é /user/login
+            
             const response = await axios.post('http://localhost:3000/user/login', formData);
 
-            // 1. Salvar o Token e os dados do usuário no navegador
+            // Salvar Token e User
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user', JSON.stringify(response.data.user));
 
-            alert('Login realizado com sucesso!');
-            
-            // 2. Redirecionar para a página principal ou para Criar Nave
-            navigate('/'); // Mude '/' para '/create-nave' se quiser ir direto pra lá
+             alert('Login realizado com sucesso!');
+            // Redirecionamento
+            // DICA: Se quiser ir para o jogo, use '/home' ou '/create-nave' conforme suas rotas
+            navigate('/'); 
 
         } catch (error) {
             console.error(error);
             if (error.response) {
-                alert(error.response.data.mensagem); // Mostra "Credenciais inválidas" etc.
+                alert(error.response.data.mensagem); //Mostra credenciais inválidas
             } else {
                 alert('Erro ao conectar com o servidor.');
             }
@@ -39,46 +40,56 @@ const Login = () => {
     };
 
     return (
-        <div style={styles.container}>
-            <h2>Acessar Sistema</h2>
-            <form onSubmit={handleSubmit}>
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>E-mail:</label>
-                    <input 
-                        type="email" 
-                        name="email" 
-                        value={formData.email} 
-                        onChange={handleChange} 
-                        style={styles.input} 
-                        required 
-                    />
+        <div className="login-full-screen">
+            
+            <div className="login-card-split">
+                
+                {/* Lado Esquerdo - Formulário */}
+                <div className="login-side-left">
+                    <h2 className="login-title">Login</h2>
+                    
+                    <form onSubmit={handleSubmit}>
+                        <div className="input-group">
+                            <label>E-mail</label>
+                            <input 
+                                type="email" 
+                                name="email" // O 'name' é essencial para o handleChange funcionar
+                                value={formData.email} 
+                                onChange={handleChange} 
+                                placeholder="seu@email.com"
+                                required 
+                            />
+                        </div>
+
+                        <div className="input-group">
+                            <label>Senha</label>
+                            <input 
+                                type="password" 
+                                name="password" // O 'name' é essencial para o handleChange funcionar
+                                value={formData.password} 
+                                onChange={handleChange} 
+                                placeholder="********"
+                                required 
+                            />
+                        </div>
+
+                        <button type="submit" className="btn btn-submit btn-login-neon">
+                            Entrar
+                        </button>
+                    </form>
+
+                    <p className="login-footer">
+                        Não tem conta? 
+                        {/* Usando o Link do router para não recarregar a página */}
+                        <Link to="/register" className="link-register"> Cadastre-se aqui</Link>
+                    </p>
                 </div>
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Senha:</label>
-                    <input 
-                        type="password" 
-                        name="password" 
-                        value={formData.password} 
-                        onChange={handleChange} 
-                        style={styles.input} 
-                        required 
-                    />
-                </div>
-                <button type="submit" style={styles.button}>Entrar</button>
-            </form>
-            <p style={{ marginTop: '15px' }}>
-                Não tem conta? <Link to="/register">Cadastre-se aqui</Link>
-            </p>
+
+                {/* Lado Direito - Imagem */}
+                <div className="login-side-right"></div>
+            </div>
         </div>
     );
-};
-
-const styles = {
-    container: { maxWidth: '400px', margin: '50px auto', padding: '20px', border: '1px solid #ddd', borderRadius: '8px', textAlign: 'center' },
-    inputGroup: { marginBottom: '15px', textAlign: 'left' },
-    label: { display: 'block', marginBottom: '5px' },
-    input: { width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' },
-    button: { width: '100%', padding: '10px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }
 };
 
 export default Login;
