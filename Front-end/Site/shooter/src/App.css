@@ -9,7 +9,7 @@ body {
   background-image: 
     radial-gradient(at 10% 10%, rgba(118, 75, 162, 0.3) 0%, transparent 50%),
     radial-gradient(at 90% 90%, rgba(102, 126, 234, 0.3) 0%, transparent 50%),
-    url('https://www.transparenttextures.com/patterns/stardust.png'); /* Textura de estrelas sutil */
+    url('../src/assets/Imagens/background.jpg'); /* Textura de estrelas sutil */
   color: #fff;
   min-height: 100vh;
 }
@@ -234,7 +234,7 @@ a {
 .input-group label {
   display: block;
   margin-bottom: 8px;
-  color: #bf55ec;
+  color: #ffffff;
   font-weight: bold;
   text-transform: uppercase;
   font-size: 0.8rem;
@@ -270,4 +270,123 @@ a {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* =============================================================
+   TELA DE LOGIN 
+   ============================================================= */
+
+.login-full-screen {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-card-split {
+  display: flex; /* Faz com q eu tenha espaço pro formulario e pra imagem */
+  width: 800px;
+  height: 550px;
+  background-color: #0D0019; 
+  border: 1px solid #802FFF;
+  border-radius: 20px;
+  overflow: hidden; /* Garante que a imagem não vaze as bordas arredondadas */
+  animation: fadeIn 0.8s ease-out;
+}
+
+/* 3. Lado Esquerdo */
+.login-side-left {
+  flex: 1; 
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  color: #fff;
+  text-transform: capitalize; /* Deixa só a primeira letra maiúscula */
+}
+
+.btn-login-neon {
+  background: #802FFF; 
+  transition: 0.3s;
+  box-shadow: 0 0 15px #802FFF;
+}
+
+.login-footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.link-register {
+  color: #802FFF;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  margin-left: 5px;
+}
+
+.link-register:hover {
+  text-decoration: underline;
+  text-shadow: 0 0 8px #802FFF;
+}
+
+/*4. Lado Direito*/
+.login-side-right {
+  flex: 1; /* Ocupa os outros 50% */
+  background-image: url('../src/assets/Imagens/meninoGamer.png'); 
+  background-size: cover; 
+  background-position: center;
+}
+
+/* Responsividade: Se a tela for pequena, esconde a imagem */
+@media (max-width: 900px) {
+  .login-card-split {
+    width: 90%;
+    height: auto;
+    flex-direction: column; 
+  }
+  
+  .login-side-right {
+    display: none; /* Esconde a foto no celular */
+  }
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  background: transparent; 
+  border: 1px solid #802FFF;  
+  color: white;           
+  border-radius: 5px;     
+  outline: none;           
+  transition: 0.3s; 
+}
+
+.input-group input:focus {
+  border-color: #802FFF; 
+}
+
+/* ==========
+   CADASTRO
+   ========== */
+
+.register-side-right {
+  flex: 1;
+  background-image: url('../src/assets/Imagens/meninaGamer.png'); 
+  background-size: cover;
+  background-position: center;
+}
+
+@media (max-width: 900px) {
+  .register-side-right {
+    display: none;
+  }
 }
