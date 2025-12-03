@@ -31,6 +31,9 @@ import EditPowerUp from './pages/EditPowerUp';
 
 import UserList from './pages/UserList'; // <--- NOVO
 import EditUser from './pages/EditUser'; // <--- NOVO
+import RankingList from './pages/RankingList';
+
+import Shop from './pages/Shop'; // <--- Importe aqui
 
 
 const Home = () => (
@@ -65,12 +68,14 @@ function App() {
           <Link to="/" style={linkStyle}>🏠 Home</Link>
           <Link to="/jogar" style={linkStyle}>🎮 Jogar Agora</Link>
           {/* Mudei o link de criar direto para a lista, faz mais sentido no fluxo */}
+          <Link to="/loja" className="nav-link" style={{color: '#bf55ec'}}>🛒 Loja</Link> {/* Novo Link */}
           <Link to="/naves" style={linkStyle}>🚀 Gerenciar Naves</Link>
           <Link to="/shots" style={linkStyle}>🔫 Shots</Link> {/* NOVO LINK */} 
           <Link to="/atributos" style={linkStyle}>⚙️ Atributos</Link> {/* NOVO LINK */}
           <Link to="/enemies" style={linkStyle}>👾 Inimigos</Link> {/* NOVO LINK */}
           <Link to="/powerups" style={linkStyle}>⚡ PowerUps</Link> {/* NOVO */}
           <Link to="/users" style={linkStyle}>👥 Users</Link> {/* NOVO LINK */}
+          <Link to="/ranking" className="nav-link" style={{color: '#FFD700'}}>🏆 Ranking</Link> {/* DESTAQUEI EM AMARELO */}
           <span style={{ color: '#444' }}>|</span>
           <Link to="/login" style={linkStyle}>Login</Link>
           <Link to="/register" style={linkStyle}>Cadastro</Link>
@@ -110,10 +115,13 @@ function App() {
 
             <Route path="/users" element={<UserList />} />
             <Route path="/edit-user/:id" element={<EditUser />} />
+            <Route path="/ranking" element={<RankingList />} />
             
             {/* Rotas de Autenticação */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+
+            <Route path="/loja" element={<Shop />} />
             </Routes>
         </div>
       </div>

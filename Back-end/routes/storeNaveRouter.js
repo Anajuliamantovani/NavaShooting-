@@ -29,4 +29,6 @@ router.get('/:id/storeNave', storeNaveController.getOne);
 // Obtém todos os registros
 router.get('/allStoreNaves', storeNaveController.getAll);
 
+router.get('/user/:userId', storeNaveController.getByUser);
+
 module.exports = router;

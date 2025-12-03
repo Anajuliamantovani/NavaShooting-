@@ -17,6 +17,8 @@ const StoreNave = require('./models/storeNave');
 const StoreShot = require('./models/storeShot');
 const StoreEnemies = require('./models/storeEnemies');
 
+
+
 const syncDatabase = async () => {
     try {
         console.log("🚧 Iniciando Recriação do Banco de Dados...");
@@ -40,7 +42,7 @@ const syncDatabase = async () => {
 };
 
 // Execute uma vez, espere dar certo, e depois COMENTE esta linha
-syncDatabase();
+//syncDatabase();
 
 // --- Routes imports ---
 const userRoutes = require('./routes/userRoutes');

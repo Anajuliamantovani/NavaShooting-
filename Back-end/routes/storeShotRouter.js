@@ -29,4 +29,6 @@ router.get('/:id/storeShot', storeShotController.getOne);
 // Obtém todos os registros
 router.get('/allStoreShots', storeShotController.getAll);
 
+router.get('/user/:userId', storeShotController.getByUser);
+
 module.exports = router;

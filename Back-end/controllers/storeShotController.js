@@ -128,6 +128,17 @@ exports.getAll = async (req, res) => {
   }
 };
 
+// ... no final do arquivo
+exports.getByUser = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const stores = await StoreShot.findAll({ where: { userId } });
+        return res.status(200).json({ storeShots: stores });
+    } catch (err) {
+        return res.status(500).json({ message: 'Erro ao buscar loja do usuario' });
+    }
+};
+
 /*
 POST /storeShot/criar
 PUT /storeShot/alterar
