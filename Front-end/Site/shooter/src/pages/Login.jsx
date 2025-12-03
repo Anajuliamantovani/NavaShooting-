@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Importante para conectar no back
+import axios from 'axios'; 
 import { useNavigate, Link } from 'react-router-dom';
-// O CSS (App.css) já é importado no main.jsx, então o estilo funciona automático
+// O estilo vem do App.css importado no main.jsx
 
 const Login = () => {
     const navigate = useNavigate();
@@ -17,29 +17,33 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            
+            // Conexão com o Back-end
             const response = await axios.post('http://localhost:3000/user/login', formData);
 
-            // Salvar Token e User
+            // 1. Salvar Token e Dados do Usuário
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user', JSON.stringify(response.data.user));
 
-             alert('Login realizado com sucesso!');
-            // Redirecionamento
-            // DICA: Se quiser ir para o jogo, use '/home' ou '/create-nave' conforme suas rotas
+            // 2. Feedback visual (opcional, pode remover o alert se preferir algo mais chique depois)
+            // alert('Login realizado com sucesso!');
+
+            // 3. Redirecionar para a Home (onde o menu vai aparecer magicamente)
             navigate('/'); 
 
         } catch (error) {
             console.error(error);
             if (error.response) {
-                alert(error.response.data.mensagem); //Mostra credenciais inválidas
+                // Erro vindo do servidor (ex: "Senha incorreta")
+                alert(error.response.data.mensagem); 
             } else {
+                // Erro de conexão (ex: Servidor desligado)
                 alert('Erro ao conectar com o servidor.');
             }
         }
     };
 
     return (
+        // Esta classe 'login-full-screen' garante que a tela ocupe 100% e centralize
         <div className="login-full-screen">
             
             <div className="login-card-split">
@@ -53,7 +57,7 @@ const Login = () => {
                             <label>E-mail</label>
                             <input 
                                 type="email" 
-                                name="email" // O 'name' é essencial para o handleChange funcionar
+                                name="email" 
                                 value={formData.email} 
                                 onChange={handleChange} 
                                 placeholder="seu@email.com"
@@ -65,7 +69,7 @@ const Login = () => {
                             <label>Senha</label>
                             <input 
                                 type="password" 
-                                name="password" // O 'name' é essencial para o handleChange funcionar
+                                name="password"
                                 value={formData.password} 
                                 onChange={handleChange} 
                                 placeholder="********"
@@ -74,18 +78,17 @@ const Login = () => {
                         </div>
 
                         <button type="submit" className="btn btn-submit btn-login-neon">
-                            Entrar
+                            ENTRAR
                         </button>
                     </form>
 
                     <p className="login-footer">
-                        Não tem conta? 
-                        {/* Usando o Link do router para não recarregar a página */}
-                        <Link to="/register" className="link-register"> Cadastre-se aqui</Link>
+                        Não possui uma conta? 
+                        <Link to="/register" className="link-register"> Cadastre-se</Link>
                     </p>
                 </div>
 
-                {/* Lado Direito - Imagem */}
+                {/* Lado Direito - Imagem (Controlada pelo CSS .login-side-right) */}
                 <div className="login-side-right"></div>
             </div>
         </div>

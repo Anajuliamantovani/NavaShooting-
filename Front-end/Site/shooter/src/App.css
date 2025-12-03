@@ -282,6 +282,7 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-image: '../src/assets/Imagens/background.jpg';
 }
 
 .login-card-split {
@@ -389,4 +390,284 @@ a {
   .register-side-right {
     display: none;
   }
+}
+
+/* App.css */
+
+/* Remove margens padrão e garante altura total */
+body, html, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0f0c29; /* Fundo do site */
+}
+
+/* O Container Principal que segura Menu + Conteúdo */
+.app-layout {
+  display: flex; /* Mágica que coloca um ao lado do outro */
+  height: 100vh; /* Ocupa 100% da altura da tela */
+  overflow: hidden; /* Evita rolagem dupla */
+}
+
+/* --- SIDEBAR (Menu Lateral) --- */
+.sidebar {
+  width: 260px; /* Largura fixa */
+  background-color: #050011; /* Fundo bem escuro */
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #2a0e4a;
+  box-shadow: 2px 0 15px rgba(0,0,0,0.5);
+  flex-shrink: 0; /* Impede o menu de encolher */
+}
+
+/* Perfil no Topo */
+.profile-section {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid #8a2be2; /* Linha roxa */
+  margin-bottom: 20px;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  background-color: #333;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background-image: url('./assets/images/menino-gamer.jpg'); /* Se tiver a imagem */
+  background-size: cover;
+}
+
+.profile-info h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.profile-info span {
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+/* Links do Menu */
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 0 10px;
+  overflow-y: auto; /* Permite rolar o menu se for muito grande */
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 15px;
+  color: #ccc;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: 0.3s;
+  font-weight: 500;
+}
+
+.nav-item:hover {
+  background-color: rgba(138, 43, 226, 0.1);
+  color: #fff;
+}
+
+/* Item Ativo (Roxo Cheio) - Simulação visual */
+.nav-item.active-menu {
+  background-color: #8a2be2;
+  color: white;
+  box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+}
+
+/* Divisores e Títulos de Seção */
+.menu-separator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0 10px 0;
+  padding: 0 20px;
+  color: #fff;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.menu-separator::before, .menu-separator::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: #8a2be2;
+}
+
+/* Rodapé do Menu (Sair) */
+.sidebar-footer {
+  margin-top: auto; /* Empurra para o final */
+  padding: 20px;
+  border-top: 1px solid #333;
+}
+
+.btn-logout {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* --- ÁREA DE CONTEÚDO (DIREITA) --- */
+.main-content {
+  flex: 1; /* Ocupa todo o espaço restante */
+  background-image: 
+    radial-gradient(at 10% 10%, rgba(118, 75, 162, 0.1) 0%, transparent 50%),
+    radial-gradient(at 90% 90%, rgba(102, 126, 234, 0.1) 0%, transparent 50%);
+  overflow-y: auto; /* Permite rolar o conteúdo */
+  padding: 20px;
+  position: relative;
+}
+
+/* --- LAYOUT PRINCIPAL (Sidebar + Conteúdo) --- */
+.app-layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: #0f0c29; /* Fundo geral */
+}
+
+/* --- SIDEBAR --- */
+.sidebar {
+  width: 260px;
+  background-color: #050011; /* Fundo escuro do menu */
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #2a0e4a;
+  box-shadow: 4px 0 15px rgba(0,0,0,0.4);
+  color: white;
+  flex-shrink: 0;
+}
+
+/* Perfil */
+.profile-section {
+  padding: 25px 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid #8a2be2;
+  margin-bottom: 15px;
+}
+
+.avatar-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-image: url('./assets/images/menino-gamer.jpg'); /* Sua imagem aqui */
+  background-size: cover;
+  background-position: center;
+  border: 2px solid #8a2be2;
+}
+
+.profile-info h3 {
+  font-size: 1rem;
+  margin: 0;
+  font-family: 'Orbitron', sans-serif; /* Se tiver a fonte */
+}
+.profile-info span {
+  font-size: 0.75rem;
+  color: #aaa;
+}
+
+/* Links de Navegação */
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 15px;
+  overflow-y: auto; /* Scroll se o menu for muito grande */
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  color: #ccc;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.nav-item:hover {
+  background-color: rgba(138, 43, 226, 0.15);
+  color: white;
+  transform: translateX(5px); /* Efeitozinho de movimento */
+}
+
+/* --- A MÁGICA DO ATIVO (QUANDO CLICA) --- */
+.nav-item.active {
+  background: linear-gradient(90deg, #8a2be2, #6a0dad); /* Roxo Degradê */
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
+}
+
+/* Separadores */
+.menu-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #6a0dad;
+  font-weight: bold;
+  margin: 20px 0 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.menu-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #2a0e4a;
+  margin-right: 15px;
+}
+
+/* Rodapé */
+.sidebar-footer {
+  margin-top: auto;
+  padding: 20px;
+  border-top: 1px solid #2a0e4a;
+}
+.btn-sair {
+  color: #ff4444;
+  text-decoration: none;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* --- CONTEÚDO PRINCIPAL --- */
+.main-content {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+  background-image: 
+    radial-gradient(at 20% 20%, rgba(138, 43, 226, 0.05) 0%, transparent 40%),
+    radial-gradient(at 80% 80%, rgba(100, 200, 255, 0.05) 0%, transparent 40%);
+}
+
+.nav-links, .main-content {
+  /* Para Firefox */
+  scrollbar-width: none; 
+  
+  /* Para Internet Explorer e Edge antigo */
+  -ms-overflow-style: none; 
 }
