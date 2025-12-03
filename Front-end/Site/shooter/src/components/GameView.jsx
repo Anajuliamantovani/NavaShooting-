@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { Unity, useUnityContext } from "react-unity-webgl";
+import axios from 'axios';
+import { jwtDecode } from "jwt-decode";
 
 function GameView() {
-  // Configuração do Unity Context
-  // ATENÇÃO: Verifique se os nomes dos arquivos na pasta public/Build batem exatamente com estes.
-  // Assumindo que você desativou a compressão na Unity, removemos o .br ou .gz do final.
+  // Configuração do Unity
   const { unityProvider, loadingProgression, isLoaded, sendMessage } = useUnityContext({
     loaderUrl: "Build/NavaShooter.loader.js",
     dataUrl: "Build/NavaShooter.data.br",
@@ -12,89 +12,127 @@ function GameView() {
     codeUrl: "Build/NavaShooter.wasm.br",
   });
 
-  // Estado para garantir que enviamos o token apenas uma vez
   const [sentAuth, setSentAuth] = useState(false);
+  
+  // Estado para guardar o ID da nave que virá do Banco de Dados
+  // Começa como null para sabermos que ainda está carregando
+  const [naveIdParaCarregar, setNaveIdParaCarregar] = useState(null);
+  const [loadingData, setLoadingData] = useState(true);
 
-  // ID da nave que queremos carregar. 
-  // Num cenário real, isso poderia vir da URL (ex: useParams) ou de um estado global.
-  // Por enquanto, deixamos fixo em 1 para teste.
-  const naveIdParaCarregar = 3; 
+  // 1. BUSCAR DADOS DA BAG ANTES DE TUDO
+  useEffect(() => {
+    const fetchBagData = async () => {
+        const token = localStorage.getItem('token');
+        
+        if (!token) {
+            console.warn("Sem token, usaremos nave padrão.");
+            setNaveIdParaCarregar(1); // Nave padrão se não estiver logado
+            setLoadingData(false);
+            return;
+        }
 
-  // Função que envia o Token e o ID para dentro do jogo
+        try {
+            // Decodifica o token para pegar o ID do usuário
+            const decoded = jwtDecode(token);
+            const userId = decoded.id;
+
+            // Busca a Bag do usuário
+            const response = await axios.get(`http://localhost:3000/bags/user/${userId}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            const bags = response.data.bags;
+
+            // Se tiver bag e tiver nave equipada, usa ela. Senão, usa a 1.
+            if (bags.length > 0 && bags[0].naveId) {
+                console.log("Nave equipada encontrada:", bags[0].naveId);
+                setNaveIdParaCarregar(bags[0].naveId);
+            } else {
+                console.log("Nenhuma nave equipada, usando padrão (1)");
+                setNaveIdParaCarregar(1); 
+            }
+
+        } catch (error) {
+            console.error("Erro ao buscar bag:", error);
+            setNaveIdParaCarregar(1); // Fallback em caso de erro
+        } finally {
+            setLoadingData(false);
+        }
+    };
+
+    fetchBagData();
+  }, []);
+
+  // 2. ENVIAR PARA UNITY (Só roda quando tivermos o ID e a Unity estiver pronta)
   const sendAuthToUnity = useCallback(() => {
-    // Recupera o token salvo no Login
     const token = localStorage.getItem('token');
     
-    // Só envia se: temos token, o jogo carregou e ainda não enviamos
-    if (token && isLoaded && !sentAuth) {
+    // Verificação extra: naveIdParaCarregar não pode ser null
+    if (token && isLoaded && !sentAuth && naveIdParaCarregar !== null) {
       
-      // Criamos o objeto JSON igual ao que definimos na classe ReactPayload do C#
       const payload = {
         token: token,
-        naveId: naveIdParaCarregar
+        naveId: naveIdParaCarregar // Agora é dinâmico!
       };
 
-      console.log("React: Enviando dados para Unity...", payload);
+      console.log("React -> Unity: Enviando Loadout...", payload);
 
-      // 1. "PlayerNave" = Nome do GameObject na cena Unity (que tem o script NaveLoader)
-      // 2. "ReceberDadosDoReact" = Nome da função pública no script C#
-      // 3. JSON.stringify(payload) = O argumento string esperado pelo C#
       sendMessage("PlayerNave", "ReceberDadosDoReact", JSON.stringify(payload));
       
       setSentAuth(true);
-    } else if (!token) {
-      console.warn("React: Nenhum token encontrado. O usuário fez login?");
     }
-  }, [isLoaded, sentAuth, sendMessage]);
+  }, [isLoaded, sentAuth, sendMessage, naveIdParaCarregar]);
 
-  // UseEffect monitora o carregamento. Assim que isLoaded virar true, dispara o envio.
+  // Monitora o carregamento da Unity E o carregamento dos dados da API
   useEffect(() => {
-    if (isLoaded && !sentAuth) {
-      // Um pequeno delay de 1s é recomendável para garantir que todos os scripts da cena Unity inicializaram
+    if (isLoaded && !sentAuth && naveIdParaCarregar !== null) {
+      // Pequeno delay de segurança
       const timer = setTimeout(() => {
         sendAuthToUnity();
       }, 1000); 
       return () => clearTimeout(timer);
     }
-  }, [isLoaded, sentAuth, sendAuthToUnity]);
+  }, [isLoaded, sentAuth, naveIdParaCarregar, sendAuthToUnity]);
 
-  // Estilos para centralizar e deixar visualmente agradável
+  // Estilos
   const wrapperStyle = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
     padding: "20px",
-    backgroundColor: "#1a1a1a",
-    minHeight: "80vh" // Ocupa boa parte da tela
+    minHeight: "80vh" // O fundo já vem do body/App.css
   };
 
   return (
-    <div style={wrapperStyle}>
-      <h2 style={{ color: "white", marginBottom: "15px" }}>NavaShooter Web</h2>
+    <div style={wrapperStyle} className="page-container">
+      <h2 style={{ marginBottom: "15px" }}>NavaShooter Web</h2>
       
-      {/* Barra de Carregamento */}
-      {!isLoaded && (
-        <div style={{ color: "white", marginBottom: "10px" }}>
-          Carregando recursos... {Math.round(loadingProgression * 100)}%
+      {/* Feedback de Carregamento */}
+      {(!isLoaded || loadingData) && (
+        <div style={{ color: "#bf55ec", marginBottom: "10px", fontWeight: "bold" }}>
+           {loadingData ? "Buscando sua nave..." : `Carregando Engine... ${Math.round(loadingProgression * 100)}%`}
         </div>
       )}
 
-      {/* O Jogo Unity */}
-      <Unity 
-        unityProvider={unityProvider} 
-        style={{ 
-          width: "960px", 
-          height: "600px", 
-          border: "2px solid #555",
-          boxShadow: "0 0 20px rgba(0,0,0,0.5)",
-          visibility: isLoaded ? "visible" : "hidden" // Evita mostrar tela branca antes da hora
-        }} 
-      />
+      <div style={{
+          border: "2px solid #8a2be2",
+          boxShadow: "0 0 30px rgba(138, 43, 226, 0.4)",
+          borderRadius: "8px",
+          overflow: "hidden",
+          width: "960px",
+          height: "600px",
+          background: "#000",
+          display: (isLoaded && !loadingData) ? "block" : "none" // Esconde até estar tudo pronto
+      }}>
+          <Unity 
+            unityProvider={unityProvider} 
+            style={{ width: "100%", height: "100%" }} 
+          />
+      </div>
       
       <p style={{ color: "#888", marginTop: "15px", fontSize: "0.9rem" }}>
-        Status: {isLoaded ? "Jogo Rodando" : "Inicializando..."} | 
-        Token Enviado: {sentAuth ? "Sim" : "Não"}
+        Status: {sentAuth ? `JOGO INICIADO (Nave ID: ${naveIdParaCarregar})` : "Aguardando..."}
       </p>
     </div>
   );

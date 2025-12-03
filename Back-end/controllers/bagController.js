@@ -226,6 +226,41 @@ exports.getByShot = async (req, res) => {
   }
 };
 
+// FUNÇÃO NOVA: Equipar Item (Lógica de Upsert)
+exports.equipItem = async (req, res) => {
+    try {
+        const { userId, type, itemId } = req.body; // type deve ser 'nave' ou 'shot'
+
+        if (!userId || !type || !itemId) {
+            return res.status(400).json({ message: 'Dados incompletos' });
+        }
+
+        // 1. Procura se o usuário já tem uma mochila
+        let bag = await Bag.findOne({ where: { userId } });
+
+        if (bag) {
+            // 2. Se já tem, ATUALIZA apenas o campo necessário
+            if (type === 'nave') bag.naveId = itemId;
+            else if (type === 'shot') bag.shotId = itemId;
+            
+            await bag.save();
+            return res.status(200).json({ message: 'Item equipado (Bag atualizada)', bag });
+        } else {
+            // 3. Se não tem, CRIA uma nova mochila
+            const payload = { userId };
+            if (type === 'nave') payload.naveId = itemId;
+            else if (type === 'shot') payload.shotId = itemId;
+
+            const newBag = await Bag.create(payload);
+            return res.status(201).json({ message: 'Item equipado (Nova Bag criada)', bag: newBag });
+        }
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Erro ao equipar item' });
+    }
+};
+
 /*
 POST /bag/criar
 PUT /bag/alterar

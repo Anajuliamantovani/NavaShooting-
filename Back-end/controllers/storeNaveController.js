@@ -128,6 +128,15 @@ exports.getAll = async (req, res) => {
   }
 };
 
+exports.getByUser = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const stores = await StoreNave.findAll({ where: { userId } });
+        return res.status(200).json({ storeNaves: stores });
+    } catch (err) {
+        return res.status(500).json({ message: 'Erro ao buscar loja do usuario' });
+    }
+};
 /*
 POST /storeNave/criar
 PUT /storeNave/alterar

@@ -44,4 +44,6 @@ router.get('/nave/:naveId', bagController.getByNave);
 // que é passado como parâmetro na URL.
 router.get('/shot/:shotId', bagController.getByShot);
 
+router.post('/equipItem', bagController.equipItem);
+
 module.exports = router;

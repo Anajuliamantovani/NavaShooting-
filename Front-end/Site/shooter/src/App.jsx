@@ -141,6 +141,7 @@ const AppContent = () => {
 
             <Route path="/users" element={<UserList />} />
             <Route path="/edit-user/:id" element={<EditUser />} />
+            <Route path="/ranking" element={<RankingList />} />
             
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
