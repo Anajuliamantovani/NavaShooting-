@@ -1,26 +1,23 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 
-// Importando os componentes e páginas
+// Seus imports (Login, Register, etc...) continuam aqui
 import Login from './pages/Login';
 import Register from './pages/Register';
 import CreateNave from './pages/CreateNave';
-import NaveList from './pages/NaveList'; // <--- NOVO IMPORT
-import EditNave from './pages/EditNave'; // <--- NOVO IMPORT
+import NaveList from './pages/NaveList';
+import EditNave from './pages/EditNave';
 import GameView from './components/GameView';
-import './App.css'
+import './App.css';
 
-// === NOVOS IMPORTS ===
 import ShotList from './pages/ShotList';
 import CreateShot from './pages/CreateShot';
 import EditShot from './pages/EditShot';
-
 
 import AtributoList from './pages/AtributoList';
 import CreateAtributo from './pages/CreateAtributo';
 import EditAtributo from './pages/EditAtributo';
 
-// ... imports anteriores
 import EnemieList from './pages/EnemieList';
 import CreateEnemie from './pages/CreateEnemie';
 import EditEnemie from './pages/EditEnemie';
@@ -29,82 +26,111 @@ import PowerUpList from './pages/PowerUpList';
 import CreatePowerUp from './pages/CreatePowerUp';
 import EditPowerUp from './pages/EditPowerUp';
 
-import UserList from './pages/UserList'; // <--- NOVO
-import EditUser from './pages/EditUser'; // <--- NOVO
-import RankingList from './pages/RankingList';
-
-import Shop from './pages/Shop'; // <--- Importe aqui
-
+import UserList from './pages/UserList';
+import EditUser from './pages/EditUser';
 
 const Home = () => (
-  <div style={{ textAlign: 'center', marginTop: '50px' }}>
+  <div style={{ textAlign: 'center', marginTop: '50px', color: 'white' }}>
     <h1>Bem-vindo ao Painel do NavaShooter</h1>
-    <p>Escolha uma opção no menu acima.</p>
+    <p>Selecione uma opção no menu lateral.</p>
   </div>
 );
 
-function App() {
-  const navStyle = {
-    backgroundColor: '#20232a',
-    padding: '15px',
-    display: 'flex',
-    justifyContent: 'center',
-    gap: '20px',
-    boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
-  };
+const AppContent = () => {
+  const location = useLocation(); 
 
-  const linkStyle = {
-    color: '#61dafb',
-    textDecoration: 'none',
-    fontSize: '18px',
-    fontWeight: 'bold'
-  };
+  // Verifica se a rota atual é Login ou Register
+  const isAuthPage = ['/login', '/register'].includes(location.pathname);
 
+  const isActive = (path) => {
+    return location.pathname === path ? 'nav-item active' : 'nav-item';
+  };
+  
   return (
-    <Router>
-      <div className="App">
-        {/* MENU DE NAVEGAÇÃO */}
-        <nav style={navStyle}>
-          <Link to="/" style={linkStyle}>🏠 Home</Link>
-          <Link to="/jogar" style={linkStyle}>🎮 Jogar Agora</Link>
-          {/* Mudei o link de criar direto para a lista, faz mais sentido no fluxo */}
-          <Link to="/loja" className="nav-link" style={{color: '#bf55ec'}}>🛒 Loja</Link> {/* Novo Link */}
-          <Link to="/naves" style={linkStyle}>🚀 Gerenciar Naves</Link>
-          <Link to="/shots" style={linkStyle}>🔫 Shots</Link> {/* NOVO LINK */} 
-          <Link to="/atributos" style={linkStyle}>⚙️ Atributos</Link> {/* NOVO LINK */}
-          <Link to="/enemies" style={linkStyle}>👾 Inimigos</Link> {/* NOVO LINK */}
-          <Link to="/powerups" style={linkStyle}>⚡ PowerUps</Link> {/* NOVO */}
-          <Link to="/users" style={linkStyle}>👥 Users</Link> {/* NOVO LINK */}
-          <Link to="/ranking" className="nav-link" style={{color: '#FFD700'}}>🏆 Ranking</Link> {/* DESTAQUEI EM AMARELO */}
-          <span style={{ color: '#444' }}>|</span>
-          <Link to="/login" style={linkStyle}>Login</Link>
-          <Link to="/register" style={linkStyle}>Cadastro</Link>
-        </nav>
+    // 1. CORREÇÃO: Se for Login, remove a classe 'app-layout' para não criar o espaço da sidebar
+    <div className={isAuthPage ? "" : "app-layout"}>
+      
+      {/* 2. CORREÇÃO: Adicionamos esta lógica "{!isAuthPage && ...}" */}
+      {/* Isso significa: "Se NÃO for página de autenticação, mostre o aside" */}
+      {!isAuthPage && (
+        <aside className="sidebar">
+          
+          <div className="profile-section">
+            <div className="avatar-circle"></div>
+            <div className="profile-info">
+              <h3>Jurubebinha</h3>
+              <span>🪙 000 | ✎ Editar</span>
+            </div>
+          </div>
 
-        {/* DEFINIÇÃO DAS ROTAS */}
-        <div style={{ padding: '20px' }}>
-            <Routes>
+          <nav className="nav-links">
+            <Link to="/" className={isActive('/')}>
+              🏠 Home
+            </Link>
+            <Link to="/jogar" className={isActive('/jogar')}>
+              🎮 Jogar
+            </Link>
+            <Link to="/powerups" className={isActive('/powerups')}>
+              🛒 Loja
+            </Link>
+            <Link to="/ranking" className={isActive('/ranking')}>
+              🏆 Ranking
+            </Link>
+          </nav>
+
+          <div className="menu-label">Admin</div>
+          
+          <nav className="nav-links">
+            <Link to="/users" className={isActive('/users')}>
+              👥 Usuários
+            </Link>
+            <Link to="/atributos" className={isActive('/atributos')}>
+              ⚙️ Atributos
+            </Link>
+            <Link to="/naves" className={isActive('/naves')}>
+              🚀 Naves
+            </Link>
+            <Link to="/shots" className={isActive('/shots')}>
+              🔫 Shots
+            </Link>
+            <Link to="/powerups" className={isActive('/powerups')}>
+              👾 Power Up
+            </Link>
+            <Link to="/enemies" className={isActive('/enemies')}>
+              👾 Inimigos
+            </Link>
+          </nav>
+
+          <div className="sidebar-footer">
+            <Link to="/login" className="btn-sair">
+              🚪 Sair
+            </Link>
+            <div style={{marginTop: '10px', fontSize: '12px'}}>
+               <Link to="/register" style={{color: '#666', textDecoration: 'none'}}>Criar Conta</Link>
+            </div>
+          </div>
+        </aside>
+      )} 
+      {/* Fim da lógica do menu */}
+
+      {/* 3. CORREÇÃO: Remove a classe 'main-content' no login para tirar o padding extra */}
+      <main className={isAuthPage ? "" : "main-content"}>
+        <Routes>
             <Route path="/" element={<Home />} />
-            
-            {/* Rota do Jogo */}
             <Route path="/jogar" element={<GameView />} />
 
-            {/* Rotas de Admin/Sistema */}
-            <Route path="/naves" element={<NaveList />} /> {/* Lista de Cards */}
+            <Route path="/naves" element={<NaveList />} />
             <Route path="/create-nave" element={<CreateNave />} />
-            <Route path="/edit-nave/:id" element={<EditNave />} /> {/* Rota dinâmica com ID */}
+            <Route path="/edit-nave/:id" element={<EditNave />} />
 
-            {/* === ROTAS DE SHOTS === */}
             <Route path="/shots" element={<ShotList />} />
             <Route path="/create-shot" element={<CreateShot />} />
             <Route path="/edit-shot/:id" element={<EditShot />} />
 
-            {/* ROTAS DE ATRIBUTOS */}
             <Route path="/atributos" element={<AtributoList />} />
             <Route path="/create-atributo" element={<CreateAtributo />} />
             <Route path="/edit-atributo/:id" element={<EditAtributo />} />
 
-            {/* ROTAS DE INIMIGOS */}
             <Route path="/enemies" element={<EnemieList />} />
             <Route path="/create-enemie" element={<CreateEnemie />} />
             <Route path="/edit-enemie/:id" element={<EditEnemie />} />
@@ -117,14 +143,19 @@ function App() {
             <Route path="/edit-user/:id" element={<EditUser />} />
             <Route path="/ranking" element={<RankingList />} />
             
-            {/* Rotas de Autenticação */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+        </Routes>
+      </main>
+    </div>
+  );
+};
 
-            <Route path="/loja" element={<Shop />} />
-            </Routes>
-        </div>
-      </div>
+// --- COMPONENTE PRINCIPAL ---
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }
