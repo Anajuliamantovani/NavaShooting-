@@ -286,7 +286,7 @@ a {
 
 .login-card-split {
   display: flex; /* Faz com q eu tenha espaço pro formulario e pra imagem */
-  width: 900px;
+  width: 800px;
   height: 550px;
   background-color: #0D0019; 
   border: 1px solid #802FFF;
@@ -372,4 +372,21 @@ a {
 
 .input-group input:focus {
   border-color: #802FFF; 
+}
+
+/* ==========
+   CADASTRO
+   ========== */
+
+.register-side-right {
+  flex: 1;
+  background-image: url('../src/assets/Imagens/meninaGamer.png'); 
+  background-size: cover;
+  background-position: center;
+}
+
+@media (max-width: 900px) {
+  .register-side-right {
+    display: none;
+  }
 }

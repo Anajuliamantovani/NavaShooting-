@@ -40,7 +40,7 @@ const syncDatabase = async () => {
 };
 
 // Execute uma vez, espere dar certo, e depois COMENTE esta linha
-//syncDatabase();
+syncDatabase();
 
 // --- Routes imports ---
 const userRoutes = require('./routes/userRoutes');
