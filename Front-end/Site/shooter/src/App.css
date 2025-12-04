@@ -277,13 +277,25 @@ a {
    ============================================================= */
 
 .login-full-screen {
-  min-height: 100vh;
-  width: 100%;
+  /* --- O TRUQUE PARA COBRIR O HEADER --- */
+  position: fixed;  /* Fixa a tela, ignorando o fluxo normal */
+  top: 0;           /* Cola no topo */
+  left: 0;          /* Cola na esquerda */
+  width: 100vw;     /* Largura total */
+  height: 100vh;    /* Altura total */
+  z-index: 9999;    /* Garante que fique EM CIMA do header */
+  
+  /* --- CENTRALIZAÇÃO (Mantenha isso) --- */
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: '../src/assets/Imagens/background.jpg';
-}
+
+  /* --- SEU FUNDO --- */
+  /* Se você tirou o fundo do body, garanta que ele esteja aqui */
+  background-image: url('../src/assets/Imagens/estrelasBrilhantes.jpg'); /* Se quiser o fundo aqui */
+  background-size: cover;
+  background-position: center;
+  }
 
 .login-card-split {
   display: flex; /* Faz com q eu tenha espaço pro formulario e pra imagem */
@@ -475,7 +487,7 @@ body, html, #root {
 }
 
 .nav-item:hover {
-  background-color: rgba(138, 43, 226, 0.1);
+  background-color: rgba(33, 236, 1, 0.1);
   color: #fff;
 }
 
@@ -569,7 +581,7 @@ body, html, #root {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background-image: url('./assets/images/menino-gamer.jpg'); /* Sua imagem aqui */
+  background-image: url('./assets/images/meninogamer.jpg'); /* Sua imagem aqui */
   background-size: cover;
   background-position: center;
   border: 2px solid #8a2be2;
@@ -670,4 +682,276 @@ body, html, #root {
   
   /* Para Internet Explorer e Edge antigo */
   -ms-overflow-style: none; 
+}
+
+/* =========================================================
+   ESTILO DO RANKING
+   ========================================================= */
+
+.leaderboard-container {
+  padding: 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+  color: white;
+  font-family: 'Segoe UI', sans-serif; /* Fonte limpa como na imagem */
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.leaderboard-title {
+  font-size: 3rem;
+  text-transform: uppercase;
+  margin-bottom: 50px;
+  letter-spacing: 3px;
+  font-weight: 300;
+  text-align: left; /* Título alinhado à esquerda como na imagem */
+  padding-left: 10px;
+}
+
+/* --- ESTRUTURA DE COLUNAS (Para alinhar Header e Rows) --- */
+.ranking-header, .ranking-row {
+  display: flex; /* Flexbox para alinhar lado a lado */
+  align-items: center;
+  padding: 15px 20px;
+}
+
+/* Larguras FIXAS para garantir alinhamento vertical */
+.col-rank {
+  width: 20%;      /* Coluna da Classificação */
+  text-align: left;
+}
+
+.col-score {
+  width: 25%;      /* Coluna da Pontuação */
+  text-align: left;
+}
+
+.col-name {
+  width: 55%;      /* Coluna do Nome (ocupa o resto) */
+  text-align: left;
+  font-weight: bold;
+}
+
+/* --- ESTILO DO CABEÇALHO --- */
+.ranking-header {
+  color: #ccc;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+  padding-bottom: 10px; /* Espaço antes das barras */
+}
+
+/* --- ESTILO DAS BARRAS (ROWS) --- */
+.ranking-row {
+  background-color: #2a0e4a;
+  margin-bottom: 10px; /* Espacinho entre elas */
+  border-radius: 6px;
+  font-size: 1.1rem;
+  transition: transform 0.2s ease;
+  
+  /* SEM BRILHO EXTRA - Visual Clean */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2); 
+  border-left: 4px solid transparent; /* Borda invisível para alinhar */
+}
+
+.ranking-row:hover {
+  transform: scale(1.01); /* Leve zoom ao passar o mouse */
+  filter: brightness(1.2);
+}
+
+/* Destaque sutil de cores nas bordas laterais (opcional, como na imagem) */
+.ranking-row:nth-child(1) { border-left-color: #fff; }    /* 1º Branco */
+.ranking-row:nth-child(2) { border-left-color: #ccc; }    /* 2º Prata */
+.ranking-row:nth-child(3) { border-left-color: #cd7f32; } /* 3º Bronze */
+
+/* Texto dos números */
+.rank-number { font-weight: bold; }
+.score-number { font-family: monospace; font-size: 1.2rem; }
+.user-name { text-transform: capitalize; }
+
+.loading-text, .no-data {
+  text-align: center;
+  margin-top: 50px;
+  color: #777;
+}
+
+/* ========================================================= 
+    ESTILO GERENCIAR NAVES
+   ========================================================== */
+/* =========================================================
+   ESTILOS FINAIS: NAVE LIST (Adicionar + Cards)
+   ========================================================= */
+
+.nave-container {
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: white;
+}
+
+.nave-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+/* O Grid que segura tudo */
+.nave-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  justify-content: center;
+}
+
+/* --- 1. CARD "ADICIONAR" (Pontilhado e Transparente) --- */
+.nave-add-card {
+  width: 240px;
+  min-height: 380px; /* Mesma altura do card normal para alinhar */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+  /* Estilo Pontilhado Neon */
+  border: 3px dashed #802FFF; 
+  border-radius: 15px;
+  background-color: transparent; /* Fundo vazio para destacar */
+  
+  text-decoration: none;
+  color: #802FFF;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nave-add-card:hover {
+  background-color: rgba(128, 47, 255, 0.1);
+  box-shadow: 0 0 25px rgba(128, 47, 255, 0.3);
+  transform: translateY(-5px);
+}
+
+.plus-sign {
+  font-size: 4rem;
+  font-weight: bold;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.add-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* --- 2. CARD "NAVE" (Sólido, Estilo Gatito) --- */
+.nave-card {
+  width: 250px; /* Um pouco mais largo */
+  background-color: #0b0b15; /* Preto azulado */
+  border: 1px solid #802FFF;
+  border-radius: 16px; /* Arredondado */
+  overflow: hidden; /* Garante que a imagem respeite as bordas */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative; /* Para posicionar o status */
+}
+
+.nave-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 0 30px rgba(128, 47, 255, 0.25);
+  border-color: #a86aff;
+}
+
+/* 1. IMAGEM (Topo total) */
+.nave-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background-color: #151520;
+  border-bottom: 2px solid #802FFF; /* Separa a imagem do texto */
+  margin: 0; /* Remove margens antigas */
+}
+
+/* 2. STATUS (Badge flutuante sobre a imagem) */
+.status-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  z-index: 2;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.status-active { background-color: #00ff88; color: #000; }
+.status-inactive { background-color: #ff4444; color: #fff; }
+
+/* 3. CONTEÚDO (Nome e Preço) */
+.nave-info {
+  padding: 15px;
+  flex: 1; /* Empurra os botões para o final */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.nave-info h3 {
+  font-size: 1.4rem;
+  margin: 0 0 5px 0;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(128, 47, 255, 0.5);
+}
+
+.nave-price {
+  font-size: 0.9rem;
+  color: #bbb;
+  font-family: monospace; /* Fonte estilo código */
+  background: rgba(255,255,255,0.05);
+  padding: 4px 12px;
+  border-radius: 4px;
+}
+
+/* 4. BOTÕES (Rodapé do Card) */
+.nave-actions {
+  display: flex;
+  border-top: 1px solid rgba(128, 47, 255, 0.3);
+}
+
+.btn-card {
+  flex: 1; /* Ocupam 50% cada */
+  padding: 15px 0;
+  border: none;
+  background-color: transparent;
+  color: #802FFF;
+  font-weight: bold;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 0.2s;
+  text-transform: uppercase;
+}
+
+/* Botão da Esquerda (Editar) */
+.btn-card:first-child {
+  border-right: 1px solid rgba(128, 47, 255, 0.3);
+}
+
+.btn-card:hover {
+  background-color: #802FFF;
+  color: white;
+}
+
+/* Variação para Desativar (Hover Vermelho) */
+.btn-card.disable:hover {
+    background-color: #ff4444;
+    color: white;
 }

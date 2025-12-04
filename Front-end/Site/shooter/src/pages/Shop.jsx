@@ -115,7 +115,6 @@ const Shop = () => {
                 itemId: item.id
             }, config);
 
-            alert(`${item.name} equipado com sucesso!`);
             loadAllData();
 
         } catch (error) {

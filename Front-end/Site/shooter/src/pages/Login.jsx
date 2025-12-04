@@ -28,7 +28,7 @@ const Login = () => {
             // alert('Login realizado com sucesso!');
 
             // 3. Redirecionar para a Home (onde o menu vai aparecer magicamente)
-            navigate('/'); 
+            navigate('/home'); 
 
         } catch (error) {
             console.error(error);
