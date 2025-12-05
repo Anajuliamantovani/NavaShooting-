@@ -1,21 +1,21 @@
 using UnityEngine;
 using UnityEngine.Windows;
-using System;
+//using System;
 using System.Collections;
+using Unity.VisualScripting;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-
     [SerializeField] private GameObject tiro; 
-
     private Rigidbody2D rigidbody2;
     [SerializeField] private int velocidade;
-
     [SerializeField] bool podeTirar;
-
     Vector2 mov;
-
     int cont;
+    public Sprite tiros;
+
+    public NaveLoader.ShotData shotImpot;
 
     void Start()
     {
@@ -70,8 +70,12 @@ public class Player : MonoBehaviour
     {
         while (podeTirar == true)
         {
-            Instantiate(tiro, transform.position, transform.rotation);
+            var shot = Instantiate(tiro, transform.position, transform.rotation);
+            shot.GetComponent<Shot>().tiro = tiros;
+            shot.GetComponent<Shot>().shotImpot = shotImpot;
+
             yield return new WaitForSeconds(0.2f);
+            
         }
         cont = 0;
     }

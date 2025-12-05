@@ -3,12 +3,28 @@
   "WorkspaceRootPath": "G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{98AF547A-9131-C30A-EEE6-8F2B3D01314E}|Assembly-CSharp.csproj|G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\assets\\scripty\\game\\shot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{98AF547A-9131-C30A-EEE6-8F2B3D01314E}|Assembly-CSharp.csproj|solutionrelative:assets\\scripty\\game\\shot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{98AF547A-9131-C30A-EEE6-8F2B3D01314E}|Assembly-CSharp.csproj|G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\assets\\scripty\\game\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{98AF547A-9131-C30A-EEE6-8F2B3D01314E}|Assembly-CSharp.csproj|solutionrelative:assets\\scripty\\game\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{98AF547A-9131-C30A-EEE6-8F2B3D01314E}|Assembly-CSharp.csproj|g:\\savaprojetos\\navashooting-\\front-end\\navashooting\\assets\\scripty\\game\\shot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{98AF547A-9131-C30A-EEE6-8F2B3D01314E}|Assembly-CSharp.csproj|solutionrelative:assets\\scripty\\game\\shot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{98AF547A-9131-C30A-EEE6-8F2B3D01314E}|Assembly-CSharp.csproj|G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\assets\\scripty\\naveloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{98AF547A-9131-C30A-EEE6-8F2B3D01314E}|Assembly-CSharp.csproj|solutionrelative:assets\\scripty\\naveloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{98AF547A-9131-C30A-EEE6-8F2B3D01314E}|Assembly-CSharp.csproj|g:\\savaprojetos\\navashooting-\\front-end\\navashooting\\assets\\scripty\\game\\gerenciarpoweruops.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{98AF547A-9131-C30A-EEE6-8F2B3D01314E}|Assembly-CSharp.csproj|solutionrelative:assets\\scripty\\game\\gerenciarpoweruops.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{98AF547A-9131-C30A-EEE6-8F2B3D01314E}|Assembly-CSharp.csproj|G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\assets\\scripty\\game\\powerups.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{98AF547A-9131-C30A-EEE6-8F2B3D01314E}|Assembly-CSharp.csproj|solutionrelative:assets\\scripty\\game\\powerups.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{98AF547A-9131-C30A-EEE6-8F2B3D01314E}|Assembly-CSharp.csproj|G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\assets\\scripty\\uvmovimento.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{98AF547A-9131-C30A-EEE6-8F2B3D01314E}|Assembly-CSharp.csproj|solutionrelative:assets\\scripty\\uvmovimento.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,30 +34,82 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
+              "Title": "gerenciarPowerUops.cs",
+              "DocumentMoniker": "G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\Assets\\Scripty\\game\\gerenciarPowerUops.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripty\\game\\gerenciarPowerUops.cs",
+              "ToolTip": "G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\Assets\\Scripty\\game\\gerenciarPowerUops.cs",
+              "RelativeToolTip": "Assets\\Scripty\\game\\gerenciarPowerUops.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T00:54:21.385Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "powerUps.cs",
+              "DocumentMoniker": "G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\Assets\\Scripty\\game\\powerUps.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripty\\game\\powerUps.cs",
+              "ToolTip": "G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\Assets\\Scripty\\game\\powerUps.cs",
+              "RelativeToolTip": "Assets\\Scripty\\game\\powerUps.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABcAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T00:49:45.158Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "uvMovimento.cs",
+              "DocumentMoniker": "G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\Assets\\Scripty\\uvMovimento.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripty\\uvMovimento.cs",
+              "ToolTip": "G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\Assets\\Scripty\\uvMovimento.cs",
+              "RelativeToolTip": "Assets\\Scripty\\uvMovimento.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T23:55:29.294Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "NaveLoader.cs",
+              "DocumentMoniker": "G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\Assets\\Scripty\\NaveLoader.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripty\\NaveLoader.cs",
+              "ToolTip": "G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\Assets\\Scripty\\NaveLoader.cs",
+              "RelativeToolTip": "Assets\\Scripty\\NaveLoader.cs",
+              "ViewState": "AgIAANIAAAAAAAAAAAArwOcAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T12:07:10.935Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
               "Title": "Shot.cs",
               "DocumentMoniker": "G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\Assets\\Scripty\\game\\Shot.cs",
               "RelativeDocumentMoniker": "Assets\\Scripty\\game\\Shot.cs",
               "ToolTip": "G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\Assets\\Scripty\\game\\Shot.cs",
               "RelativeToolTip": "Assets\\Scripty\\game\\Shot.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-28T01:13:51.204Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Player.cs",
               "DocumentMoniker": "G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\Assets\\Scripty\\game\\Player.cs",
               "RelativeDocumentMoniker": "Assets\\Scripty\\game\\Player.cs",
               "ToolTip": "G:\\SAVAProjetos\\NavaShooting-\\Front-end\\navaShooting\\Assets\\Scripty\\game\\Player.cs",
               "RelativeToolTip": "Assets\\Scripty\\game\\Player.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAcAAAAAAAAAA==",
+              "ViewState": "AgIAADYAAAAAAAAAAAAAAE8AAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-28T00:37:50.965Z",
               "EditorCaption": ""
