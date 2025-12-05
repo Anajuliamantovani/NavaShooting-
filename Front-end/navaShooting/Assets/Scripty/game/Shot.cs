@@ -2,12 +2,16 @@ using UnityEngine;
 using UnityEngine.Windows;
 using System;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Shot : MonoBehaviour
 {
 
     Rigidbody2D rigidbody2;
     [SerializeField] private float vellocidadeTiro;
+    public Sprite tiro;
+    public Image imagem;
+    public NaveLoader.ShotData shotImpot;
 
     void Start()
     {
@@ -18,6 +22,10 @@ public class Shot : MonoBehaviour
     void Update()
     {
         movimento();
+        if(tiro != null)
+        {
+            imagem.sprite = tiro;
+        }
     }
 
     void movimento()
@@ -31,4 +39,18 @@ public class Shot : MonoBehaviour
         Destroy(this.gameObject);
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag != "player")
+        {
+            if (collision.GetComponent<powerUps>())
+            {
+                if(collision.GetComponent<powerUps>().meteur == true)
+                {
+                    collision.GetComponent<powerUps>().Destroir(shotImpot.damage);
+                    Destroy(this.gameObject);
+                }
+            }
+        }
+    }
 }

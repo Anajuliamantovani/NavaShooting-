@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const connection = new Sequelize(
     'Navashooting',
     'root',
-    'Mantovan!555',
+    '123456',
     {
         host: 'localhost',
         dialect: 'mysql',

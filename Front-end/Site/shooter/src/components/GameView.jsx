@@ -14,9 +14,9 @@ function GameView() {
 
   const [sentAuth, setSentAuth] = useState(false);
   
-  // Estado para guardar o ID da nave que virá do Banco de Dados
-  // Começa como null para sabermos que ainda está carregando
+  // Estado para guardar os IDs que virão do Banco de Dados
   const [naveIdParaCarregar, setNaveIdParaCarregar] = useState(null);
+  const [shotIdParaCarregar, setShotIdParaCarregar] = useState(null); // <--- NOVO ESTADO
   const [loadingData, setLoadingData] = useState(true);
 
   // 1. BUSCAR DADOS DA BAG ANTES DE TUDO
@@ -25,36 +25,52 @@ function GameView() {
         const token = localStorage.getItem('token');
         
         if (!token) {
-            console.warn("Sem token, usaremos nave padrão.");
-            setNaveIdParaCarregar(1); // Nave padrão se não estiver logado
+            console.warn("Sem token, usaremos nave e tiro padrão.");
+            setNaveIdParaCarregar(1); 
+            setShotIdParaCarregar(1); // <--- Default Tiro
             setLoadingData(false);
             return;
         }
 
         try {
-            // Decodifica o token para pegar o ID do usuário
             const decoded = jwtDecode(token);
             const userId = decoded.id;
 
-            // Busca a Bag do usuário
             const response = await axios.get(`http://localhost:3000/bags/user/${userId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 
             const bags = response.data.bags;
 
-            // Se tiver bag e tiver nave equipada, usa ela. Senão, usa a 1.
-            if (bags.length > 0 && bags[0].naveId) {
-                console.log("Nave equipada encontrada:", bags[0].naveId);
-                setNaveIdParaCarregar(bags[0].naveId);
+            // Lógica para pegar Nave e Tiro da Bag
+            if (bags.length > 0) {
+                // Nave
+                if (bags[0].naveId) {
+                    console.log("Nave equipada:", bags[0].naveId);
+                    setNaveIdParaCarregar(bags[0].naveId);
+                } else {
+                    setNaveIdParaCarregar(1);
+                }
+
+                // Tiro (NOVA LÓGICA)
+                if (bags[0].shotId) {
+                    console.log("Tiro equipado:", bags[0].shotId);
+                    setShotIdParaCarregar(bags[0].shotId);
+                } else {
+                    console.log("Sem tiro na bag, usando padrão (1)");
+                    setShotIdParaCarregar(1);
+                }
+
             } else {
-                console.log("Nenhuma nave equipada, usando padrão (1)");
+                console.log("Bag vazia, usando padrões.");
                 setNaveIdParaCarregar(1); 
+                setShotIdParaCarregar(1); // <--- Default
             }
 
         } catch (error) {
             console.error("Erro ao buscar bag:", error);
-            setNaveIdParaCarregar(1); // Fallback em caso de erro
+            setNaveIdParaCarregar(1); 
+            setShotIdParaCarregar(1); // <--- Default em caso de erro
         } finally {
             setLoadingData(false);
         }
@@ -63,36 +79,37 @@ function GameView() {
     fetchBagData();
   }, []);
 
-  // 2. ENVIAR PARA UNITY (Só roda quando tivermos o ID e a Unity estiver pronta)
+  // 2. ENVIAR PARA UNITY
   const sendAuthToUnity = useCallback(() => {
     const token = localStorage.getItem('token');
     
-    // Verificação extra: naveIdParaCarregar não pode ser null
-    if (token && isLoaded && !sentAuth && naveIdParaCarregar !== null) {
+    // VERIFICAÇÃO: Só envia se tivermos Token, Unity carregada, e AMBOS os IDs definidos
+    if (token && isLoaded && !sentAuth && naveIdParaCarregar !== null && shotIdParaCarregar !== null) {
       
       const payload = {
         token: token,
-        naveId: naveIdParaCarregar // Agora é dinâmico!
+        naveId: naveIdParaCarregar,
+        shotId: shotIdParaCarregar // <--- ENVIANDO O ID DO TIRO AGORA
       };
 
-      console.log("React -> Unity: Enviando Loadout...", payload);
+      console.log("React -> Unity: Enviando Loadout Completo...", payload);
 
       sendMessage("PlayerNave", "ReceberDadosDoReact", JSON.stringify(payload));
       
       setSentAuth(true);
     }
-  }, [isLoaded, sentAuth, sendMessage, naveIdParaCarregar]);
+  }, [isLoaded, sentAuth, sendMessage, naveIdParaCarregar, shotIdParaCarregar]); // <--- Dependência atualizada
 
-  // Monitora o carregamento da Unity E o carregamento dos dados da API
+  // Monitora carregamento
   useEffect(() => {
-    if (isLoaded && !sentAuth && naveIdParaCarregar !== null) {
-      // Pequeno delay de segurança
+    // Só tenta enviar se ambos os IDs não forem nulos
+    if (isLoaded && !sentAuth && naveIdParaCarregar !== null && shotIdParaCarregar !== null) {
       const timer = setTimeout(() => {
         sendAuthToUnity();
       }, 1000); 
       return () => clearTimeout(timer);
     }
-  }, [isLoaded, sentAuth, naveIdParaCarregar, sendAuthToUnity]);
+  }, [isLoaded, sentAuth, naveIdParaCarregar, shotIdParaCarregar, sendAuthToUnity]);
 
   // Estilos
   const wrapperStyle = {
@@ -101,17 +118,16 @@ function GameView() {
     alignItems: "center",
     justifyContent: "center",
     padding: "20px",
-    minHeight: "80vh" // O fundo já vem do body/App.css
+    minHeight: "80vh" 
   };
 
   return (
     <div style={wrapperStyle} className="page-container">
       <h2 style={{ marginBottom: "15px" }}>NavaShooter Web</h2>
       
-      {/* Feedback de Carregamento */}
       {(!isLoaded || loadingData) && (
         <div style={{ color: "#bf55ec", marginBottom: "10px", fontWeight: "bold" }}>
-           {loadingData ? "Buscando sua nave..." : `Carregando Engine... ${Math.round(loadingProgression * 100)}%`}
+           {loadingData ? "Carregando Inventário..." : `Carregando Engine... ${Math.round(loadingProgression * 100)}%`}
         </div>
       )}
 
@@ -123,7 +139,7 @@ function GameView() {
           width: "960px",
           height: "600px",
           background: "#000",
-          display: (isLoaded && !loadingData) ? "block" : "none" // Esconde até estar tudo pronto
+          display: (isLoaded && !loadingData) ? "block" : "none" 
       }}>
           <Unity 
             unityProvider={unityProvider} 
@@ -132,7 +148,7 @@ function GameView() {
       </div>
       
       <p style={{ color: "#888", marginTop: "15px", fontSize: "0.9rem" }}>
-        Status: {sentAuth ? `JOGO INICIADO (Nave ID: ${naveIdParaCarregar})` : "Aguardando..."}
+        Status: {sentAuth ? `JOGO INICIADO (Nave: ${naveIdParaCarregar}, Tiro: ${shotIdParaCarregar})` : "Aguardando..."}
       </p>
     </div>
   );

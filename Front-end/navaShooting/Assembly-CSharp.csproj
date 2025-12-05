@@ -66,8 +66,11 @@
     <Compile Include="Assets\Scripty\MenuController.cs" />
     <Compile Include="Assets\Scripty\maneger\Login.cs" />
     <Compile Include="Assets\Scripty\game\Player.cs" />
+    <Compile Include="Assets\Scripty\game\powerUps.cs" />
     <Compile Include="Assets\Scripty\game\Shot.cs" />
     <Compile Include="Assets\Scripty\NaveLoader.cs" />
+    <Compile Include="Assets\Scripty\uvMovimento.cs" />
+    <Compile Include="Assets\Scripty\game\gerenciarPowerUops.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
