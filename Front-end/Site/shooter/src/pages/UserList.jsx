@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+// O CSS é importado no App.jsx
 
 const UserList = () => {
     const [users, setUsers] = useState([]);
@@ -16,21 +17,16 @@ const UserList = () => {
             const response = await axios.get('http://localhost:3000/user/getAll', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
-            // Ordena por ID
-            const sortedUsers = response.data.usuarios.sort((a, b) => a.id - b.id);
+            const lista = response.data.usuarios || [];
+            const sortedUsers = lista.sort((a, b) => a.id - b.id);
             setUsers(sortedUsers);
         } catch (error) {
             console.error("Erro ao buscar usuários:", error);
-            alert("Erro ao carregar lista de usuários.");
         }
     };
 
     const toggleStatus = async (user) => {
         const token = localStorage.getItem('token');
-        
-        // Determina a URL baseada no status atual
-        // Nota: Sua rota espera o ID na URL, mas o controller espera no Body.
-        // Vamos enviar nos dois para garantir.
         const url = user.status === 'A' 
             ? `http://localhost:3000/user/${user.id}/deactivate`
             : `http://localhost:3000/user/${user.id}/activate`;
@@ -39,114 +35,100 @@ const UserList = () => {
             await axios.post(url, { id: user.id }, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
-            fetchUsers(); // Recarrega a lista
+            fetchUsers(); 
         } catch (error) {
             console.error("Erro ao alterar status:", error);
-            alert("Erro ao alterar status do usuário.");
+            const msg = error.response?.data?.message || error.message;
+            alert(`Erro ao alterar status: ${msg}`);
         }
-    };
-
-    // Função para deletar (caso queira usar no futuro)
-    const handleDelete = async (id) => {
-        if(!window.confirm("Tem certeza que deseja remover este usuário permanentemente?")) return;
-        const token = localStorage.getItem('token');
-        try {
-            await axios.delete(`http://localhost:3000/user/${id}/remove`, {
-                headers: { 'Authorization': `Bearer ${token}` },
-                data: { id } // Controller pede ID no body
-            });
-            fetchUsers();
-        } catch (error) {
-            console.error("Erro ao deletar:", error);
-        }
-    };
-
-    // Estilos (Layout Horizontal)
-    const styles = {
-        container: { padding: '20px', maxWidth: '900px', margin: '0 auto' },
-        header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' },
-        addButton: { padding: '10px 20px', backgroundColor: '#28a745', color: '#fff', textDecoration: 'none', borderRadius: '5px', fontWeight: 'bold' },
-        listContainer: { display: 'flex', flexDirection: 'column', gap: '15px' },
-        
-        // Card Horizontal
-        card: { 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center', 
-            border: '1px solid #ccc', 
-            borderRadius: '8px', 
-            padding: '20px', 
-            backgroundColor: '#fff', 
-            boxShadow: '0 2px 4px rgba(0,0,0,0.05)' 
-        },
-        infoSide: { display: 'flex', flexDirection: 'column', gap: '5px' },
-        nickname: { fontSize: '1.2rem', margin: 0, color: '#333' },
-        email: { fontSize: '0.9rem', color: '#666' },
-        meta: { fontSize: '0.8rem', color: '#888' },
-        
-        statusBadge: (status) => ({
-            display: 'inline-block',
-            padding: '2px 8px',
-            borderRadius: '12px',
-            fontSize: '0.75rem',
-            fontWeight: 'bold',
-            color: '#fff',
-            backgroundColor: status === 'A' ? '#28a745' : '#dc3545',
-            marginLeft: '10px'
-        }),
-
-        btnGroup: { display: 'flex', gap: '10px' },
-        btnEdit: { backgroundColor: '#ffc107', border: 'none', padding: '8px 15px', borderRadius: '4px', cursor: 'pointer', color: '#000', fontWeight: 'bold' },
-        btnToggle: (status) => ({ backgroundColor: status === 'A' ? '#dc3545' : '#17a2b8', border: 'none', padding: '8px 15px', borderRadius: '4px', cursor: 'pointer', color: '#fff', fontWeight: 'bold' })
     };
 
     return (
-        <div style={styles.container}>
-            <div style={styles.header}>
-                <h2>Gerenciar Usuários</h2>
-                {/* Como a criação de usuário é o Registro, podemos mandar para lá ou criar um CreateUser específico */}
-                <Link to="/register" style={styles.addButton}>+ Novo Usuário</Link>
+        <div className="nave-container">
+            {/* Header */}
+            <div className="user-header">
+                <h2 className="shot-title">BASE DE JOGADORES</h2>
             </div>
 
-            <div style={styles.listContainer}>
+            {/* Grid */}
+            <div className="user-grid">
                 {users.map((user) => (
-                    <div key={user.id} style={styles.card}>
-                        {/* Lado Esquerdo */}
-                        <div style={styles.infoSide}>
-                            <div style={{display: 'flex', alignItems: 'center'}}>
-                                <h3 style={styles.nickname}>{user.nickname}</h3>
-                                <span style={styles.statusBadge(user.status)}>
-                                    {user.status === 'A' ? 'ATIVO' : 'INATIVO'}
-                                </span>
-                            </div>
-                            <span style={styles.email}>{user.email}</span>
-                            <span style={styles.meta}>
-                                Permissão: <strong>{user.permission}</strong> | Score: {user.score} | Coins: {user.coins}
-                            </span>
+                    <div key={user.id} className="sci-fi-card">
+                        
+                        {/* 1. BADGE FLUTUANTE */}
+                        <div className={`status-pill ${user.status === 'A' ? 'pill-active' : 'pill-inactive'}`}>
+                            {user.status === 'A' ? 'ATIVO' : 'DESATIVADO'}
                         </div>
 
-                        {/* Lado Direito */}
-                        <div style={styles.btnGroup}>
+                        {/* 2. AVATAR (ESTILO SHOT) */}
+                        <div className="card-avatar-section">
+                            {/* Adicionei overflow: 'hidden' e position: 'relative' para garantir que a imagem é cortada */}
+                            <div className="avatar-circle" style={{ overflow: 'hidden', position: 'relative' }}>
+                                {user.profilePic ? (
+                                    <img 
+                                        src={`http://localhost:3000/imagens/${user.profilePic}`} 
+                                        alt={`${user.nickname} avatar`}
+                                        // O estilo da imagem garante que ela preencha o círculo e mantenha a proporção
+                                        style={{ 
+                                            width: '100%', 
+                                            height: '100%', 
+                                            objectFit: 'cover',
+                                            position: 'absolute',
+                                            top: '0',
+                                            left: '0'
+                                        }}
+                                    />
+                                ) : (
+                                    // Adicionado para centralizar a letra caso não haja imagem
+                                    <span style={{ display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+                                        {user.nickname.charAt(0).toUpperCase()}
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* 3. INFO */}
+                        <div className="card-info-section">
+                            <h3 className="sci-fi-title">{user.nickname}</h3>
+                            <p className="sci-fi-subtitle">{user.email}</p>
+                            
+                            {/* 4. STATS TRANSPARENTES E PRÓXIMOS (Modificado) */}
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '25px', marginBottom: '25px', width: '100%' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <span className="stat-label" style={{ marginBottom: '2px' }}>SCORE</span>
+                                    <span className="stat-number text-cyan" style={{ fontSize: '1.2rem' }}>{user.score}</span>
+                                </div>
+                                
+                                {/* Linha divisória vertical subtil */}
+                                <div style={{ width: '1px', height: '25px', backgroundColor: '#444' }}></div>
+
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <span className="stat-label" style={{ marginBottom: '2px' }}>COINS</span>
+                                    <span className="stat-number text-gold" style={{ fontSize: '1.2rem' }}>{user.coins}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* 5. RODAPÉ DE AÇÕES DIVIDIDO */}
+                        <div className="card-footer-actions">
                             <button 
-                                style={styles.btnEdit} 
+                                className="footer-btn btn-edit-text"
                                 onClick={() => navigate(`/edit-user/${user.id}`)}
                             >
-                                Editar
+                                EDITAR
                             </button>
                             
+                            <div className="footer-divider"></div>
+                            
                             <button 
-                                style={styles.btnToggle(user.status)} 
+                                className={`footer-btn ${user.status === 'A' ? 'btn-deactivate-text' : 'btn-activate-text'}`}
                                 onClick={() => toggleStatus(user)}
                             >
-                                {user.status === 'A' ? 'Desativar' : 'Ativar'}
+                                {user.status === 'A' ? 'DESATIVAR' : 'ATIVAR'}
                             </button>
                         </div>
                     </div>
                 ))}
-            </div>
-            
-            <div style={{marginTop: '30px', textAlign: 'center'}}>
-                <Link to="/">Voltar ao Menu Principal</Link>
             </div>
         </div>
     );

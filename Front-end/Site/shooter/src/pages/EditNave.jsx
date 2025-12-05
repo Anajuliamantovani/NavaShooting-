@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import '../App.css'; // Importa o estilo global Sci-Fi
 
 const EditNave = () => {
-    const { id } = useParams(); // Pega o ID da URL
+    const { id } = useParams();
     const navigate = useNavigate();
     
     const [formData, setFormData] = useState({
@@ -12,7 +13,7 @@ const EditNave = () => {
         price: '',
         masLife: '',
         status: 'A',
-        sprite: '' // Nome do arquivo atual
+        sprite: ''
     });
 
     useEffect(() => {
@@ -27,7 +28,6 @@ const EditNave = () => {
             });
             const nave = response.data.nave;
             
-            // Preenche o formulário com os dados recebidos
             setFormData({
                 id: nave.id,
                 name: nave.name,
@@ -52,78 +52,120 @@ const EditNave = () => {
         const token = localStorage.getItem('token');
 
         try {
-            // Nota: Estamos enviando JSON normal, pois sua rota de update 
-            // no backend atual não suporta upload de arquivo novo ainda.
             await axios.put('http://localhost:3000/naves/updateNave', formData, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 
             alert('Nave atualizada com sucesso!');
-            navigate('/naves'); // Volta para os cards
+            navigate('/naves'); 
         } catch (error) {
             console.error("Erro ao atualizar:", error);
             alert("Erro ao atualizar nave.");
         }
     };
 
-    // Estilos (reutilizando lógica simples)
-    const styles = {
-        container: { maxWidth: '500px', margin: '2rem auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' },
-        inputGroup: { marginBottom: '15px' },
-        label: { display: 'block', marginBottom: '5px', fontWeight: 'bold' },
-        input: { width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' },
-        button: { width: '100%', padding: '10px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '16px' },
-        cancelBtn: { display: 'block', textAlign: 'center', marginTop: '10px', color: '#666' },
-        previewImg: { width: '100px', marginTop: '5px', borderRadius: '5px' }
-    };
-
     return (
-        <div style={styles.container}>
-            <h2>Editar Nave #{id}</h2>
-            <form onSubmit={handleSubmit}>
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Nome:</label>
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} style={styles.input} required />
-                </div>
+        <div className="form-page-container">
+            <div className="form-card-neon">
+                
+                <h2 className="form-title">EDITAR NAVE #{id}</h2>
 
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Preço:</label>
-                    <input type="number" name="price" value={formData.price} onChange={handleChange} style={styles.input} />
-                </div>
+                <form onSubmit={handleSubmit}>
+                    <div className="form-grid-layout">
+                        
+                        {/* --- COLUNA DA ESQUERDA (DADOS) --- */}
+                        <div className="form-fields">
+                            <div className="form-group">
+                                <label className="input-label">Nome</label>
+                                <input 
+                                    type="text" 
+                                    name="name" 
+                                    className="input-modern"
+                                    value={formData.name} 
+                                    onChange={handleChange} 
+                                    required 
+                                />
+                            </div>
 
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Vida Máxima:</label>
-                    <input type="number" name="masLife" value={formData.masLife} onChange={handleChange} style={styles.input} />
-                </div>
+                            <div className="form-group">
+                                <label className="input-label">Preço</label>
+                                <input 
+                                    type="number" 
+                                    name="price" 
+                                    className="input-modern"
+                                    value={formData.price} 
+                                    onChange={handleChange} 
+                                />
+                            </div>
 
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Status:</label>
-                    <select name="status" value={formData.status} onChange={handleChange} style={styles.input}>
-                        <option value="A">Ativo</option>
-                        <option value="D">Desativado</option>
-                    </select>
-                </div>
+                            <div className="form-group">
+                                <label className="input-label">Vida Máxima</label>
+                                <input 
+                                    type="number" 
+                                    name="masLife" 
+                                    className="input-modern"
+                                    value={formData.masLife} 
+                                    onChange={handleChange} 
+                                />
+                            </div>
 
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Imagem Atual:</label>
-                    {formData.sprite && (
-                        <img 
-                            src={`http://localhost:3000/imagens/${formData.sprite}`} 
-                            alt="Sprite atual" 
-                            style={styles.previewImg} 
-                        />
-                    )}
-                    <p style={{fontSize: '0.8rem', color: '#666'}}>
-                        * Para trocar a imagem, delete e crie novamente (ou atualize o backend).
-                    </p>
-                </div>
+                            <div className="form-group">
+                                <label className="input-label">Status</label>
+                                <select 
+                                    name="status" 
+                                    className="select-modern"
+                                    value={formData.status} 
+                                    onChange={handleChange}
+                                >
+                                    <option value="A">Ativo</option>
+                                    <option value="D">Desativado</option>
+                                </select>
+                            </div>
+                        </div>
 
-                <button type="submit" style={styles.button}>Salvar Alterações</button>
-            </form>
-            
-            <a href="#" onClick={(e) => { e.preventDefault(); navigate('/naves'); }} style={styles.cancelBtn}>
-                Cancelar
-            </a>
+                        {/* --- COLUNA DA DIREITA (IMAGEM ATUAL) --- */}
+                        <div className="image-upload-area">
+                            <label className="input-label">Imagem Atual</label>
+                            
+                            {/* Caixa que mostra a imagem atual */}
+                            <div className="image-preview-box" style={{cursor: 'default'}}>
+                                {formData.sprite ? (
+                                    <img 
+                                        src={`http://localhost:3000/imagens/${formData.sprite}`} 
+                                        alt="Sprite atual" 
+                                        className="preview-img"
+                                    />
+                                ) : (
+                                    <div className="upload-placeholder">
+                                        <p>Sem imagem</p>
+                                    </div>
+                                )}
+                            </div>
+                            
+                            <p style={{fontSize: '0.8rem', color: '#666', marginTop: '10px', textAlign: 'center'}}>
+                                * Para trocar a imagem, delete e crie novamente (ou atualize o backend).
+                            </p>
+                        </div>
+
+                    </div> {/* Fim do Grid */}
+
+                    {/* BOTÕES DE AÇÃO */}
+                    <div className="form-actions">
+                        {/* Botão Azul para diferenciar do Criar (Verde) */}
+                        <button 
+                            type="submit" 
+                            className="btn-save"
+                            style={{ background: 'linear-gradient(90deg, #007bff 0%, #0056b3 100%)', boxShadow: '0 5px 15px rgba(0, 123, 255, 0.3)' }}
+                        >
+                            SALVAR ALTERAÇÕES
+                        </button>
+
+                        <Link to="/naves" className="btn-cancel">
+                            Cancelar
+                        </Link>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };

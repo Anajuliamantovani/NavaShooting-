@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+// O CSS é global (App.css), então não precisa importar diretamente se já estiver no main
 
 const CreateAtributo = () => {
     const navigate = useNavigate();
@@ -8,7 +9,7 @@ const CreateAtributo = () => {
     const [formData, setFormData] = useState({
         speed: '',
         scale: '',
-        shield: 'false' // Começa como string do select, depois convertemos
+        shield: 'false' // Começa como string para o select
     });
 
     const handleChange = (e) => {
@@ -19,7 +20,7 @@ const CreateAtributo = () => {
         e.preventDefault();
         const token = localStorage.getItem('token');
 
-        // Prepara o objeto (convertendo shield para booleano real)
+        // Conversão de tipos antes de enviar
         const payload = {
             speed: parseFloat(formData.speed),
             scale: parseFloat(formData.scale),
@@ -36,42 +37,90 @@ const CreateAtributo = () => {
 
         } catch (error) {
             console.error("Erro ao criar:", error);
-            alert('Erro ao criar atributo.');
+            const msg = error.response?.data?.message || error.message;
+            alert(`Erro ao criar atributo: ${msg}`);
         }
     };
 
-    const styles = {
-        container: { maxWidth: '400px', margin: '2rem auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' },
-        inputGroup: { marginBottom: '15px' },
-        label: { display: 'block', marginBottom: '5px', fontWeight: 'bold' },
-        input: { width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' },
-        button: { width: '100%', padding: '10px', backgroundColor: '#28a745', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }
-    };
-
     return (
-        <div style={styles.container}>
-            <h2>Novo Atributo</h2>
-            <form onSubmit={handleSubmit}>
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Velocidade (Speed):</label>
-                    <input type="number" step="0.1" name="speed" value={formData.speed} onChange={handleChange} style={styles.input} required />
-                </div>
+        <div className="form-page-container">
+            {/* Limitamos a largura pois não há imagem lateral, para não ficar muito esticado */}
+            <div className="form-card-neon" style={{ maxWidth: '600px' }}>
+                
+                <h2 className="form-title">NOVO ATRIBUTO</h2>
+                
+                <form onSubmit={handleSubmit}>
+                    
+                    {/* Campos do Formulário */}
+                    <div className="form-fields">
+                        
+                        <div className="form-group">
+                            <label className="input-label">Velocidade (Speed)</label>
+                            <input 
+                                type="number" 
+                                step="0.1" 
+                                name="speed" 
+                                className="input-modern"
+                                value={formData.speed} 
+                                onChange={handleChange} 
+                                placeholder="Ex: 1.5"
+                                required 
+                            />
+                        </div>
 
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Escala (Scale):</label>
-                    <input type="number" step="0.1" name="scale" value={formData.scale} onChange={handleChange} style={styles.input} required />
-                </div>
+                        <div className="form-group">
+                            <label className="input-label">Escala (Scale)</label>
+                            <input 
+                                type="number" 
+                                step="0.1" 
+                                name="scale" 
+                                className="input-modern"
+                                value={formData.scale} 
+                                onChange={handleChange} 
+                                placeholder="Ex: 0.5"
+                                required 
+                            />
+                        </div>
 
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Possui Escudo (Shield)?</label>
-                    <select name="shield" value={formData.shield} onChange={handleChange} style={styles.input}>
-                        <option value="false">Não</option>
-                        <option value="true">Sim</option>
-                    </select>
-                </div>
+                        <div className="form-group">
+                            <label className="input-label">Possui Escudo (Shield)?</label>
+                            <select 
+                                name="shield" 
+                                className="select-modern"
+                                value={formData.shield} 
+                                onChange={handleChange}
+                            >
+                                <option value="false">Não</option>
+                                <option value="true">Sim</option>
+                            </select>
+                        </div>
 
-                <button type="submit" style={styles.button}>Salvar Atributo</button>
-            </form>
+                    </div>
+
+                    {/* Botões de Ação */}
+                    <div className="form-actions" style={{ marginTop: '30px' }}>
+                        <button 
+                            type="submit" 
+                            className="btn-save"
+                            style={{ 
+                                background: 'linear-gradient(90deg, #802FFF, #5e00b8)',
+                                boxShadow: 'none' // Remove a sombra verde
+                            }}
+                        >
+                            CRIAR ATRIBUTO
+                        </button>
+
+                        <button 
+                            type="button" 
+                            className="btn-cancel"
+                            onClick={() => navigate('/atributos')}
+                        >
+                            CANCELAR
+                        </button>
+                    </div>
+
+                </form>
+            </div>
         </div>
     );
 };

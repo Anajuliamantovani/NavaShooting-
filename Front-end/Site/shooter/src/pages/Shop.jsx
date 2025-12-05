@@ -171,7 +171,6 @@ const Shop = () => {
             <div className="header-flex">
                 <div>
                     <h2>Loja Espacial</h2>
-                    <p>Adquira equipamentos para melhorar sua jornada.</p>
                 </div>
                 <div style={{textAlign: 'right'}}>
                     <h3 style={{color: '#FFD700', textShadow: '0 0 10px #FFD700'}}>
@@ -181,7 +180,7 @@ const Shop = () => {
             </div>
 
             {/* SESSÃO DE NAVES */}
-            <h3 style={{borderLeft: '5px solid #8a2be2', paddingLeft: '10px', marginTop: '30px'}}>🚀 Naves</h3>
+            <h3 style={{borderLeft: '5px solid #8a2be2', paddingLeft: '10px', marginTop: '30px'}}> NAVES</h3>
             <div className="grid-container">
                 {naves.map((nave) => (
                     <div key={nave.id} className="game-card">
@@ -200,7 +199,7 @@ const Shop = () => {
             </div>
 
             {/* SESSÃO DE SHOTS */}
-            <h3 style={{borderLeft: '5px solid #00d2ff', paddingLeft: '10px', marginTop: '50px'}}>🔫 Armas (Shots)</h3>
+            <h3 style={{borderLeft: '5px solid #00d2ff', paddingLeft: '10px', marginTop: '50px'}}> SHOTS </h3>
             <div className="grid-container">
                 {shots.map((shot) => (
                     <div key={shot.id} className="game-card">
@@ -216,10 +215,6 @@ const Shop = () => {
                         {renderCardAction(shot, 'shot')}
                     </div>
                 ))}
-            </div>
-
-            <div style={{marginTop: '50px', textAlign: 'center'}}>
-                <Link to="/" className="nav-link">Voltar ao Menu Principal</Link>
             </div>
         </div>
     );

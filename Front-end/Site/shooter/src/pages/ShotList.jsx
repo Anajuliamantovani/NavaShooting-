@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+// A importação do CSS foi removida para evitar erros de caminho.
 
 const ShotList = () => {
     const [shots, setShots] = useState([]);
@@ -16,92 +17,99 @@ const ShotList = () => {
             const response = await axios.get('http://localhost:3000/shots/allShots', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
-            // Ordena por ID
-            const sortedShots = response.data.shots.sort((a, b) => a.id - b.id);
+            
+            // Verificação de segurança caso response.data.shots venha nulo
+            const listaShots = response.data.shots || [];
+            const sortedShots = listaShots.sort((a, b) => a.id - b.id);
             setShots(sortedShots);
         } catch (error) {
             console.error("Erro ao buscar shots:", error);
-            // alert("Erro ao carregar lista de shots."); // Opcional
         }
     };
 
     const toggleStatus = async (shot) => {
         const token = localStorage.getItem('token');
+        
+        // CORREÇÃO: Usamos 'deactivateShot' (sem o 's') para bater com o router do backend
         const url = shot.status === 'A' 
             ? 'http://localhost:3000/shots/deactivateShot' 
             : 'http://localhost:3000/shots/activateShot';
 
         try {
-            await axios.post(url, { id: shot.id }, {
+            // Enviamos tanto 'id' quanto 'shotId' para garantir compatibilidade
+            const payload = { 
+                id: shot.id, 
+                shotId: shot.id 
+            };
+
+            await axios.post(url, payload, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
+            
+            // Recarrega a lista para atualizar o botão
             fetchShots(); 
+            
         } catch (error) {
-            console.error("Erro ao alterar status:", error);
-            alert("Erro ao alterar status do shot.");
+            console.error("Erro detalhado ao alterar status:", error);
+            const msg = error.response?.data?.message || error.message;
+            alert(`Erro ao alterar status: ${msg}`);
         }
     };
 
-    const styles = {
-        container: { padding: '20px', maxWidth: '1000px', margin: '0 auto' },
-        header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' },
-        addButton: { padding: '10px 20px', backgroundColor: '#28a745', color: '#fff', textDecoration: 'none', borderRadius: '5px', fontWeight: 'bold' },
-        grid: { display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center' },
-        card: { border: '1px solid #ccc', borderRadius: '8px', padding: '15px', width: '220px', textAlign: 'center', backgroundColor: '#fff', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' },
-        image: { width: '100%', height: '150px', objectFit: 'contain', marginBottom: '10px', backgroundColor: '#f0f0f0', borderRadius: '4px' },
-        name: { margin: '10px 0', fontSize: '1.2rem', color: '#333' },
-        stats: { fontSize: '0.9rem', color: '#555', margin: '5px 0' },
-        status: (status) => ({ color: status === 'A' ? 'green' : 'red', fontWeight: 'bold', marginBottom: '10px' }),
-        buttonGroup: { display: 'flex', justifyContent: 'space-between', marginTop: '10px' },
-        btnEdit: { backgroundColor: '#ffc107', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer', color: '#000' },
-        btnToggle: (status) => ({ backgroundColor: status === 'A' ? '#dc3545' : '#17a2b8', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer', color: '#fff' })
-    };
-
     return (
-        <div style={styles.container}>
-            <div style={styles.header}>
-                <h2>Gerenciar Shots (Tiros)</h2>
-                <Link to="/create-shot" style={styles.addButton}>+ Adicionar Shot</Link>
-            </div>
+        <div className="nave-container">
+            <h2 className="shot-title">GERENCIAR SHOTS</h2>
 
-            <div style={styles.grid}>
+            <div className="shot-grid">
+                
+                {/* 1. CARD ADICIONAR */}
+                <Link to="/create-shot" className="shot-add-card">
+                    <span className="plus-sign">+</span>
+                    <span className="add-text">ADICIONAR</span>
+                </Link>
+
+                {/* 2. CARDS SHOTS */}
                 {shots.map((shot) => (
-                    <div key={shot.id} style={styles.card}>
+                    <div key={shot.id} className="shot-card">
+                        
+                        {/* Imagem */}
                         <img 
                             src={`http://localhost:3000/imagens/${shot.sprite}`} 
                             alt={shot.name} 
-                            style={styles.image} 
+                            className="shot-image"
                             onError={(e) => { e.target.src = 'https://via.placeholder.com/150?text=Sem+Img'; }}
                         />
-                        
-                        <h3 style={styles.name}>#{shot.id} - {shot.name}</h3>
-                        <p style={styles.stats}>Dano: {shot.damage}</p>
-                        <p style={styles.stats}>Preço: {shot.price}</p>
-                        <p style={styles.status(shot.status)}>
-                            {shot.status === 'A' ? 'ATIVO' : 'DESATIVADO'}
-                        </p>
 
-                        <div style={styles.buttonGroup}>
+                        {/* Status Badge */}
+                        <span className={`status-badge ${shot.status === 'A' ? 'status-active' : 'status-inactive'}`}>
+                            {shot.status === 'A' ? 'ATIVO' : 'DESATIVADO'}
+                        </span>
+                        
+                        {/* Informações */}
+                        <div className="shot-info">
+                            <h3>{shot.name}</h3>
+                            <p className="shot-damage">Dano: {shot.damage}</p>
+                            <p className="shot-damage">Preço: {shot.price}</p>
+                        </div>
+
+                        {/* Botões de Ação */}
+                        <div className="nave-actions">
                             <button 
-                                style={styles.btnEdit} 
+                                className="btn-card"
                                 onClick={() => navigate(`/edit-shot/${shot.id}`)}
                             >
-                                ✏️ Editar
+                                Editar
                             </button>
                             
                             <button 
-                                style={styles.btnToggle(shot.status)} 
+                                className="btn-card"
                                 onClick={() => toggleStatus(shot)}
                             >
-                                {shot.status === 'A' ? 'Desabilitar' : 'Habilitar'}
+                                {shot.status === 'A' ? 'Desativar' : 'Ativar'}
                             </button>
                         </div>
                     </div>
                 ))}
-            </div>
-            
-            <div style={{marginTop: '30px', textAlign: 'center'}}>
-                <Link to="/">Voltar ao Menu Principal</Link>
             </div>
         </div>
     );

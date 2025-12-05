@@ -1,9 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+// O CSS global (App.css) deve conter as classes do Modal (veja abaixo)
 
 const AtributoList = () => {
     const [atributos, setAtributos] = useState([]);
+    
+    // Estado para controlar o Modal Customizado
+    const [modal, setModal] = useState({
+        show: false,
+        type: 'alert', // 'alert' ou 'confirm'
+        title: '',
+        message: '',
+        onConfirm: null
+    });
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -12,110 +23,169 @@ const AtributoList = () => {
 
     const fetchAtributos = async () => {
         try {
-            // Se tiver autenticação no futuro, o header já está pronto
             const token = localStorage.getItem('token');
             const response = await axios.get('http://localhost:3000/atributos/allAtributes', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             
-            // Ordena por ID
             const listaOrdenada = response.data.atributos.sort((a, b) => a.id - b.id);
             setAtributos(listaOrdenada);
         } catch (error) {
             console.error("Erro ao buscar atributos:", error);
+            // Poderíamos usar o modal de erro aqui também se quiséssemos
         }
     };
 
-    const handleDelete = async (id) => {
-        if (!window.confirm("Tem certeza que deseja excluir este atributo?")) return;
+    // --- FUNÇÕES DO MODAL ---
+    
+    const closeModal = () => {
+        setModal({ ...modal, show: false });
+    };
 
+    const showAlert = (title, message) => {
+        setModal({
+            show: true,
+            type: 'alert',
+            title,
+            message,
+            onConfirm: closeModal
+        });
+    };
+
+    const showConfirm = (title, message, action) => {
+        setModal({
+            show: true,
+            type: 'confirm',
+            title,
+            message,
+            onConfirm: () => {
+                action();
+                closeModal();
+            }
+        });
+    };
+
+    // --- LÓGICA DE EXCLUSÃO ---
+
+    const handleDeleteClick = (id) => {
+        showConfirm(
+            "CONFIRMAR EXCLUSÃO",
+            "Tem certeza que deseja desintegrar este atributo do sistema?",
+            () => deleteAtributo(id)
+        );
+    };
+
+    const deleteAtributo = async (id) => {
         const token = localStorage.getItem('token');
         try {
-            // ATENÇÃO: Para enviar BODY no DELETE com Axios, usamos a propriedade 'data'
             await axios.delete('http://localhost:3000/atributos/deleteAtribute', {
                 headers: { 'Authorization': `Bearer ${token}` },
                 data: { id: id } 
             });
 
-            // Remove o item da lista visualmente sem precisar recarregar a página
-            setAtributos(atributos.filter(item => item.id !== id));
-            alert("Atributo excluído com sucesso!");
+            setAtributos(prev => prev.filter(item => item.id !== id));
+            showAlert("SUCESSO", "Atributo excluído com sucesso!");
 
         } catch (error) {
             console.error("Erro ao excluir:", error);
-            alert("Erro ao excluir atributo.");
+            showAlert("ERRO DE SISTEMA", "Falha ao excluir o atributo.");
         }
     };
 
-    // Estilos para o formato de Lista
-    const styles = {
-        container: { padding: '20px', maxWidth: '800px', margin: '0 auto' },
-        header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' },
-        addButton: { padding: '10px 20px', backgroundColor: '#28a745', color: '#fff', textDecoration: 'none', borderRadius: '5px', fontWeight: 'bold' },
-        listContainer: { display: 'flex', flexDirection: 'column', gap: '15px' },
-        
-        // O Card Retangular Horizontal
-        card: { 
-            display: 'flex', 
-            justifyContent: 'space-between', // Separa Esquerda e Direita
-            alignItems: 'center', 
-            border: '1px solid #ccc', 
-            borderRadius: '8px', 
-            padding: '20px', 
-            backgroundColor: '#fff', 
-            boxShadow: '0 2px 4px rgba(0,0,0,0.05)' 
-        },
-        infoSide: { display: 'flex', flexDirection: 'column', gap: '5px' },
-        title: { fontSize: '1.2rem', margin: 0, color: '#333' },
-        details: { fontSize: '0.9rem', color: '#666' },
-        
-        btnGroup: { display: 'flex', gap: '10px' },
-        btnEdit: { backgroundColor: '#ffc107', border: 'none', padding: '8px 15px', borderRadius: '4px', cursor: 'pointer', color: '#000', fontWeight: 'bold' },
-        btnDelete: { backgroundColor: '#dc3545', border: 'none', padding: '8px 15px', borderRadius: '4px', cursor: 'pointer', color: '#fff', fontWeight: 'bold' }
-    };
-
     return (
-        <div style={styles.container}>
-            <div style={styles.header}>
-                <h2>Gerenciar Atributos</h2>
-                <Link to="/create-atributo" style={styles.addButton}>+ Novo Atributo</Link>
+        <div className="nave-container">
+            {/* Header */}
+            <div className="user-header">
+                <h2 className="shot-title">GERENCIAR ATRIBUTOS</h2>
             </div>
 
-            <div style={styles.listContainer}>
+            {/* Grid de Cards */}
+            <div className="user-grid">
+                
+                {/* 1. CARD DE ADICIONAR */}
+                <Link 
+                    to="/create-atributo" 
+                    className="sci-fi-card"
+                    style={{
+                        textDecoration: 'none',
+                        border: '2px dashed #802FFF',
+                        backgroundColor: 'rgba(5, 0, 17, 0.3)',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        cursor: 'pointer',
+                        minHeight: '200px',
+                        transition: 'all 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(128, 47, 255, 0.1)';
+                        e.currentTarget.style.transform = 'translateY(-5px)';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(5, 0, 17, 0.3)';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                    }}
+                >
+                    <div style={{ fontSize: '4rem', color: '#802FFF', marginBottom: '10px', fontWeight: 'bold' }}>+</div>
+                    <span style={{ color: '#802FFF', fontFamily: "'Orbitron', sans-serif", fontSize: '1.2rem', letterSpacing: '2px', textTransform: 'uppercase' }}>ADICIONAR</span>
+                </Link>
+
+                {/* 2. LOOP DOS CARDS */}
                 {atributos.map((atrib) => (
-                    <div key={atrib.id} style={styles.card}>
-                        {/* Lado Esquerdo: Informações */}
-                        <div style={styles.infoSide}>
-                            <h3 style={styles.title}>Atributo #{atrib.id}</h3>
-                            <span style={styles.details}>
-                                <strong>Velocidade:</strong> {atrib.speed} | 
-                                <strong> Escala:</strong> {atrib.scale} | 
-                                <strong> Escudo:</strong> {atrib.shield ? 'Sim' : 'Não'}
-                            </span>
+                    <div key={atrib.id} className="sci-fi-card">
+                        
+                        <div className="card-info-section" style={{ marginTop: '20px' }}>
+                            <h3 className="sci-fi-title">ATRIBUTO #{atrib.id}</h3>
+                            <p className="sci-fi-subtitle">Parâmetros de Jogo</p>
+                            
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '15px', marginBottom: '25px', width: '100%' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <span className="stat-label" style={{ marginBottom: '2px' }}>SPEED</span>
+                                    <span className="stat-number text-cyan" style={{ fontSize: '1.2rem' }}>{atrib.speed}</span>
+                                </div>
+                                <div style={{ width: '1px', height: '25px', backgroundColor: '#444' }}></div>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <span className="stat-label" style={{ marginBottom: '2px' }}>SCALE</span>
+                                    <span className="stat-number text-gold" style={{ fontSize: '1.2rem' }}>{atrib.scale}</span>
+                                </div>
+                                <div style={{ width: '1px', height: '25px', backgroundColor: '#444' }}></div>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <span className="stat-label" style={{ marginBottom: '2px' }}>ESCUDO</span>
+                                    <span className="stat-number" style={{ fontSize: '1.2rem', color: atrib.shield ? '#28a745' : '#ff3333' }}>
+                                        {atrib.shield ? 'ON' : 'OFF'}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
 
-                        {/* Lado Direito: Botões */}
-                        <div style={styles.btnGroup}>
-                            <button 
-                                style={styles.btnEdit} 
-                                onClick={() => navigate(`/edit-atributo/${atrib.id}`)}
-                            >
-                                Editar
-                            </button>
-                            <button 
-                                style={styles.btnDelete} 
-                                onClick={() => handleDelete(atrib.id)}
-                            >
-                                Excluir
-                            </button>
+                        <div className="card-footer-actions">
+                            <button className="footer-btn btn-edit-text" onClick={() => navigate(`/edit-atributo/${atrib.id}`)}>EDITAR</button>
+                            <div className="footer-divider"></div>
+                            <button className="footer-btn btn-deactivate-text" onClick={() => handleDeleteClick(atrib.id)}>EXCLUIR</button>
                         </div>
                     </div>
                 ))}
             </div>
-            
-            <div style={{marginTop: '30px', textAlign: 'center'}}>
-                <Link to="/">Voltar ao Menu Principal</Link>
-            </div>
+
+            {/* --- COMPONENTE MODAL CUSTOMIZADO --- */}
+            {modal.show && (
+                <div className="custom-modal-overlay">
+                    <div className="custom-modal-box">
+                        <h3 className="modal-title">{modal.title}</h3>
+                        <p className="modal-message">{modal.message}</p>
+                        
+                        <div className="modal-actions">
+                            {modal.type === 'confirm' && (
+                                <button className="modal-btn btn-cancel" onClick={closeModal}>
+                                    CANCELAR
+                                </button>
+                            )}
+                            <button className="modal-btn btn-confirm" onClick={modal.onConfirm}>
+                                OK
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

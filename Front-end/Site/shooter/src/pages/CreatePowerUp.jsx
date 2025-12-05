@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import '../App.css'; // Estilo Sci-Fi
 
 const CreatePowerUp = () => {
     const navigate = useNavigate();
     
+    // Estado do formulário
     const [formData, setFormData] = useState({
         name: '',
         status: 'A',
@@ -12,17 +14,22 @@ const CreatePowerUp = () => {
         atributoId: ''
     });
     
+    // Listas para os selects
     const [availableShots, setAvailableShots] = useState([]);
     const [availableAttributes, setAvailableAttributes] = useState([]);
+    
+    // Imagem
     const [imageFile, setImageFile] = useState(null);
     const [preview, setPreview] = useState(null);
 
+    // Carrega dados iniciais (Armas e Atributos disponíveis)
     useEffect(() => {
         const fetchData = async () => {
             const token = localStorage.getItem('token');
             const config = { headers: { 'Authorization': `Bearer ${token}` } };
             try {
                 const resShots = await axios.get('http://localhost:3000/shots/allShots', config);
+                // Filtra apenas armas ativas para o select
                 setAvailableShots(resShots.data.shots.filter(s => s.status === 'A'));
 
                 const resAttribs = await axios.get('http://localhost:3000/atributos/allAtributes', config);
@@ -51,8 +58,10 @@ const CreatePowerUp = () => {
         const dataToSend = new FormData();
         dataToSend.append('name', formData.name);
         dataToSend.append('status', formData.status);
-        dataToSend.append('shotId', formData.shotId);
-        dataToSend.append('atributoId', formData.atributoId);
+        
+        // Só envia se tiver valor selecionado
+        if (formData.shotId) dataToSend.append('shotId', formData.shotId);
+        if (formData.atributoId) dataToSend.append('atributoId', formData.atributoId);
         
         if (imageFile) {
             dataToSend.append('sprite', imageFile);
@@ -61,71 +70,127 @@ const CreatePowerUp = () => {
         const token = localStorage.getItem('token');
         try {
             await axios.post('http://localhost:3000/powerups/newPowerUp', dataToSend, {
-                headers: { 'Authorization': `Bearer ${token}` }
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
+                }
             });
             alert('PowerUp criado com sucesso!');
-            navigate('/powerups');
+            navigate('/loja'); // ou /powerups
         } catch (error) {
             console.error("Erro ao criar:", error);
             alert('Erro ao criar PowerUp.');
         }
     };
 
-    // Estilos simples
-    const styles = {
-        container: { maxWidth: '500px', margin: '2rem auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' },
-        inputGroup: { marginBottom: '15px' },
-        label: { display: 'block', marginBottom: '5px', fontWeight: 'bold' },
-        input: { width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' },
-        select: { width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc', backgroundColor: '#fff' },
-        button: { width: '100%', padding: '10px', backgroundColor: '#28a745', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }
-    };
-
     return (
-        <div style={styles.container}>
-            <h2>Novo PowerUp</h2>
-            <form onSubmit={handleSubmit}>
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Nome:</label>
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} style={styles.input} />
-                </div>
+        <div className="form-page-container">
+            <div className="form-card-neon">
+                
+                <h2 className="form-title">NOVO POWERUP</h2>
 
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Concede Arma (Shot):</label>
-                    <select name="shotId" value={formData.shotId} onChange={handleChange} style={styles.select}>
-                        <option value="">-- Nenhum --</option>
-                        {availableShots.map(shot => (
-                            <option key={shot.id} value={shot.id}>{shot.name}</option>
-                        ))}
-                    </select>
-                </div>
+                <form onSubmit={handleSubmit}>
+                    <div className="form-grid-layout">
+                        
+                        {/* --- COLUNA DA ESQUERDA --- */}
+                        <div className="form-fields">
+                            
+                            <div className="form-group">
+                                <label className="input-label">Nome do PowerUp</label>
+                                <input 
+                                    type="text" 
+                                    name="name" 
+                                    className="input-modern"
+                                    placeholder="Ex: Super Tiro"
+                                    value={formData.name}
+                                    onChange={handleChange} 
+                                    required 
+                                />
+                            </div>
 
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Concede Atributo:</label>
-                    <select name="atributoId" value={formData.atributoId} onChange={handleChange} style={styles.select}>
-                        <option value="">-- Nenhum --</option>
-                        {availableAttributes.map(attr => (
-                            <option key={attr.id} value={attr.id}>ID #{attr.id} (Vel: {attr.speed})</option>
-                        ))}
-                    </select>
-                </div>
+                            <div className="form-group">
+                                <label className="input-label">Concede Arma (Shot):</label>
+                                <select 
+                                    name="shotId" 
+                                    className="select-modern"
+                                    value={formData.shotId} 
+                                    onChange={handleChange}
+                                >
+                                    <option value="">-- Nenhum --</option>
+                                    {availableShots.map(shot => (
+                                        <option key={shot.id} value={shot.id}>{shot.name}</option>
+                                    ))}
+                                </select>
+                            </div>
 
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Status:</label>
-                    <select name="status" value={formData.status} onChange={handleChange} style={styles.select}>
-                        <option value="A">Ativo</option>
-                        <option value="D">Desativado</option>
-                    </select>
-                </div>
+                            <div className="form-group">
+                                <label className="input-label">Concede Atributo:</label>
+                                <select 
+                                    name="atributoId" 
+                                    className="select-modern"
+                                    value={formData.atributoId} 
+                                    onChange={handleChange}
+                                >
+                                    <option value="">-- Nenhum --</option>
+                                    {availableAttributes.map(attr => (
+                                        <option key={attr.id} value={attr.id}>
+                                            ID #{attr.id} (Vel: {attr.speed})
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
 
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Imagem:</label>
-                    <input type="file" onChange={handleFile} accept="image/*" />
-                    {preview && <img src={preview} alt="Preview" style={{maxWidth: '100px', marginTop: '10px'}} />}
-                </div>
+                            <div className="form-group">
+                                <label className="input-label">Status Inicial</label>
+                                <select 
+                                    name="status" 
+                                    className="select-modern"
+                                    value={formData.status} 
+                                    onChange={handleChange}
+                                >
+                                    <option value="A">ATIVO</option>
+                                    <option value="D">DESATIVADO</option>
+                                </select>
+                            </div>
+                        </div>
 
-                <button type="submit" style={styles.button}>Criar PowerUp</button>
-            </form>
+                        {/* --- COLUNA DA DIREITA (IMAGEM) --- */}
+                        <div className="image-upload-area">
+                            <label className="input-label">Sprite (Imagem)</label>
+                            
+                            <label htmlFor="file-upload" className="image-preview-box">
+                                {preview ? (
+                                    <img src={preview} alt="Preview" className="preview-img" />
+                                ) : (
+                                    <div className="upload-placeholder">
+                                        <span className="upload-icon">⚡</span>
+                                        <p>Clique para selecionar imagem</p>
+                                    </div>
+                                )}
+                            </label>
+                            <input 
+                                id="file-upload" 
+                                type="file" 
+                                accept="image/*" 
+                                className="file-input-hidden"
+                                onChange={handleFile}
+                            />
+                        </div>
+
+                    </div> {/* Fim do Grid */}
+
+                    {/* BOTÕES */}
+                    <div className="form-actions">
+                        <button type="submit" className="btn-save">
+                            CRIAR POWERUP
+                        </button>
+
+                        <Link to="/loja" className="btn-cancel">
+                            Cancelar e Voltar
+                        </Link>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };

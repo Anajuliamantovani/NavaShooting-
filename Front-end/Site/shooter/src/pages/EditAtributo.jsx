@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import '../App.css'; // Importa o estilo global Sci-Fi
 
 const EditAtributo = () => {
     const { id } = useParams();
@@ -65,41 +66,79 @@ const EditAtributo = () => {
         }
     };
 
-    const styles = {
-        container: { maxWidth: '400px', margin: '2rem auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' },
-        inputGroup: { marginBottom: '15px' },
-        label: { display: 'block', marginBottom: '5px', fontWeight: 'bold' },
-        input: { width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' },
-        button: { width: '100%', padding: '10px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }
-    };
-
     return (
-        <div style={styles.container}>
-            <h2>Editar Atributo #{id}</h2>
-            <form onSubmit={handleSubmit}>
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Velocidade (Speed):</label>
-                    <input type="number" step="0.1" name="speed" value={formData.speed} onChange={handleChange} style={styles.input} required />
-                </div>
+        <div className="form-page-container">
+            {/* Usamos o mesmo card, mas limitamos a largura pois não tem imagem */}
+            <div className="form-card-neon" style={{ maxWidth: '600px' }}>
+                
+                <h2 className="form-title">EDITAR ATRIBUTO #{id}</h2>
 
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Escala (Scale):</label>
-                    <input type="number" step="0.1" name="scale" value={formData.scale} onChange={handleChange} style={styles.input} required />
-                </div>
+                <form onSubmit={handleSubmit}>
+                    
+                    {/* Como não tem imagem, usamos uma coluna única estilizada */}
+                    <div className="form-fields">
+                        
+                        <div className="form-group">
+                            <label className="input-label">Velocidade (Speed)</label>
+                            <input 
+                                type="number" 
+                                step="0.1" 
+                                name="speed" 
+                                className="input-modern"
+                                placeholder="Ex: 1.5"
+                                value={formData.speed} 
+                                onChange={handleChange} 
+                                required 
+                            />
+                        </div>
 
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Possui Escudo (Shield)?</label>
-                    <select name="shield" value={formData.shield} onChange={handleChange} style={styles.input}>
-                        <option value="false">Não</option>
-                        <option value="true">Sim</option>
-                    </select>
-                </div>
+                        <div className="form-group">
+                            <label className="input-label">Escala (Scale)</label>
+                            <input 
+                                type="number" 
+                                step="0.1" 
+                                name="scale" 
+                                className="input-modern"
+                                placeholder="Ex: 1.0"
+                                value={formData.scale} 
+                                onChange={handleChange} 
+                                required 
+                            />
+                        </div>
 
-                <button type="submit" style={styles.button}>Salvar Alterações</button>
-            </form>
+                        <div className="form-group">
+                            <label className="input-label">Possui Escudo (Shield)?</label>
+                            <select 
+                                name="shield" 
+                                className="select-modern"
+                                value={formData.shield} 
+                                onChange={handleChange}
+                            >
+                                <option value="false">Não</option>
+                                <option value="true">Sim</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    {/* BOTÕES DE AÇÃO */}
+                    <div className="form-actions">
+                        <button 
+                            type="submit" 
+                            className="btn-save"
+                            style={{ background: 'linear-gradient(90deg, #007bff 0%, #0056b3 100%)', boxShadow: '0 5px 15px rgba(0, 123, 255, 0.3)' }}
+                        >
+                            SALVAR ALTERAÇÕES
+                        </button>
+
+                        <Link to="/atributos" className="btn-cancel">
+                            Cancelar
+                        </Link>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };
 
-// ESSA LINHA É A MAIS IMPORTANTE PARA CORRIGIR O SEU ERRO:
 export default EditAtributo;

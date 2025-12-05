@@ -658,7 +658,7 @@ body, html, #root {
   border-top: 1px solid #2a0e4a;
 }
 .btn-sair {
-  color: #ff4444;
+  color: #6a0dad;
   text-decoration: none;
   font-weight: bold;
   display: flex;
@@ -779,17 +779,11 @@ body, html, #root {
     ESTILO GERENCIAR NAVES
    ========================================================== */
 /* =========================================================
-   ESTILOS FINAIS: NAVE LIST (Adicionar + Cards)
+   ESTILOS GERAIS DE CARDS (NAVES, SHOTS, POWERUPS)
    ========================================================= */
 
-.nave-container {
-  padding: 40px;
-  max-width: 1200px;
-  margin: 0 auto;
-  color: white;
-}
-
-.nave-title {
+/* Títulos */
+.nave-title, .shot-title, .powerup-title {
   font-family: 'Orbitron', sans-serif;
   font-size: 2.5rem;
   margin-bottom: 30px;
@@ -797,85 +791,68 @@ body, html, #root {
   text-transform: uppercase;
 }
 
-/* O Grid que segura tudo */
-.nave-grid {
+/* Grids */
+.nave-grid, .shot-grid, .powerup-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 25px;
   justify-content: center;
 }
 
-/* --- 1. CARD "ADICIONAR" (Pontilhado e Transparente) --- */
-.nave-add-card {
+/* --- 1. CARD "ADICIONAR" (Pontilhado) --- */
+.nave-add-card, .shot-add-card, .powerup-add-card {
   width: 240px;
-  min-height: 380px; /* Mesma altura do card normal para alinhar */
+  min-height: 380px; 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  
-  /* Estilo Pontilhado Neon */
   border: 3px dashed #802FFF; 
   border-radius: 15px;
-  background-color: transparent; /* Fundo vazio para destacar */
-  
+  background-color: transparent; 
   text-decoration: none;
   color: #802FFF;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.nave-add-card:hover {
+.nave-add-card:hover, .shot-add-card:hover, .powerup-add-card:hover {
   background-color: rgba(128, 47, 255, 0.1);
   box-shadow: 0 0 25px rgba(128, 47, 255, 0.3);
   transform: translateY(-5px);
 }
 
-.plus-sign {
-  font-size: 4rem;
-  font-weight: bold;
-  line-height: 1;
-  margin-bottom: 10px;
-}
-
-.add-text {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 1.2rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-/* --- 2. CARD "NAVE" (Sólido, Estilo Gatito) --- */
-.nave-card {
-  width: 250px; /* Um pouco mais largo */
-  background-color: #0b0b15; /* Preto azulado */
+/* --- 2. CARD PRINCIPAL (Estilo Gatito/Sci-Fi) --- */
+.nave-card, .shot-card, .powerup-card {
+  width: 250px; 
+  background-color: #0b0b15; 
   border: 1px solid #802FFF;
-  border-radius: 16px; /* Arredondado */
-  overflow: hidden; /* Garante que a imagem respeite as bordas */
+  border-radius: 16px; 
+  overflow: hidden; /* Importante para a imagem não vazar */
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
-  position: relative; /* Para posicionar o status */
+  position: relative; 
 }
 
-.nave-card:hover {
+.nave-card:hover, .shot-card:hover, .powerup-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 0 30px rgba(128, 47, 255, 0.25);
   border-color: #a86aff;
 }
 
-/* 1. IMAGEM (Topo total) */
-.nave-image {
+/* Imagem (Topo total) */
+.nave-image, .shot-image, .powerup-image {
   width: 100%;
   height: 180px;
   object-fit: cover;
   background-color: #151520;
-  border-bottom: 2px solid #802FFF; /* Separa a imagem do texto */
-  margin: 0; /* Remove margens antigas */
+  border-bottom: 2px solid #802FFF; 
+  margin: 0; 
 }
 
-/* 2. STATUS (Badge flutuante sobre a imagem) */
+/* Status (Badge flutuante) */
 .status-badge {
   position: absolute;
   top: 10px;
@@ -892,17 +869,17 @@ body, html, #root {
 .status-active { background-color: #00ff88; color: #000; }
 .status-inactive { background-color: #ff4444; color: #fff; }
 
-/* 3. CONTEÚDO (Nome e Preço) */
-.nave-info {
+/* Conteúdo (Nome e Preço) */
+.nave-info, .shot-info, .powerup-info {
   padding: 15px;
-  flex: 1; /* Empurra os botões para o final */
+  flex: 1; 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.nave-info h3 {
+.nave-info h3, .shot-info h3, .powerup-info h3 {
   font-size: 1.4rem;
   margin: 0 0 5px 0;
   color: #fff;
@@ -912,23 +889,25 @@ body, html, #root {
   text-shadow: 0 0 10px rgba(128, 47, 255, 0.5);
 }
 
-.nave-price {
+/* Estilo de "tag" para preço/dano */
+.nave-price, .shot-damage, .powerup-effect {
   font-size: 0.9rem;
   color: #bbb;
-  font-family: monospace; /* Fonte estilo código */
+  font-family: monospace; 
   background: rgba(255,255,255,0.05);
   padding: 4px 12px;
   border-radius: 4px;
+  margin-bottom: 5px;
 }
 
-/* 4. BOTÕES (Rodapé do Card) */
+/* Botões (Rodapé) */
 .nave-actions {
   display: flex;
   border-top: 1px solid rgba(128, 47, 255, 0.3);
 }
 
 .btn-card {
-  flex: 1; /* Ocupam 50% cada */
+  flex: 1; 
   padding: 15px 0;
   border: none;
   background-color: transparent;
@@ -938,9 +917,10 @@ body, html, #root {
   cursor: pointer;
   transition: 0.2s;
   text-transform: uppercase;
+  border-radius: 0; /* Quadrados */
 }
 
-/* Botão da Esquerda (Editar) */
+/* Botão da Esquerda (Editar) - Linha divisória */
 .btn-card:first-child {
   border-right: 1px solid rgba(128, 47, 255, 0.3);
 }
@@ -950,8 +930,398 @@ body, html, #root {
   color: white;
 }
 
-/* Variação para Desativar (Hover Vermelho) */
-.btn-card.disable:hover {
-    background-color: #ff4444;
-    color: white;
+.plus-sign { font-size: 4rem; font-weight: bold; margin-bottom: 10px; }
+.add-text { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; text-transform: uppercase; }
+
+/* =========================================================
+   ESTILOS DE FORMULÁRIOS (CREATE/EDIT) - SCI-FI FINAL
+   ========================================================= */
+
+/* Container Centralizado */
+.form-page-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  min-height: 100vh;
+}
+
+/* O Cartão do Formulário */
+.form-card-neon {
+  width: 100%;
+  max-width: 900px;
+  background-color: #0b0b15;
+  border: 1px solid #802FFF;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 0 40px rgba(128, 47, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Título */
+.form-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  color: #fff;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #802FFF;
+  padding-bottom: 10px;
+  display: inline-block;
+}
+
+/* Layout em Grid (Duas Colunas) */
+.form-grid-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px; /* Esquerda flexível, Direita fixa para imagem */
+  gap: 40px;
+}
+
+/* Inputs e Selects Modernos */
+.input-modern, .select-modern {
+  width: 100%;
+  padding: 15px;
+  background-color: #151520;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: 0.3s;
+  font-family: 'Segoe UI', sans-serif;
+  box-sizing: border-box; /* Garante que o padding não estoure a largura */
+}
+
+.input-modern:focus, .select-modern:focus {
+  border-color: #802FFF;
+  box-shadow: 0 0 15px rgba(128, 47, 255, 0.3);
+  background-color: #1a1a2e;
+}
+
+.input-label {
+  display: block;
+  color: #bf55ec;
+  margin-bottom: 8px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+/* --- ÁREA DE UPLOAD DE IMAGEM (O "SLOT") --- */
+.image-upload-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centraliza o texto "Sprite" */
+}
+
+/* Força o label da imagem a ficar centralizado */
+.image-upload-area .input-label {
+  width: 100%;
+  text-align: center;
+}
+
+.image-preview-box {
+  width: 100%;
+  height: 300px;
+  background-color: #050011;
+  border: 2px dashed #802FFF;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.image-preview-box:hover {
+  background-color: rgba(128, 47, 255, 0.05);
+  border-color: #fff;
+}
+
+/* A imagem que aparece dentro */
+.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 10px;
+}
+
+/* Texto quando não tem imagem */
+.upload-placeholder {
+  text-align: center;
+  color: #802FFF;
+}
+.upload-icon { font-size: 3rem; display: block; margin-bottom: 10px; }
+
+/* Esconde o input file feio original */
+.file-input-hidden {
+  display: none;
+}
+
+/* --- BOTÕES DE AÇÃO --- */
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+/* Botão Salvar (Verde) */
+.btn-save {
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(90deg, #28a745 0%, #218838 100%); /* Verde Gamer */
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 0.3s;
+  letter-spacing: 1px;
+  box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+.btn-save:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(40, 167, 69, 0.5);
+  filter: brightness(1.1);
+}
+
+/* Botão Cancelar (Roxo Outline - Destaque Novo) */
+.btn-cancel {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  text-align: center;
+  background-color: transparent;
+  border: 2px solid #802FFF; /* Borda roxa forte */
+  border-radius: 10px;
+  color: #802FFF;
+  font-weight: bold;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  box-sizing: border-box; /* Garante que a borda não aumente o tamanho */
+}
+
+.btn-cancel:hover {
+  background-color: #802FFF;
+  color: white;
+  box-shadow: 0 0 15px rgba(128, 47, 255, 0.4);
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+  .form-grid-layout {
+    grid-template-columns: 1fr; /* Vira uma coluna só no celular */
+  }
+  .image-preview-box {
+    height: 200px;
+  }
+}
+/* =========================================================
+   ESTILOS NOVOS DA LISTA DE USUÁRIOS (CARD TIPO GATITO)
+   ========================================================= */
+
+/* Header e Grid */
+.user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto 40px auto;
+  width: 100%;
+}
+
+.user-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* O CARTÃO (Container Principal) */
+.sci-fi-card {
+  background-color: #050011; /* Fundo muito escuro */
+  border: 1px solid #802FFF; /* Borda Roxa */
+  border-radius: 15px;
+  padding-top: 20px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(128, 47, 255, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.sci-fi-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 25px rgba(128, 47, 255, 0.3);
+}
+
+/* 1. BADGE DE STATUS (Pílula no topo) */
+.status-pill {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #fff;
+  z-index: 2;
+}
+
+.pill-active {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+}
+
+.pill-inactive {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+}
+
+/* 2. AVATAR */
+.card-avatar-section {
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+
+.avatar-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradiente Roxo/Azul */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+  font-family: 'Orbitron', sans-serif;
+  border: 2px solid #fff;
+  box-shadow: 0 0 15px rgba(128, 47, 255, 0.5);
+}
+
+/* 3. TÍTULOS E SUBTÍTULOS */
+.card-info-section {
+  width: 100%;
+  text-align: center;
+  padding: 0 20px;
+  flex-grow: 1;
+}
+
+.sci-fi-title {
+  color: #fff;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.4rem;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.sci-fi-subtitle {
+  color: #888;
+  font-size: 0.85rem;
+  margin-top: 5px;
+  margin-bottom: 20px;
+}
+
+/* 4. CAIXAS DE STATS (Igual ao Dano/Preço do seu print) */
+.stats-box-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 25px;
+  width: 100%;
+}
+
+.stat-dark-box {
+  background-color: #111; /* Fundo quase preto */
+  border-radius: 6px;
+  padding: 8px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #222;
+}
+
+.stat-label {
+  color: #888;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.stat-number {
+  font-family: 'Consolas', monospace;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.text-cyan { color: #00e5ff; }
+.text-gold { color: #ffd700; }
+
+/* 5. RODAPÉ COM BOTÕES DE TEXTO */
+.card-footer-actions {
+  width: 100%;
+  border-top: 1px solid #802FFF;
+  display: flex;
+  height: 45px;
+  margin-top: auto;
+}
+
+.footer-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: bold;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: 0.2s;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-divider {
+  width: 1px;
+  background-color: #802FFF;
+  height: 100%;
+}
+
+/* Cores dos Botões de Texto */
+.btn-edit-text {
+  color: #802FFF;
+}
+.btn-edit-text:hover {
+  background-color: rgba(128, 47, 255, 0.1);
+  color: #fff;
+}
+
+.btn-activate-text {
+  color: #802FFF; /* Verde */
+}
+.btn-activate-text:hover {
+  color: #fff;
+}
+
+.btn-deactivate-text {
+  color: #802FFF;
+}
+.btn-deactivate-text:hover {
+  color: #fff;
 }

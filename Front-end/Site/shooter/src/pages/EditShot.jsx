@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+// A importação do CSS foi removida para evitar erros de caminho. 
+// Certifique-se de que o seu App.css está importado no main.jsx ou App.jsx.
 
 const EditShot = () => {
     const { id } = useParams();
@@ -51,7 +53,6 @@ const EditShot = () => {
         const token = localStorage.getItem('token');
 
         try {
-            // Nota: Rota attShot (atualizar shot)
             await axios.put('http://localhost:3000/shots/attShot', formData, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -64,47 +65,117 @@ const EditShot = () => {
         }
     };
 
-    const styles = {
-        container: { maxWidth: '500px', margin: '2rem auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' },
-        inputGroup: { marginBottom: '15px' },
-        label: { display: 'block', marginBottom: '5px', fontWeight: 'bold' },
-        input: { width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' },
-        button: { width: '100%', padding: '10px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }
-    };
-
     return (
-        <div style={styles.container}>
-            <h2>Editar Shot #{id}</h2>
-            <form onSubmit={handleSubmit}>
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Nome:</label>
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} style={styles.input} required />
-                </div>
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Preço:</label>
-                    <input type="number" name="price" value={formData.price} onChange={handleChange} style={styles.input} />
-                </div>
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Dano (Damage):</label>
-                    <input type="number" name="damage" value={formData.damage} onChange={handleChange} style={styles.input} />
-                </div>
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Status:</label>
-                    <select name="status" value={formData.status} onChange={handleChange} style={styles.input}>
-                        <option value="A">Ativo</option>
-                        <option value="D">Desativado</option>
-                    </select>
-                </div>
+        <div className="form-page-container">
+            <div className="form-card-neon">
                 
-                <div style={{marginBottom: '20px'}}>
-                    <p>Imagem atual:</p>
-                    {formData.sprite && (
-                        <img src={`http://localhost:3000/imagens/${formData.sprite}`} alt="Atual" width="100" />
-                    )}
-                </div>
+                <h2 className="form-title">EDITAR SHOT #{id}</h2>
 
-                <button type="submit" style={styles.button}>Salvar Alterações</button>
-            </form>
+                <form onSubmit={handleSubmit}>
+                    <div className="form-grid-layout">
+                        
+                        {/* --- COLUNA DA ESQUERDA (DADOS) --- */}
+                        <div className="form-fields">
+                            
+                            {/* Nome */}
+                            <div className="form-group">
+                                <label className="input-label">Nome</label>
+                                <input 
+                                    type="text" 
+                                    name="name" 
+                                    className="input-modern"
+                                    value={formData.name} 
+                                    onChange={handleChange} 
+                                    required 
+                                />
+                            </div>
+
+                            {/* Preço */}
+                            <div className="form-group">
+                                <label className="input-label">Preço</label>
+                                <input 
+                                    type="number" 
+                                    name="price" 
+                                    className="input-modern"
+                                    value={formData.price} 
+                                    onChange={handleChange} 
+                                />
+                            </div>
+
+                            {/* Dano (Específico de Shot) */}
+                            <div className="form-group">
+                                <label className="input-label">Dano (Damage)</label>
+                                <input 
+                                    type="number" 
+                                    name="damage" 
+                                    className="input-modern"
+                                    value={formData.damage} 
+                                    onChange={handleChange} 
+                                />
+                            </div>
+
+                            {/* Status */}
+                            <div className="form-group">
+                                <label className="input-label">Status</label>
+                                <select 
+                                    name="status" 
+                                    className="select-modern"
+                                    value={formData.status} 
+                                    onChange={handleChange}
+                                >
+                                    <option value="A">Ativo</option>
+                                    <option value="D">Desativado</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        {/* --- COLUNA DA DIREITA (IMAGEM ATUAL) --- */}
+                        <div className="image-upload-area">
+                            <label className="input-label">Imagem Atual</label>
+                            
+                            {/* Caixa que mostra a imagem atual */}
+                            <div className="image-preview-box" style={{cursor: 'default'}}>
+                                {formData.sprite ? (
+                                    <img 
+                                        src={`http://localhost:3000/imagens/${formData.sprite}`} 
+                                        alt="Sprite atual" 
+                                        className="preview-img"
+                                    />
+                                ) : (
+                                    <div className="upload-placeholder">
+                                        <p>Sem imagem</p>
+                                    </div>
+                                )}
+                            </div>
+                            
+                            <p style={{fontSize: '0.8rem', color: '#666', marginTop: '10px', textAlign: 'center'}}>
+                                * Para trocar a imagem, delete e crie novamente (ou atualize o backend).
+                            </p>
+                        </div>
+
+                    </div> {/* Fim do Grid */}
+
+                    {/* BOTÕES DE AÇÃO */}
+                    <div className="form-actions">
+                        {/* Botão Azul para combinar com a Nave */}
+                        <button 
+                            type="submit" 
+                            className="btn-save"
+                            style={{ background: 'linear-gradient(90deg, #007bff 0%, #0056b3 100%)', boxShadow: '0 5px 15px rgba(0, 123, 255, 0.3)' }}
+                        >
+                            SALVAR ALTERAÇÕES
+                        </button>
+
+                        <button 
+                            type="button"
+                            className="btn-cancel"
+                            onClick={() => navigate('/shots')}
+                        >
+                            CANCELAR
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };

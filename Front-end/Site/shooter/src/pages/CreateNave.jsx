@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate, Link } from 'react-router-dom';
+import '../App.css'; // Importa o estilo global Sci-Fi
 
 const CreateNave = () => {
+    const navigate = useNavigate();
+    
     const [formData, setFormData] = useState({
         name: '',
         price: '',
         masLife: '',
-        status: 'A' // Padrão Ativo
+        status: 'A'
     });
     
     const [imageFile, setImageFile] = useState(null);
@@ -18,11 +22,11 @@ const CreateNave = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    // --- Lógica de Drag and Drop e Seleção de Arquivo ---
+    // --- Lógica de Arquivo e Drag & Drop ---
     const handleFile = (file) => {
         if (file && file.type.startsWith('image/')) {
             setImageFile(file);
-            setPreview(URL.createObjectURL(file)); // Cria preview para o usuário ver
+            setPreview(URL.createObjectURL(file));
         } else {
             alert("Por favor, selecione apenas arquivos de imagem.");
         }
@@ -56,131 +60,145 @@ const CreateNave = () => {
     // --- Envio do Formulário ---
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        // Para enviar arquivos, OBRIGATORIAMENTE usamos FormData
         const dataToSend = new FormData();
         dataToSend.append('name', formData.name);
         dataToSend.append('price', formData.price);
         dataToSend.append('masLife', formData.masLife);
         dataToSend.append('status', formData.status);
-        
-        // 'sprite' deve ser o mesmo nome configurado no upload.single('sprite') no Node
         if (imageFile) {
             dataToSend.append('sprite', imageFile);
         }
 
         const token = localStorage.getItem('token');
-
         if (!token) {
             alert('Você precisa estar logado para criar uma nave!');
             return;
         }
 
         try {
-            // O Axios detecta que é FormData e configura o header corretamente sozinho
-            //const response = await axios.post('http://localhost:3000/naves/newNave', dataToSend);
-
-            const response = await axios.post('http://localhost:3000/naves/newNave', dataToSend, {
-                headers: {
-                    // 2. Adicionamos o Token
+            await axios.post('http://localhost:3000/naves/newNave', dataToSend, {
+                headers: { 
                     'Authorization': `Bearer ${token}`,
-                    
-                    // IMPORTANTE: NÃO adicione 'Content-Type': 'multipart/form-data' aqui.
-                    // O Axios vai detectar o FormData e adicionar o Content-Type 
-                    // com o "boundary" correto automaticamente, mantendo o Authorization que passamos.
+                    'Content-Type': 'multipart/form-data'
                 }
             });
-
             alert('Nave criada com sucesso!');
-            console.log(response.data);
-            
-            // Limpar formulário
-            setFormData({ name: '', price: '', masLife: '', status: 'A' });
-            setImageFile(null);
-            setPreview(null);
-
+            navigate('/naves'); // Volta para a lista de naves
         } catch (error) {
             console.error("Erro ao criar nave:", error);
             alert('Erro ao criar nave.');
         }
     };
 
-    // --- Estilos Simples (Inline para facilitar) ---
-    const styles = {
-        container: { maxWidth: '500px', margin: '2rem auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' },
-        inputGroup: { marginBottom: '15px' },
-        label: { display: 'block', marginBottom: '5px', fontWeight: 'bold' },
-        input: { width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' },
-        dropZone: {
-            border: dragActive ? '2px dashed #007bff' : '2px dashed #ccc',
-            backgroundColor: dragActive ? '#e9f5ff' : '#fafafa',
-            padding: '20px',
-            textAlign: 'center',
-            cursor: 'pointer',
-            borderRadius: '8px',
-            marginTop: '10px'
-        },
-        button: { width: '100%', padding: '10px', backgroundColor: '#28a745', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '16px' }
-    };
-
     return (
-        <div style={styles.container}>
-            <h2>Registrar Nova Nave</h2>
-            <form onSubmit={handleSubmit}>
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Nome:</label>
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} style={styles.input} required />
-                </div>
+        <div className="form-page-container">
+            <div className="form-card-neon">
+                
+                <h2 className="form-title">REGISTRAR NOVA NAVE</h2>
 
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Preço:</label>
-                    <input type="number" name="price" value={formData.price} onChange={handleChange} style={styles.input} />
-                </div>
-
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Vida Máxima:</label>
-                    <input type="number" name="masLife" value={formData.masLife} onChange={handleChange} style={styles.input} />
-                </div>
-
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Status:</label>
-                    <select name="status" value={formData.status} onChange={handleChange} style={styles.input}>
-                        <option value="A">Ativo</option>
-                        <option value="D">Desativado</option>
-                    </select>
-                </div>
-
-                {/* Área de Upload (Drag & Drop) */}
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Sprite da Nave (Imagem):</label>
-                    <div 
-                        style={styles.dropZone}
-                        onDragEnter={handleDrag}
-                        onDragLeave={handleDrag}
-                        onDragOver={handleDrag}
-                        onDrop={handleDrop}
-                        onClick={() => document.getElementById('fileInput').click()}
-                    >
-                        <input 
-                            id="fileInput" 
-                            type="file" 
-                            style={{ display: 'none' }} 
-                            onChange={handleInputFileChange} 
-                            accept="image/*"
-                        />
-                        {preview ? (
-                            <div>
-                                <img src={preview} alt="Preview" style={{ maxWidth: '100px', maxHeight: '100px', marginBottom: '10px' }} />
-                                <p>Clique ou arraste para trocar</p>
+                <form onSubmit={handleSubmit}>
+                    <div className="form-grid-layout">
+                        
+                        {/* --- COLUNA DA ESQUERDA (DADOS) --- */}
+                        <div className="form-fields">
+                            
+                            <div className="form-group">
+                                <label className="input-label">Nome da Nave</label>
+                                <input 
+                                    type="text" 
+                                    name="name" 
+                                    className="input-modern"
+                                    placeholder="Ex: Millennium Falcon"
+                                    value={formData.name}
+                                    onChange={handleChange} 
+                                    required 
+                                />
                             </div>
-                        ) : (
-                            <p>Arraste a imagem aqui ou clique para selecionar</p>
-                        )}
-                    </div>
-                </div>
 
-                <button type="submit" style={styles.button}>Registrar Nave</button>
-            </form>
+                            <div className="form-group">
+                                <label className="input-label">Preço</label>
+                                <input 
+                                    type="number" 
+                                    name="price" 
+                                    className="input-modern"
+                                    placeholder="Ex: 5000"
+                                    value={formData.price}
+                                    onChange={handleChange} 
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label className="input-label">Vida Máxima (masLife)</label>
+                                <input 
+                                    type="number" 
+                                    name="masLife" 
+                                    className="input-modern"
+                                    placeholder="Ex: 200"
+                                    value={formData.masLife}
+                                    onChange={handleChange} 
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label className="input-label">Status Inicial</label>
+                                <select 
+                                    name="status" 
+                                    className="select-modern"
+                                    value={formData.status} 
+                                    onChange={handleChange}
+                                >
+                                    <option value="A">ATIVO</option>
+                                    <option value="D">DESATIVADO</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        {/* --- COLUNA DA DIREITA (IMAGEM DRAG & DROP) --- */}
+                        <div className="image-upload-area">
+                            <label className="input-label">Sprite da Nave</label>
+                            
+                            {/* Área de Drag & Drop estilizada */}
+                            <label 
+                                htmlFor="fileInput" 
+                                className={`image-preview-box ${dragActive ? 'drag-active' : ''}`}
+                                onDragEnter={handleDrag}
+                                onDragLeave={handleDrag}
+                                onDragOver={handleDrag}
+                                onDrop={handleDrop}
+                            >
+                                {preview ? (
+                                    <img src={preview} alt="Preview" className="preview-img" />
+                                ) : (
+                                    <div className="upload-placeholder">
+                                        <span className="upload-icon">🚀</span>
+                                        <p>{dragActive ? "Solte a imagem aqui!" : "Arraste ou clique para selecionar"}</p>
+                                    </div>
+                                )}
+                            </label>
+                            
+                            <input 
+                                id="fileInput" 
+                                type="file" 
+                                className="file-input-hidden"
+                                onChange={handleInputFileChange} 
+                                accept="image/*"
+                            />
+                        </div>
+
+                    </div> {/* Fim do Grid */}
+
+                    {/* BOTÕES DE AÇÃO */}
+                    <div className="form-actions">
+                        <button type="submit" className="btn-save">
+                            REGISTRAR NAVE
+                        </button>
+
+                        <Link to="/naves" className="btn-cancel">
+                            Cancelar e Voltar
+                        </Link>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };

@@ -36,12 +36,16 @@ const User = connection.define('user', {
     coins: {
         type: Sequelize.INTEGER,
         allowNull: true
+    },
+    // NOVO CAMPO: Foto de Perfil
+    profilePic: {
+        type: Sequelize.STRING,
+        allowNull: true // Pode ser nulo (usuário sem foto)
     }
 },{
     tableName: 'users',   
     timestamps: false
 });
 
-//User.sync({ force: true });
 
 module.exports = User;
