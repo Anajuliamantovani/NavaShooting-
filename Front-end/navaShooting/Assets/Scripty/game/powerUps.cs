@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class powerUps : MonoBehaviour
 {
@@ -9,6 +10,11 @@ public class powerUps : MonoBehaviour
     public float tempDestroi;
     public bool meteur;
     public int vidaMeteur;
+    public Image img;
+
+    public gerenciarPowerUops.PowerUpData powerUpData;
+    //public gerenciarPowerUops.AtributoData atributoData;
+    //public gerenciarPowerUops.ShotData shotData;
 
     void Start()
     {

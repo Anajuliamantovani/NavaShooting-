@@ -166,9 +166,7 @@ public class gerenciarPowerUops : MonoBehaviour
                         new Rect(0, 0, textura.width, textura.height),
                         new Vector2(0.5f, 0.5f), 100f);
 
-                    // Aplica no SpriteRenderer do objeto instanciado
-                    SpriteRenderer sr = objPowerUp.GetComponent<SpriteRenderer>();
-                    if (sr != null) sr.sprite = sprite;
+                    objPowerUp.GetComponent<powerUps>().img.sprite = sprite;
                 }
             }
         }
@@ -181,12 +179,14 @@ public class gerenciarPowerUops : MonoBehaviour
             // Você deve adaptar isso para o nome real do seu script no prefab
 
             // Exemplo Genérico:
-            // var script = objPowerUp.GetComponent<SeuScriptDePowerUp>();
-            // if(script != null) {
-            //     script.nome = dados.name;
-            //     if(dados.shot != null) script.idTiro = dados.shot.id;
-            //     if(dados.atributo != null) script.velocidadeExtra = dados.atributo.speed;
-            // }
+            var script = objPowerUp.GetComponent<powerUps>();
+            if (script != null)
+            {
+                //script.nome = dados.name;
+                if (dados.shot != null) script.powerUpData = dados;
+                //if (dados.atributo != null) script.velocidadeExtra = dados.atributo;
+                //if (dados.atributo != null) script.velocidadeExtra = dados.atributo;
+            }
 
             // Debug para confirmar que pegamos os dados aninhados
             if (dados.shot != null)

@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using static UnityEditor.PlayerSettings;
+//using static UnityEditor.PlayerSettings;
 
 public class NaveLoader : MonoBehaviour
 {
@@ -29,12 +29,12 @@ public class NaveLoader : MonoBehaviour
     private void Start()
     {
         // Se tiver token preenchido no Inspector, carrega os dados (Modo Teste)
-        if (!string.IsNullOrEmpty(tokemP))
-        {
-            StartCoroutine(CarregarNaveDaAPI(tokemP, idSprit));
-            StartCoroutine(CarregarShotDaAPI(tokemP, idShot));
-            ups.Token = tokemP;
-        }
+        //if (!string.IsNullOrEmpty(tokemP))
+        //{
+        //    StartCoroutine(CarregarNaveDaAPI(tokemP, idSprit));
+        //    StartCoroutine(CarregarShotDaAPI(tokemP, idShot));
+        //    ups.Token = tokemP;
+        //}
     }
 
     // --- Estruturas de Dados para o JSON ---
@@ -94,7 +94,9 @@ public class NaveLoader : MonoBehaviour
 
         ReactPayload dados = JsonUtility.FromJson<ReactPayload>(jsonPayload);
 
+        tokemP = dados.token;
         ups.Token = dados.token;
+        
 
         if (dados != null && !string.IsNullOrEmpty(dados.token))
         {
@@ -138,6 +140,7 @@ public class NaveLoader : MonoBehaviour
                 if (!string.IsNullOrEmpty(resposta.nave.sprite))
                 {
                     StartCoroutine(BaixarSpriteNave(resposta.nave.sprite));
+                    this.gameObject.GetComponent<Player>().vida = resposta.nave.masLife;
                 }
             }
         }
@@ -169,13 +172,14 @@ public class NaveLoader : MonoBehaviour
                 );
 
                 image.sprite = novoSprite; // Aplica na Nave
+                
             }
         }
     }
 
     // --- Coroutines TIRO (NOVAS) ---
 
-    IEnumerator CarregarShotDaAPI(string token, int id)
+    public IEnumerator CarregarShotDaAPI(string token, int id)
     {
         // Rota da API de tiros
         string url = apiBaseUrl + "/shots/" + id + "/shot";
